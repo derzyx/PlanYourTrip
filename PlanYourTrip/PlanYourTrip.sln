@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32210.238
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlanYourTrip_BackEnd", "PlanYourTrip_BackEnd\PlanYourTrip_BackEnd.csproj", "{AD4CA25A-78A2-4871-AE67-18F432BFB1F2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlanYourTrip_FrontEnd", "PlanYourTrip_FrontEnd\PlanYourTrip_FrontEnd.csproj", "{458C0221-E502-454E-940D-30E65640CA03}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AD4CA25A-78A2-4871-AE67-18F432BFB1F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD4CA25A-78A2-4871-AE67-18F432BFB1F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD4CA25A-78A2-4871-AE67-18F432BFB1F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD4CA25A-78A2-4871-AE67-18F432BFB1F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{458C0221-E502-454E-940D-30E65640CA03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{458C0221-E502-454E-940D-30E65640CA03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{458C0221-E502-454E-940D-30E65640CA03}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{458C0221-E502-454E-940D-30E65640CA03}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {402D3C84-FDAC-42EC-8F25-971A59F08210}
+	EndGlobalSection
+EndGlobal
