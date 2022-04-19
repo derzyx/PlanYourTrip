@@ -46,7 +46,7 @@ namespace PlanYourTrip_BackEnd.Controllers
             return Ok(await _context.Users.ToListAsync());
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         public async Task<ActionResult<List<Users>>> UpdateUser(Users request)
         {
             var user = await _context.Users.FindAsync(request.Id);
