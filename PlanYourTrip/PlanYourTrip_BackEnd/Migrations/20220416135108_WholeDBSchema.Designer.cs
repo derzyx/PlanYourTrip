@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PlanYourTrip_BackEnd.Data;
 
@@ -11,9 +12,10 @@ using PlanYourTrip_BackEnd.Data;
 namespace PlanYourTrip_BackEnd.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220416135108_WholeDBSchema")]
+    partial class WholeDBSchema
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -83,8 +85,7 @@ namespace PlanYourTrip_BackEnd.Migrations
 
                     b.HasKey("ContributorId");
 
-                    b.HasIndex("UserId")
-                        .IsUnique();
+                    b.HasIndex("UserId");
 
                     b.ToTable("Contributors");
                 });
@@ -135,9 +136,6 @@ namespace PlanYourTrip_BackEnd.Migrations
 
                     b.Property<int>("AutorId")
                         .HasColumnType("int");
-
-                    b.Property<bool>("IsOneDay")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Nazwa")
                         .IsRequired()
@@ -241,8 +239,8 @@ namespace PlanYourTrip_BackEnd.Migrations
             modelBuilder.Entity("PlanYourTrip_ClassLibrary.Classes.Contributors", b =>
                 {
                     b.HasOne("PlanYourTrip_ClassLibrary.Classes.Users", "User")
-                        .WithOne("Contributors")
-                        .HasForeignKey("PlanYourTrip_ClassLibrary.Classes.Contributors", "UserId")
+                        .WithMany()
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -279,9 +277,6 @@ namespace PlanYourTrip_BackEnd.Migrations
             modelBuilder.Entity("PlanYourTrip_ClassLibrary.Classes.Users", b =>
                 {
                     b.Navigation("Answers");
-
-                    b.Navigation("Contributors")
-                        .IsRequired();
 
                     b.Navigation("Posts");
 

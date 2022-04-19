@@ -4,23 +4,23 @@
 
 namespace PlanYourTrip_BackEnd.Migrations
 {
-    public partial class UsersTabUpdate_Age : Migration
+    public partial class TripPlansTable_AddColumn : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<int>(
-                name: "Age",
-                table: "Users",
-                type: "int",
+            migrationBuilder.AddColumn<bool>(
+                name: "IsOneDay",
+                table: "TripPlans",
+                type: "bit",
                 nullable: false,
-                defaultValue: 0);
+                defaultValue: false);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "Age",
-                table: "Users");
+                name: "IsOneDay",
+                table: "TripPlans");
         }
     }
 }
