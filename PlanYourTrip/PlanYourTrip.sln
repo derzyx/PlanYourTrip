@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlanYourTrip_BackEnd", "Pla
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlanYourTrip_FrontEnd", "PlanYourTrip_FrontEnd\PlanYourTrip_FrontEnd.csproj", "{458C0221-E502-454E-940D-30E65640CA03}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlanYourTrip_ClassLibrary", "PlanYourTrip_ClassLibrary\PlanYourTrip_ClassLibrary.csproj", "{6D0A0E92-DB74-412B-AD27-584C12AEC10E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlanYourTrip_ClassLibrary", "PlanYourTrip_ClassLibrary\PlanYourTrip_ClassLibrary.csproj", "{6D0A0E92-DB74-412B-AD27-584C12AEC10E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
