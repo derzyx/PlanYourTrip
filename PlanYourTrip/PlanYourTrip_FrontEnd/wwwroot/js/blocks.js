@@ -1,15 +1,39 @@
-﻿function PointBlock(blockNumber) {
+﻿const upIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-up" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"/>
+                </svg>`;
+const downIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+                  </svg>`;
+const crossIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                      <path fill-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"/>
+                      <path fill-rule="evenodd" d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"/>
+                    </svg>`;
+const colorIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-palette" viewBox="0 0 16 16">
+                      <path d="M8 5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm4 3a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zM5.5 7a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm.5 6a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/>
+                      <path d="M16 8c0 3.15-1.866 2.585-3.567 2.07C11.42 9.763 10.465 9.473 10 10c-.603.683-.475 1.819-.351 2.92C9.826 14.495 9.996 16 8 16a8 8 0 1 1 8-8zm-8 7c.611 0 .654-.171.655-.176.078-.146.124-.464.07-1.119-.014-.168-.037-.37-.061-.591-.052-.464-.112-1.005-.118-1.462-.01-.707.083-1.61.704-2.314.369-.417.845-.578 1.272-.618.404-.038.812.026 1.16.104.343.077.702.186 1.025.284l.028.008c.346.105.658.199.953.266.653.148.904.083.991.024C14.717 9.38 15 9.161 15 8a7 7 0 1 0-7 7z"/>
+                    </svg>`;
+const plusIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+                      <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
+                    </svg>`;
+
+
+function PointBlock(point) {
     //<mainDiv>
     //  <pointDiv>
-    //      <contents/>
+    //      <title/>
     //      <addedAttrsDiv/>
-    //      <btnsDiv>
+    //      <addAttrDiv>
+    //          <btnAddAttr/>
+    //      </addAttrDiv>
+    //  </pointDiv>
+    //  <managePointDiv>
+    //      <manageBtnsGroup>
+    //          <btnDelete/>
     //          <btnUp/>
     //          <btnDown/>
-    //          <btnAddAttr/>
-    //      </btnsDiv>
-    //  </pointDiv>
-    //  <lineDiv>
+    //          <btnBgColor/>
+    //      </manageBtnsGroup>
+    //  </managePointDiv>
     //  </lineDiv>
     //  <addBranchDiv>
     //      <btnAddBranch/>
@@ -22,56 +46,94 @@
     let pointDiv = document.createElement("div");
     pointDiv.className = "point";
 
-    let contents = document.createElement("p");
-    contents.textContent = blockNumber;
+    let title = document.createElement("input");
+    title.className = "pointTitle";
+    title.value = point.Title;
 
     let addedAttrsDiv = document.createElement("div");
     addedAttrsDiv.className = "addedAttributes";
 
+    let btnAddAttr = document.createElement("button");
+    btnAddAttr.className = "btn btn-outline-secondary tinyButton";
+    btnAddAttr.innerHTML = plusIcon + "dodaj atrybut";
+    btnAddAttr.addEventListener("click", function (e) { Attribute.prototype.AddAttribute(this) })
+
+    let addAttrDiv = document.createElement("div");
+
+    addAttrDiv.appendChild(btnAddAttr);
+
+    pointDiv.appendChild(title);
+    pointDiv.appendChild(addedAttrsDiv);
+    pointDiv.appendChild(addAttrDiv);
+
+    //---------------------------------------------------------------
+    let managePointDiv = document.createElement("div");
+    managePointDiv.className = "managePoint"
+
+    let manageBtnsGroup = document.createElement("div");
+    manageBtnsGroup.className = "btn-group managePointBtns";
+
     let btnUp = document.createElement("button");
     let btnDown = document.createElement("button");
-    let btnAddAttr = document.createElement("button");
-    btnUp.textContent = "Up";
+    let btnDelete = document.createElement("button");
+    let btnBgColor = document.createElement("button");
+
+    btnUp.className = "btn btn-outline-secondary tinyButton";
     btnUp.addEventListener("click", function (e) { MoveElUp(this.parentElement.parentElement.parentElement) });
-    btnDown.textContent = "Down";
+    btnUp.innerHTML = upIcon;
+
+    btnDown.className = "btn btn-outline-secondary tinyButton";
     btnDown.addEventListener("click", function (e) { MoveElDown(this.parentElement.parentElement.parentElement) });
-    btnAddAttr.textContent = "+ dodaj atrybut";
-    btnAddAttr.addEventListener("click", function (e) { AddAttribute(this) })
+    btnDown.innerHTML = downIcon;
 
-    let buttonsDiv = document.createElement("div");
+    btnDelete.className = "btn btn-outline-danger tinyButton";
+    btnDelete.addEventListener("click", function (e) { Point.prototype.DeleteMainPoint(this.parentElement.parentElement.parentElement, point.IsBranch) })
+    btnDelete.innerHTML = crossIcon;
 
-    buttonsDiv.appendChild(btnUp);
-    buttonsDiv.appendChild(btnDown);
-    buttonsDiv.appendChild(btnAddAttr);
+    btnBgColor.className = "btn btn-outline-secondary tinyButton";
+    //EVENT
+    btnBgColor.innerHTML = colorIcon;
 
-    pointDiv.appendChild(contents);
-    pointDiv.appendChild(addedAttrsDiv);
-    pointDiv.appendChild(buttonsDiv);
 
-    let lineDiv = document.createElement("div");
-    lineDiv.className = "line"
+    manageBtnsGroup.appendChild(btnDelete);
+    manageBtnsGroup.appendChild(btnUp);
+    manageBtnsGroup.appendChild(btnDown);
+    manageBtnsGroup.appendChild(btnBgColor);
+    
 
-    let addBranchDiv = document.createElement("div");
-    addBranchDiv.className = "addBranchBtn";
-    let btnAddBranch = document.createElement("button");
-    btnAddBranch.className = "btn btn-outline-secondary";
-    btnAddBranch.innerHTML = `
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
-            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-        </svg>
-        dodaj gałąź`;
-    btnAddBranch.addEventListener("click", function (e) { AddBranch(this.parentElement.parentElement) });
+    managePointDiv.appendChild(manageBtnsGroup);
+    //-------------------------------------------------------------------
 
-    addBranchDiv.appendChild(btnAddBranch);
 
     mainDiv.appendChild(pointDiv);
-    mainDiv.appendChild(lineDiv);
-    mainDiv.appendChild(addBranchDiv);
+    mainDiv.appendChild(managePointDiv);
+    
+    let branchManageBtns = document.createElement("div");
+    branchManageBtns.className = "branchManageBtns";
+
+    if (point.IsBranch == false) {
+        let btnAddBranch = document.createElement("button");
+        btnAddBranch.className = "btn btn-outline-secondary tinyButton";
+        btnAddBranch.innerHTML = plusIcon + "dodaj gałąź";
+        btnAddBranch.addEventListener("click", function (e) { Branch.prototype.AddBranch(this.parentElement.parentElement); AddAndRemoveBranchVisibility(this) });
+
+        branchManageBtns.appendChild(btnAddBranch);
+    }
+
+    let btnDeleteBranch = document.createElement("button");
+    btnDeleteBranch.className = "btn btn-outline-danger tinyButton";
+    btnDeleteBranch.innerHTML = crossIcon + "usuń gałąź";
+    btnDeleteBranch.style.visibility = "hidden";
+    btnDeleteBranch.addEventListener("click", function (e) { Branch.prototype.DeleteBranch(this.parentElement.parentElement); AddAndRemoveBranchVisibility(this) });
+
+    branchManageBtns.appendChild(btnDeleteBranch);
+
+    mainDiv.appendChild(branchManageBtns);
 
     return mainDiv;
 }
 
-function AttributeBlock() {
+function AttributeBlock(titleNumber) {
     //<mainDiv>
     //  <inputDiv>
     //      <keyInput/>
@@ -98,9 +160,9 @@ function AttributeBlock() {
 
     let keyInput = document.createElement("input");
     keyInput.className = "pointAttrKey";
-    keyInput.value = "klucz";
+    keyInput.value = "klucz " + titleNumber;
     keyInput.addEventListener("input", function (e) { ResizeInput(e.target) });
-    keyInput.style.width = "6ch";
+    keyInput.style.width = "8ch";
 
     let valueInput = document.createElement("input");
     valueInput.className = "pointAttrValue";
@@ -123,30 +185,22 @@ function AttributeBlock() {
 
     let btnUp = document.createElement("button");
     btnUp.type = "button";
-    btnUp.className = "btn btn-outline-secondary attrBtn";
+    btnUp.className = "btn btn-outline-secondary attrBtn tinyButton";
     btnUp.addEventListener("click", function (e) { MoveElUp(this.parentElement.parentElement.parentElement) });
-    btnUp.innerHTML = `
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-short" viewBox="0 0 16 16">
-            <path fill-rule="evenodd" d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5z" />
-        </svg>`;
+    btnUp.innerHTML = upIcon;
 
     let btnDown = document.createElement("button");
     btnDown.type = "button";
-    btnDown.className = "btn btn-outline-secondary attrBtn";
+    btnDown.className = "btn btn-outline-secondary attrBtn tinyButton";
     btnDown.addEventListener("click", function (e) { MoveElDown(this.parentElement.parentElement.parentElement) });
-    btnDown.innerHTML = `
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-short" viewBox="0 0 16 16">
-            <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4z" />
-        </svg>`;
+    btnDown.innerHTML = downIcon;
 
     let btnCross = document.createElement("button");
     btnCross.type = "button";
-    btnCross.className = "btn btn-outline-secondary attrBtn";
-    btnCross.addEventListener("click", function (e) { RemoveEl(this.parentElement.parentElement.parentElement) });
-    btnCross.innerHTML = `
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
-            <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
-        </svg>`;
+    btnCross.className = "btn btn-outline-danger attrBtn tinyButton";
+    //btnCross.addEventListener("click", function (e) { RemoveEl(this.parentElement.parentElement.parentElement) });
+    btnCross.addEventListener("click", function (e) { Attribute.prototype.RemoveAttribute(this.parentElement.parentElement.parentElement) });
+    btnCross.innerHTML = crossIcon;
 
     btnsGroup.appendChild(btnUp);
     btnsGroup.appendChild(btnDown);
@@ -160,4 +214,28 @@ function AttributeBlock() {
     mainDiv.appendChild(btnsDiv);
 
     return mainDiv;
+}
+
+function BranchBlock() {
+    let branchDiv = document.createElement("div");
+    branchDiv.className = "branchContainer";
+
+    let pointsDiv = document.createElement("div");
+    pointsDiv.className = "addedPoints";
+
+    let addPointDiv = document.createElement("div");
+    addPointDiv.className = "col-8 point addPoint";
+    addPointDiv.addEventListener("click", function (e) { Point.prototype.AddBranchPoint(this) })
+
+    let p = document.createElement("p");
+    p.textContent = "+ Dodaj punkt";
+
+    //pointsDiv.appendChild(PointBlock());
+
+    addPointDiv.appendChild(p);
+
+    branchDiv.appendChild(pointsDiv);
+    branchDiv.appendChild(addPointDiv);
+
+    return branchDiv;
 }

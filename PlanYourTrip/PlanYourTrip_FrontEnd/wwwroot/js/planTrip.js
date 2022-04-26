@@ -1,12 +1,11 @@
-﻿const addedPointsContainer = document.getElementById("addedPoints");
+﻿const addedMainPointsContainer = document.getElementById("addedPoints");
 const branchesContainer = document.getElementById("branches");
+const defaultPointTitle = "Nowy punkt";
 
 
 function MoveElUp(currentEl) {
     let elementId = FindElementId(currentEl);
     let parentEl = currentEl.parentElement;
-
-    console.log(currentEl);
 
     if (elementId != 0) {
         parentEl.insertBefore(currentEl, parentEl.children[elementId - 1]);
@@ -17,15 +16,12 @@ function MoveElDown(currentEl) {
     let elementId = FindElementId(currentEl);
     let parentEl = currentEl.parentElement;
 
-    console.log(currentEl);
-
     if (elementId != (parentEl.childElementCount - 1)) {
         parentEl.insertBefore(parentEl.children[elementId + 1], currentEl);
     }
 }
 
 function RemoveEl(currentEl) {
-    let parentEl = currentEl.parentElement;
     currentEl.remove();
 }
 
@@ -38,31 +34,13 @@ function FindElementId(element) {
     }
 }
 
-function ResizeInput(target) {
-    target.style.width = (target.value.length + .5) + "ch";
+function ResizeInput(sender) {
+    sender.style.width = (sender.value.length + .5) + "ch";
 }
 
-function AddPoint(type) {
-    //type = "main" || "branch"
-    if (type === "main") {
-        addedPointsContainer.insertBefore(PointBlock(addedPointsContainer.childElementCount + 1), null);
-    }
-    
-}
 
-function AddAttribute(target) {
-    let parentEl = target.parentElement.parentElement;
-
-    console.log(parentEl);
-
-    let attrCont = parentEl.getElementsByClassName("addedAttributes")[0];
-    console.log(attrCont);
-
-    attrCont.insertBefore(AttributeBlock(), null);
-}
-
-function VisibleBtns(target, state) {
-    let btnsEl = target.children[1];
+function VisibleBtns(sender, state) {
+    let btnsEl = sender.children[1];
 
     if (state) {
         btnsEl.style.visibility = "visible";
@@ -71,30 +49,12 @@ function VisibleBtns(target, state) {
     }
 }
 
-function AddBranch(target) {
-    let parentEl = target.parentElement;
-    let branchDiv = document.createElement("div");
-    branchDiv.style.width = "100%";
-    branchDiv.style.marginTop = target.offsetTop;
+function AddAndRemoveBranchVisibility(sender, state) {
+    sender.style.visibility = "hidden";
 
-    let p = document.createElement("p");
-    p.textContent = "nowy div";
-
-    branchDiv.appendChild(PointBlock(1));
-
-    branchesContainer.appendChild(branchDiv);
-}
-
-var Points = {
-
-}
-
-var Point = {
-    Attributes = {
-
+    if (sender.parentElement.children[0] === sender) {
+        sender.parentElement.children[1].style.visibility = "visible";
+    } else {
+        sender.parentElement.children[0].style.visibility = "visible";
     }
-}
-
-var Branch = {
-    
 }
