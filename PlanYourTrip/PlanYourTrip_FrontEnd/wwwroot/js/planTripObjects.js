@@ -39,7 +39,7 @@ var pointPrototype = {
             }
         }
     },
-    DeleteMainPoint: (pointHTMLEl, isBranch) => {
+    DeletePoint: (pointHTMLEl, isBranch) => {
         let thisPoint;
         if (!isBranch) {
             thisPoint = Point.prototype.FindPointInPoints(pointHTMLEl);
@@ -60,9 +60,6 @@ var pointPrototype = {
         pointHTMLEl.remove();
         
     },
-    DeleteBranchPoint: (pointHTMLEl) => {
-
-    }
 }
 
 function Point(title, isBranch, hasBranch, htmlEL, arrayId, branchPoints, branch) {
@@ -85,14 +82,9 @@ var attributePrototype = {
     AddAttribute: (target) => {
         let parentEl = target.parentElement.parentElement;
         let attrCont = parentEl.getElementsByClassName("addedAttributes")[0];
-        attrCont.insertBefore(AttributeBlock(attrCont.childElementCount + 1), null);
-        Points[FindElementId(parentEl.parentElement)].Attributes.push(new Attribute(attrCont.childElementCount, "", (attrCont.childElementCount - 1)));
+        attrCont.insertBefore(AttributeBlock(attrCont.childElementCount + 1, ""), null);
+        Points[FindElementId(parentEl.parentElement)].Attributes.push(new Attribute(attrCont.childElementCount, "", "",  (attrCont.childElementCount - 1)));
         console.log(Points);
-    },
-    UpdateAttribute: (key, value, id, target) => {
-        let parentEl = target.parentElement.parentElement;
-        Points[FindElementId(parentEl.parentElement)].Attributes[id].Key = key;
-        Points[FindElementId(parentEl.parentElement)].Attributes[id].Value = value;
     },
     RemoveAttribute: (sender) => {
         let parentEl = sender.parentElement.parentElement;
@@ -102,9 +94,10 @@ var attributePrototype = {
     }
 }
 
-function Attribute(key, value, arrayId) {
+function Attribute(key, value, hiddenVal, arrayId) {
     this.Key = key;
     this.Value = value;
+    this.HiddenVal = hiddenVal;
     this.ArrayId = arrayId
 }
 
@@ -173,8 +166,21 @@ var Branches = []
 // punkty w gałęzi dodawać do punktu korzenia (teraz dodaje do Points) - OK
 // usuwanie punktów/gałęzi - OK
 // wyłączenie przycisku "dodaj gałąź" jeśli już jest gałąź - OK
+// chowanie/pokazywanie bloku gałęzi i guzik do tego - OK
+// chowanie poprzedniego bloku gałęzi jeśli kliknięto inny guzik lub "zwiń gałąź/powrót do root" - OK
+// atrybuty w głównym punkcie średnio działają trzeba zrobić na sztywno coś - OK
 
 // linia łącząca rootPoint z gałęzią
-// chowanie/pokazywanie bloku gałęzi i guzik do tego
-// chowanie poprzedniego bloku gałęzi jeśli kliknięto inny guzik lub "zwiń gałąź/powrót do root"
-// atrybuty w głównym punkcie średnio działają trzeba zrobić na sztywno coś
+// okno z pytaniem przy usuwaniu punktu/gałęzi/atr (+ gdzieś opcje wyłączenia i włączenia tych okien)
+// zapisywanie do JSON
+// odczytywanie z JSON
+// baner na górze z kilkoma opcjami (zapisz, pobierz plik, wyłącz okna ostrzeżeń...)
+
+// MAPA
+// połowa ekranu po lewej/prawej
+// dropdown list z typem pokazywanych punktów
+// opis punktu po kliknięciu na niego
+// po kliknięciu na punkt można dodać dane jako nowy atrybut punktu (współrzędne jakoś w ukrytym polu)
+// ALBO
+// dodać przycisk "dodaj link" obok dodaj atrybut i będzie podaj link, i nazwę
+// w AttributeBlock trzebaby wtedy podać typ jaki wchodzi "isLink" albo coś

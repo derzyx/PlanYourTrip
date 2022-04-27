@@ -15,6 +15,10 @@ const colorIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16
 const plusIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
                       <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
                     </svg>`;
+const eyeIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
+                  <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
+                  <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+                </svg>`;
 
 
 function PointBlock(point) {
@@ -45,6 +49,7 @@ function PointBlock(point) {
 
     let pointDiv = document.createElement("div");
     pointDiv.className = "point";
+    pointDiv.addEventListener("click", function (e) { ChangePointFocus(this) });
 
     let title = document.createElement("input");
     title.className = "pointTitle";
@@ -54,9 +59,9 @@ function PointBlock(point) {
     addedAttrsDiv.className = "addedAttributes";
 
     let btnAddAttr = document.createElement("button");
-    btnAddAttr.className = "btn btn-outline-secondary tinyButton";
+    btnAddAttr.className = "btn btn-outline-dark tinyButton";
     btnAddAttr.innerHTML = plusIcon + "dodaj atrybut";
-    btnAddAttr.addEventListener("click", function (e) { Attribute.prototype.AddAttribute(this) })
+    btnAddAttr.addEventListener("click", function (e) { Attribute.prototype.AddAttribute(this) });
 
     let addAttrDiv = document.createElement("div");
 
@@ -76,21 +81,31 @@ function PointBlock(point) {
     let btnUp = document.createElement("button");
     let btnDown = document.createElement("button");
     let btnDelete = document.createElement("button");
-    let btnBgColor = document.createElement("button");
+    let btnBgColor = document.createElement("input");
 
+    btnUp.title = "Przenieś wyżej";
     btnUp.className = "btn btn-outline-secondary tinyButton";
     btnUp.addEventListener("click", function (e) { MoveElUp(this.parentElement.parentElement.parentElement) });
     btnUp.innerHTML = upIcon;
 
+    btnDown.title = "Przenieś niżej";
     btnDown.className = "btn btn-outline-secondary tinyButton";
     btnDown.addEventListener("click", function (e) { MoveElDown(this.parentElement.parentElement.parentElement) });
     btnDown.innerHTML = downIcon;
 
+    btnDelete.title = "Usuń punkt";
     btnDelete.className = "btn btn-outline-danger tinyButton";
-    btnDelete.addEventListener("click", function (e) { Point.prototype.DeleteMainPoint(this.parentElement.parentElement.parentElement, point.IsBranch) })
+    btnDelete.addEventListener("click", function (e) { Point.prototype.DeletePoint(this.parentElement.parentElement.parentElement, point.IsBranch) })
     btnDelete.innerHTML = crossIcon;
 
+    btnBgColor.title = "Kolor punktu";
     btnBgColor.className = "btn btn-outline-secondary tinyButton";
+    btnBgColor.type = "color";
+    btnBgColor.style.width = "28px";
+    btnBgColor.style.height = "28px";
+    btnBgColor.style.padding = "0";
+    btnBgColor.addEventListener("change", function (e) { ColorPick(this)})
+    btnBgColor.addEventListener("input", function (e) { ColorPick(this)})
     //EVENT
     btnBgColor.innerHTML = colorIcon;
 
@@ -115,25 +130,44 @@ function PointBlock(point) {
         let btnAddBranch = document.createElement("button");
         btnAddBranch.className = "btn btn-outline-secondary tinyButton";
         btnAddBranch.innerHTML = plusIcon + "dodaj gałąź";
-        btnAddBranch.addEventListener("click", function (e) { Branch.prototype.AddBranch(this.parentElement.parentElement); AddAndRemoveBranchVisibility(this) });
+        btnAddBranch.addEventListener("click", function (e) {
+            Branch.prototype.AddBranch(this.parentElement.parentElement);
+            AddAndRemoveBranchVisibility(this);
+            ChangeBranchFocus(this.parentElement.parentElement);
+        });
 
         branchManageBtns.appendChild(btnAddBranch);
     }
 
-    let btnDeleteBranch = document.createElement("button");
-    btnDeleteBranch.className = "btn btn-outline-danger tinyButton";
-    btnDeleteBranch.innerHTML = crossIcon + "usuń gałąź";
-    btnDeleteBranch.style.visibility = "hidden";
-    btnDeleteBranch.addEventListener("click", function (e) { Branch.prototype.DeleteBranch(this.parentElement.parentElement); AddAndRemoveBranchVisibility(this) });
+    let visibilityAndRemoveBtns = document.createElement("div");
+    visibilityAndRemoveBtns.className = "btn-group visibAndRemoveBtns";
+    visibilityAndRemoveBtns.style.visibility = "hidden";
+    visibilityAndRemoveBtns.style.position = "absolute";
+    visibilityAndRemoveBtns.style.right = "0";
 
-    branchManageBtns.appendChild(btnDeleteBranch);
+    let btnBranchVisibility = document.createElement("button");
+    btnBranchVisibility.title = "Ukryj/pokaż gałąź";
+    btnBranchVisibility.className = "btn btn-outline-secondary tinyButton";
+    btnBranchVisibility.innerHTML = eyeIcon;
+    btnBranchVisibility.addEventListener("click", function (e) { ChangeBranchFocus(this.parentElement.parentElement.parentElement) });
+
+    let btnDeleteBranch = document.createElement("button");
+    btnDeleteBranch.title = "Usuń gałąź";
+    btnDeleteBranch.className = "btn btn-outline-danger tinyButton";
+    btnDeleteBranch.innerHTML = crossIcon;
+    btnDeleteBranch.addEventListener("click", function (e) { Branch.prototype.DeleteBranch(this.parentElement.parentElement.parentElement); AddAndRemoveBranchVisibility(this.parentElement) });
+
+    visibilityAndRemoveBtns.appendChild(btnBranchVisibility);
+    visibilityAndRemoveBtns.appendChild(btnDeleteBranch);
+
+    branchManageBtns.appendChild(visibilityAndRemoveBtns);
 
     mainDiv.appendChild(branchManageBtns);
 
     return mainDiv;
 }
 
-function AttributeBlock(titleNumber) {
+function AttributeBlock(titleNumber, hiddenVal) {
     //<mainDiv>
     //  <inputDiv>
     //      <keyInput/>
@@ -159,20 +193,25 @@ function AttributeBlock(titleNumber) {
     inputDiv.className = "col";
 
     let keyInput = document.createElement("input");
-    keyInput.className = "pointAttrKey";
+    keyInput.className = "pointAttrInput";
     keyInput.value = "klucz " + titleNumber;
     keyInput.addEventListener("input", function (e) { ResizeInput(e.target) });
     keyInput.style.width = "8ch";
 
     let valueInput = document.createElement("input");
-    valueInput.className = "pointAttrValue";
+    valueInput.className = "pointAttrInput";
     valueInput.value = "wartość";
     valueInput.addEventListener("input", function (e) { ResizeInput(e.target) });
     valueInput.style.width = "8ch";
 
+    let hiddenDiv = document.createElement("div");
+    hiddenDiv.style.visibility = "hidden";
+    hiddenDiv.style.position = "absolute";
+
     inputDiv.appendChild(keyInput);
     inputDiv.appendChild(document.createTextNode(": "));
     inputDiv.appendChild(valueInput);
+    inputDiv.appendChild(hiddenDiv);
 
     //--------------------------------------------------------
 

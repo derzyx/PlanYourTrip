@@ -14,7 +14,9 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/PlanYourTrip_FrontEnd.styles.css" asp-append-version="true" />
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     <style>
         body{
             margin: 0;
@@ -26,6 +28,7 @@
         }
 
         .tinyButton{
+            background-color: white;
             padding: 0 5px 2px 5px;
         }
 
@@ -82,6 +85,14 @@
             border-right: 5px solid green;
         }
 
+        .pointTitle{
+            border: none;
+            background-color: transparent;
+            font-size: 28px;
+            font-weight: bold;
+            max-width: 100%;
+        }
+
         .managePoint{
             position: absolute;
             left: 0;
@@ -102,8 +113,16 @@
             cursor:pointer;
         }
 
+        .addedAttributes{
+            margin: 20px 0;
+        }
 
-        .pointAttrKey, .pointAttrValue{
+        .pointAttr{
+            position: relative;
+            font-family: 'Space Mono', monospace;
+        }
+
+        .pointAttrInput{
             width: 49%;
             border: none;
             background-color: transparent;
@@ -112,21 +131,16 @@
             z-index:9;
         }
 
-        .pointAttr{
-            position: relative;
-            font-family:monospace;
-        }
-
-        .pointAttrKey:hover, .pointAttrValue:hover{
+        .pointAttrInput{
             cursor:text;
             background-color: white;
         }
 
-        .pointAttrKey:focus, .pointAttrValue:focus{
+        .pointAttrInput{
             background-color: white;
         }
 
-        .pointAttrKey:not(:focus), .pointAttrValue:not(:focus){
+        .pointAttrInput{
             background-color: transparent;
         }
 
@@ -158,6 +172,10 @@
             position: absolute;
             width: 100%;
         }
+
+        .currentPoint{
+            box-shadow: 0 0 1em blue;
+        }
     </style>
 </head>
 <body>
@@ -179,10 +197,19 @@
                         <div class="addedAttributes">
                         </div>
                         <div>
-                            <button onclick="Attribute.prototype.AddAttribute(this)">+ dodaj atrybut</button>
+                            <button class="btn btn-outline-dark tinyButton" onclick="Attribute.prototype.AddAttribute(this)">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+                                  <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
+                                </svg>
+                                dodaj atrybut
+                            </button>
                         </div>
                     </div>
-                    <div class="line"></div>
+                    <div class="managePoint">
+                        <div class="btn-group managePointsBtns">
+                            <input title="Kolor punktu" class="btn btn-outline-secondary tinyButton" type="color" style="width:28px; height:28px; padding:inherit;" onchange="ColorPick(this)" oninput="ColorPick(this)"/>
+                        </div>
+                    </div>
                 </div>
                 <div id="addedPoints"></div>
                 <div id="addPoint" class="col-8 point addPoint" onclick="Point.prototype.AddPoint(this)">
