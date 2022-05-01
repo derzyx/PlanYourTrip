@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PlanYourTrip_ClassLibrary.Classes;
 
 namespace PlanYourTrip_BackEnd.Data
 {
@@ -6,8 +7,11 @@ namespace PlanYourTrip_BackEnd.Data
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
-        public DbSet<User> Users { get; set; }
-
-
+        public DbSet<Answers> Answers { get; set; }
+        public DbSet<Users> Users { get; set; }
+        public DbSet<Contributors> Contributors { get; set; }
+        public DbSet<Posts> Posts { get; set; }
+        public DbSet<TripPlans> TripPlans { get; set; }
+        
     }
 }

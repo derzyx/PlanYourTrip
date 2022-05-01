@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PlanYourTrip_ClassLibrary.Classes;
 
 namespace PlanYourTrip_BackEnd.Controllers
 {
@@ -8,7 +9,7 @@ namespace PlanYourTrip_BackEnd.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private static List<User> users = new List<User>
+        private static List<Users> users = new List<Users>
         {
 
         };
@@ -21,16 +22,16 @@ namespace PlanYourTrip_BackEnd.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<User>>> GetAllUsers()
+        public async Task<ActionResult<List<Users>>> GetAllUsers()
         {
             return Ok(await _context.Users.ToListAsync());
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(int id)
+        public async Task<ActionResult<Users>> GetUser(int id)
         {
             var user = await _context.Users.FindAsync(id);
-            if(user == null)
+            if (user == null)
             {
                 return BadRequest("Nie znaleziono użytkownika");
             }
@@ -38,15 +39,15 @@ namespace PlanYourTrip_BackEnd.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<List<User>>> AddUser(User user)
+        public async Task<ActionResult<List<Users>>> AddUser(Users user)
         {
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
             return Ok(await _context.Users.ToListAsync());
         }
 
-        [HttpPut]
-        public async Task<ActionResult<List<User>>> UpdateUser(User request)
+        [HttpPut("{id}")]
+        public async Task<ActionResult<List<Users>>> UpdateUser(Users request)
         {
             var user = await _context.Users.FindAsync(request.Id);
             if (user == null)
@@ -54,9 +55,9 @@ namespace PlanYourTrip_BackEnd.Controllers
                 return BadRequest("Nie znaleziono użytkownika");
             }
 
-            user.Name = request.Name;
-            user.FirstName = request.FirstName;
-            user.LastName = request.LastName;
+            user.Nick = request.Nick;
+            user.Imie = request.Imie;
+            user.Nazwisko = request.Nazwisko;
 
             await _context.SaveChangesAsync();
 
@@ -64,7 +65,7 @@ namespace PlanYourTrip_BackEnd.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<User>> RemoveUser(int id)
+        public async Task<ActionResult<Users>> RemoveUser(int id)
         {
             var user = await _context.Users.FindAsync(id);
             if (user == null)
