@@ -14,7 +14,6 @@ namespace PlanYourTrip_ClassLibrary.Classes
         public int TripPlanId { get; set; }
         public string Nazwa { get; set; }
         public string Opis { get; set; }
-        public bool IsOneDay { get; set; }
         public string PunktyJSON { get; set; }
 
         //Relacje

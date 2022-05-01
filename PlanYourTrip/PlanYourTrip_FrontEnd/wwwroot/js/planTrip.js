@@ -2,30 +2,42 @@
 const branchesContainer = document.getElementById("branches");
 const defaultPointTitle = "Nowy punkt";
 
+const addLinkBox = document.getElementById("addLinkBox");
+const addLinkBtn = document.getElementById("addLink");
+const closeLinkBoxBtn = document.getElementById("closeLinkBox");
+const linkValueInput = document.getElementById("linkValue");
+const linkURLInput = document.getElementById("linkHiddenVal");
+
+const removeQuestionBox = document.getElementById("removeElQuestion");
+const closeQuestionBtn = document.getElementById("closeQuestionBox");
+const removeElBtn = document.getElementById("removeEl");
+
 var currentPointFocus;
 var currentBranchFocus;
 
-function MoveElUp(currentEl) {
-    let elementId = FindElementId(currentEl);
-    let parentEl = currentEl.parentElement;
+// EVENTS
 
-    if (elementId != 0) {
-        parentEl.insertBefore(currentEl, parentEl.children[elementId - 1]);
-    }
-}
+closeLinkBoxBtn.addEventListener("click", function (e) {
+    addLinkBox.style.visibility = "hidden";
+});
 
-function MoveElDown(currentEl) {
-    let elementId = FindElementId(currentEl);
-    let parentEl = currentEl.parentElement;
+addLinkBtn.addEventListener("click", function (e) {
+    let attribute = new Attribute("", linkValueInput.value, linkURLInput.value, null, "link", null);
+    let sourcePoint = Points[e.target.getAttribute("source")];
+    Attribute.prototype.AddLinkAttribute(sourcePoint, attribute);
+    addLinkBox.style.visibility = "hidden";
+});
 
-    if (elementId != (parentEl.childElementCount - 1)) {
-        parentEl.insertBefore(parentEl.children[elementId + 1], currentEl);
-    }
-}
+//closeQuestionBtn.addEventListener("click", function (e) {
+//    removeQuestionBox.style.visibility = "hidden";
+//});
 
-function RemoveEl(currentEl) {
-    currentEl.remove();
-}
+//removeElBtn.addEventListener("click", function (e) {
+
+//})
+
+
+// FUNCTIONS
 
 function FindElementId(element) {
     let parentEl = element.parentElement;
@@ -91,5 +103,49 @@ function ChangeBranchFocus(sender) {
         } else {
             Branches[i].BranchEl.style.visibility = "hidden";
         }
+    }
+}
+
+function UpdateBranchOffset(point) {
+    console.log(point);
+    if (point.HasBranch) {
+        point.Branch.style.marginTop = (point.HTMLEl.offsetTop - 120) + "px";
+    }
+}
+
+function OpenAddLinkBox(sender) {
+    addLinkBox.style.visibility = "visible";
+    let parentPointEl = sender.parentElement.parentElement.parentElement;
+    let parentPointId = Points.indexOf(Point.prototype.FindPointInPoints(parentPointEl));
+    addLinkBtn.setAttribute("source", parentPointId);
+}
+
+function OpenRemoveElQuestionBox(sender, type) {
+
+    // TA ZMIENNA MA BYĆ JAKO PRZYCISK W NAVBAR
+    let askBeforeDelete = true;
+
+    if (askBeforeDelete) {
+        document.querySelector("body").insertBefore(RemoveElQuestionBlock(sender, type), document.getElementById("navBar"));
+    }
+    else {
+        RemoveByType(sender, type);
+    }
+}
+
+function RemoveByType(sender, type) {
+    switch (type) {
+        case "point":
+            Point.prototype.DeletePoint(sender, false);
+            break;
+        case "branch-point":
+            Point.prototype.DeletePoint(sender, true);
+            break;
+        case "branch":
+            Branch.prototype.DeleteBranch(sender);
+            break;
+        case "attribute":
+            Attribute.prototype.RemoveAttribute(sender);
+            break;
     }
 }

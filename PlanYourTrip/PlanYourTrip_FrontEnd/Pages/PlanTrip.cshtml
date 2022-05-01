@@ -9,214 +9,114 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=1920, initial-scale=1.0, maximum-scale=1.0 user-scalabe=no" />
     <title>PlanYourTrip_FrontEnd</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/PlanYourTrip_FrontEnd.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/TripPlanningPage.css" asp-append-version="true" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
-    <style>
-        body{
-            margin: 0;
-            overflow:hidden;
-        }
-
-        h-100{
-            height:100%;
-        }
-
-        .tinyButton{
-            background-color: white;
-            padding: 0 5px 2px 5px;
-        }
-
-        .leftBlock{
-            background-color:red;
-        }
-
-        .left{
-            position:fixed;
-            left: 0;
-            width: 20%;
-        }
-        
-        .centerBlock{
-            background-color:white;
-        }
-        
-        .center{
-            width:60%;
-            height:100vh;
-            margin-left: 20%;
-            overflow:auto;
-        }
-        
-        .rightBlock{
-            background-color:gray;
-        }
-
-        .right{
-            position:fixed;
-            right: 0;
-            width: 50%;
-        }
-
-        .point{
-            margin: 0 auto;
-            min-height:100px;
-            border: 1px solid;
-            border-radius: 10px;
-            padding: 20px;
-        }
-
-        .pointContainer{
-            position: relative;
-            padding:0;
-            margin: 0 auto;
-        }
-
-        .pointContainer::after{
-            content:'';
-            display:block;
-            height:50px;
-            width:50%;
-            border-right: 5px solid green;
-        }
-
-        .pointTitle{
-            border: none;
-            background-color: transparent;
-            font-size: 28px;
-            font-weight: bold;
-            max-width: 100%;
-        }
-
-        .managePoint{
-            position: absolute;
-            left: 0;
-        }
-
-        .addPoint{
-            display:flex;
-            justify-content:center;
-            text-align:center;
-        }
-
-        .addPoint p{
-            font-size:2.3vh;
-            margin:auto;
-        }
-
-        .addPoint:hover{
-            cursor:pointer;
-        }
-
-        .addedAttributes{
-            margin: 20px 0;
-        }
-
-        .pointAttr{
-            position: relative;
-            font-family: 'Space Mono', monospace;
-        }
-
-        .pointAttrInput{
-            width: 49%;
-            border: none;
-            background-color: transparent;
-            min-width: 10px;
-            max-width: 100%;
-            z-index:9;
-        }
-
-        .pointAttrInput{
-            cursor:text;
-            background-color: white;
-        }
-
-        .pointAttrInput{
-            background-color: white;
-        }
-
-        .pointAttrInput{
-            background-color: transparent;
-        }
-
-        .attrBtn{
-            padding:0 5px;
-            background-color: white;
-        }
-
-        .attrBtns{
-            position: absolute;
-            width: 106px;
-            right: 0;
-        }
-
-        .branchManageBtns{
-            position: relative;
-        }
-
-        .branchManageBtns button{
-            position: absolute;
-            right: 0;
-        }
-
-        .brachesContainer{
-            position:relative;
-        }
-
-        .branchContainer{
-            position: absolute;
-            width: 100%;
-        }
-
-        .currentPoint{
-            box-shadow: 0 0 1em blue;
-        }
-    </style>
 </head>
 <body>
-    <div class="left leftBlock h-100">
-        aaa
-    </div>
-
-    <div class="right rightBlock h-100">
-        MAP BLOCK
-    </div>
-
-
-    <div class="center centerBlock">
-        <div class="row justify-content-center" style="margin:50px 0;">
-            <div id="mainPoints" class="col-6">
-                <div class="col-8 pointContainer">
-                    <div class=point>
-                        <input class="pointTitle" value="pierwszy" />
-                        <div class="addedAttributes">
-                        </div>
-                        <div>
-                            <button class="btn btn-outline-dark tinyButton" onclick="Attribute.prototype.AddAttribute(this)">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
-                                  <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
-                                </svg>
-                                dodaj atrybut
-                            </button>
-                        </div>
+    <div class="windowDiv" id="addLinkBox" style="visibility:hidden";>
+        <div class="centerBoxPosition">
+            <div class="centerBox">
+                <div class="container">
+                    <div class="row addLinkField">
+                        <label>
+                            Nazwa linku
+                        </label>
+                        <br/>
+                        <input id="linkValue" type="text"/>
                     </div>
-                    <div class="managePoint">
-                        <div class="btn-group managePointsBtns">
-                            <input title="Kolor punktu" class="btn btn-outline-secondary tinyButton" type="color" style="width:28px; height:28px; padding:inherit;" onchange="ColorPick(this)" oninput="ColorPick(this)"/>
-                        </div>
+                    <div class="row addLinkField">
+                        <label>
+                            Adres linku
+                        </label>
+                        <br/>
+                        <input id="linkHiddenVal" type="text"/>
                     </div>
-                </div>
-                <div id="addedPoints"></div>
-                <div id="addPoint" class="col-8 point addPoint" onclick="Point.prototype.AddPoint(this)">
-                    <p>+ Dodaj punkt</p>
+                    <div class="row justify-content-between">
+                        <button class="col-4 btn btn-outline-danger" id="closeLinkBox">
+                            Anuluj
+                        </button>
+                        <button class="col-4 btn btn-outline-dark" id="addLink">
+                            Dodaj
+                        </button>
+                    </div>
                 </div>
             </div>
-            <div id="branches" class="col-6 brachesContainer">
+        </div>
+    </div>
+@*
+    <div class="windowDiv" id="removeElQuestion" style="visibility:visible";>
+        <div class="centerBoxPosition">
+            <div class="centerBox">
+                <div class="container">
+                    <div class="row addLinkField">
+                        <label>
+                            Czy na pewno chcesz usunąć ten element?
+                        </label>
+                    </div>
+                    <div class="row justify-content-between">
+                        <button class="col-4 btn btn-outline-danger" id="closeQuestionBox">
+                            Anuluj
+                        </button>
+                        <button class="col-4 btn btn-outline-dark" id="removeEl">
+                            Usuń
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+*@
+    <div id="navBar" class="navBarContainer">
+        <div class="navBar">
+            aaa
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-6 mapBlock">
+                <div class="col-6 mapContainer">
+                    MAP BLOCK
+                </div>
+            </div>
+            <div class=col-6>
+                <div class="row justify-content-center" style="margin:50px 0;">
+                    <div id="mainPoints" class="col-6">
+                        <div class="col-11 pointContainer">
+                            <div class=point>
+                                <input class="pointTitle" value="pierwszy" />
+                                <div class="addedAttributes">
+                                </div>
+                                <div>
+                                    <button class="btn btn-outline-dark tinyButton" onclick="Attribute.prototype.AddAttribute(this)">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+                                          <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
+                                        </svg>
+                                        dodaj atrybut
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="managePoint">
+                                <div class="btn-group managePointsBtns">
+                                    <input title="Kolor punktu" class="btn btn-outline-secondary tinyButton" type="color" style="width:28px; height:28px; padding:inherit;" onchange="ColorPick(this)" oninput="ColorPick(this)"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="addedPoints"></div>
+                        <div id="addPoint" class="col-8 point addPoint" onclick="Point.prototype.AddPoint(this)">
+                            <p>+ Dodaj punkt</p>
+                        </div>
+                    </div>
+                    <div id="branches" class="col-6 brachesContainer">
+                    </div>
+                </div>
             </div>
         </div>
     </div>
