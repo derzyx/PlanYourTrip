@@ -1,0 +1,204 @@
+﻿body {
+    margin: 0;
+    height: 100%;
+}
+
+h-100 {
+    height: 100%;
+}
+
+.tinyButton {
+    background-color: white;
+    padding: 0 5px 2px 5px;
+}
+
+.navBarContainer {
+    position: relative;
+    width: 100%;
+    height: 70px;
+}
+
+.navBar {
+    position: fixed;
+    width: 100%;
+    height: 70px;
+    background-color: red;
+    z-index: 20;
+}
+
+.centerBlock {
+    background-color: white;
+}
+
+.center {
+    width: 60%;
+    height: 100vh;
+    overflow: auto;
+}
+
+.mapBlock {
+    padding: 0;
+}
+
+.mapContainer {
+    position: fixed;
+    height: calc(100vh - 70px);
+    background-color: gray;
+}
+
+.point {
+    margin: 0 auto;
+    min-height: 100px;
+    border: 1px solid;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.pointContainer {
+    position: relative;
+    padding: 0;
+    margin: 0 auto;
+}
+
+    .pointContainer::after {
+        content: '';
+        display: block;
+        height: 50px;
+        width: 50%;
+        border-right: 5px solid green;
+    }
+
+.pointTitle {
+    border: none;
+    background-color: transparent;
+    font-size: 28px;
+    font-weight: bold;
+    max-width: 100%;
+}
+
+.managePoint {
+    position: absolute;
+    left: 0;
+}
+
+.addPoint {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    background-color: white;
+    margin-bottom: 100px;
+}
+
+    .addPoint p {
+        font-size: 2.3vh;
+        margin: auto;
+    }
+
+    .addPoint:hover {
+        cursor: pointer;
+    }
+
+.addedAttributes {
+    margin: 20px 0;
+}
+
+.pointAttr {
+    position: relative;
+    font-family: 'Space Mono', monospace;
+}
+
+.pointAttrInput {
+    width: 49%;
+    border: none;
+    background-color: transparent;
+    min-width: 10px;
+    max-width: 100%;
+    z-index: 9;
+}
+
+.pointAttrInput {
+    cursor: text;
+    background-color: white;
+}
+
+.pointAttrInput {
+    background-color: white;
+}
+
+.pointAttrInput {
+    background-color: transparent;
+}
+
+.attrBtn {
+    padding: 0 5px;
+    background-color: white;
+}
+
+.attrBtns {
+    position: absolute;
+    width: 106px;
+    right: 0;
+}
+
+.branchManageBtns {
+    position: relative;
+}
+
+    .branchManageBtns button {
+        position: absolute;
+        right: 0;
+    }
+
+.brachesContainer {
+    position: relative;
+}
+
+.branchContainer {
+    position: absolute;
+    width: 100%;
+}
+
+.branchLine {
+    position: absolute;
+    width: 200px;
+    height: 50px;
+    left: -100px;
+    border-bottom: 5px solid green;
+    z-index: -1;
+}
+
+.currentPoint {
+    box-shadow: 0 0 1em blue;
+}
+
+.windowDiv {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(177, 177, 177, 0.7);
+    z-index: 100;
+}
+
+.centerBoxPosition {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+.centerBox {
+    padding: 30px;
+    background-color: white;
+    border: 1px solid;
+    border-radius: 10px;
+}
+
+.addLinkField{
+    margin-bottom: 30px;
+}
+
+.addLinkField input{
+    padding: 5px;
+    border: 1px solid gray;
+}
