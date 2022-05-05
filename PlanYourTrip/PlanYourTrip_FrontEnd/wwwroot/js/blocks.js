@@ -50,7 +50,7 @@ function PointBlock(point) {
     let pointDiv = document.createElement("div");
     pointDiv.className = "point";
     pointDiv.style.backgroundColor = point.BackgroundColor;
-    pointDiv.addEventListener("click", function (e) { ChangePointFocus(this) });
+    pointDiv.addEventListener("click", function (e) { ChangePointFocus(this, point.IsBranch) });
 
     let title = document.createElement("input");
     title.className = "pointTitle";
@@ -62,7 +62,21 @@ function PointBlock(point) {
     let btnAddAttr = document.createElement("button");
     btnAddAttr.className = "btn btn-outline-dark tinyButton";
     btnAddAttr.innerHTML = plusIcon + "atrybut";
-    btnAddAttr.addEventListener("click", function (e) { Attribute.prototype.AddAttribute(this) });
+    if (!point.IsBranch) {
+        btnAddAttr.addEventListener("click", function (e) {
+            Attribute.prototype.AddAttribute(
+                Point.prototype.FindPointInPoints(this.parentElement.parentElement.parentElement)
+            )
+        });
+    }
+    else {
+        btnAddAttr.addEventListener("click", function (e) {
+            Attribute.prototype.AddAttribute(
+                Branch.prototype.FindBranchPoint(this.parentElement.parentElement.parentElement)
+            )
+        });
+    }
+    
 
     let btnAddLinkAttr = document.createElement("button");
     btnAddLinkAttr.className = "btn btn-outline-dark tinyButton";
@@ -116,7 +130,6 @@ function PointBlock(point) {
     btnDelete.addEventListener("click", function (e) {
         let type = (point.IsBranch) ? "branch-point" : "point";
         OpenRemoveElQuestionBox(this.parentElement.parentElement.parentElement, type);
-        //Point.prototype.DeletePoint(this.parentElement.parentElement.parentElement, point.IsBranch)
     })
     btnDelete.innerHTML = crossIcon;
 
@@ -219,7 +232,7 @@ function AttributeBlock(attribute) {
     inputDiv.className = "col";
 
     let keyInput = document.createElement("input");
-    keyInput.className = "pointAttrInput";
+    keyInput.className = "pointAttrInput attrKey";
     keyInput.value = attribute.Key;
     keyInput.addEventListener("input", function (e) { ResizeInput(e.target) });
     keyInput.style.width = "8ch";
@@ -227,10 +240,9 @@ function AttributeBlock(attribute) {
     inputDiv.appendChild(keyInput);
     inputDiv.appendChild(document.createTextNode(": "));
 
-    // jeśli attribute.Type === "attr"
     if (attribute.Type === "attr") {
         let valueInput = document.createElement("input");
-        valueInput.className = "pointAttrInput";
+        valueInput.className = "pointAttrInput attrValue";
         valueInput.value = "wartość";
         valueInput.addEventListener("input", function (e) { ResizeInput(e.target) });
         valueInput.style.width = "8ch";
@@ -243,6 +255,16 @@ function AttributeBlock(attribute) {
         if (attribute.Value != "") {
             linkField.textContent = attribute.Value;
         }
+
+        inputDiv.appendChild(linkField);
+    }
+    else if (attribute.Type === "map-link") {
+        let linkField = document.createElement("a");
+        linkField.href = "#";
+        linkField.textContent = attribute.Value;
+        linkField.addEventListener("click", function (e) {
+            getPointByEntityId(attribute.HiddenVal);
+        });
 
         inputDiv.appendChild(linkField);
     }

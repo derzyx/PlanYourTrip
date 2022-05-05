@@ -126,41 +126,43 @@ Point.prototype.constructor = Point;
 var attributePrototype = {
     Key: "",
     Value: "",
-    AddAttribute: (target) => {
-        let parentEl = target.parentElement.parentElement;
-        let attrCont = parentEl.getElementsByClassName("addedAttributes")[0];
-
+    AddAttribute: (parentPoint) => {
+        let attrCont = parentPoint.HTMLEl.getElementsByClassName("addedAttributes")[0];
         let attribute = new Attribute(("klucz " + (attrCont.childElementCount + 1)), "", "", attrCont.childElementCount, "attr", null);
         let attrBlock = AttributeBlock(attribute);
+
         attrCont.insertBefore(attrBlock, null);
         attribute.HTMLEl = attrBlock;
-        Points[FindElementId(parentEl.parentElement)].Attributes.push(attribute);
+        parentPoint.Attributes.push(attribute);
         console.log(Points);
     },
-    AddLinkAttribute: (target, attribute) => {
-        let attrCont = target.HTMLEl.getElementsByClassName("addedAttributes")[0];
-        //let parentPoint = Point.prototype.FindPointInPoints(target)
+    AddLinkAttribute: (parentPoint, attribute) => {
+        let attrCont = parentPoint.HTMLEl.getElementsByClassName("addedAttributes")[0];
 
-        attribute.Key = "klucz" + (attrCont.childElementCount + 1);
+        if (attribute.Key === "") {
+            attribute.Key = "klucz" + (attrCont.childElementCount + 1);
+        }
         attribute.ArrayId = attrCont.childElementCount;
 
         let attrBlock = AttributeBlock(attribute);
         attrCont.insertBefore(attrBlock, null);
         attribute.HTMLEl = attrBlock;
 
-
-        target.Attributes.push(attribute);
+        parentPoint.Attributes.push(attribute);
         console.log(Points);
     },
     RemoveAttribute: (sender) => {
-        let parentEl = sender.parentElement.parentElement;
-        let attrCont = parentEl.getElementsByClassName("addedAttributes")[0];
-        Points[FindElementId(parentEl.parentElement)].Attributes.splice(FindElementId(sender), 1)
+        let parentPoint = FindParentPoint(sender);
+
+        let attrCont = parentPoint.HTMLEl.getElementsByClassName("addedAttributes")[0];
+        parentPoint.Attributes.splice(FindElementId(sender), 1)
         attrCont.children[FindElementId(sender)].remove();
+        console.log(parentPoint);
     },
     MoveAttribute: (sender, direction) => {
         let parentEl = sender.parentElement;
-        let parentPoint = Point.prototype.FindPointInPoints(parentEl.parentElement.parentElement);
+        let parentPoint = FindParentPoint(sender);
+
         let elementId = FindElementId(sender);
         let attribute = Attribute.prototype.FindAttributeObj(sender);
         let fromIndex = parentPoint.Attributes.indexOf(attribute);
@@ -178,8 +180,8 @@ var attributePrototype = {
         console.log(parentPoint);
     },
     FindAttributeObj: (attrHTMLEl) => {
-        let parentEl = attrHTMLEl.parentElement.parentElement.parentElement;
-        let parentPoint = Point.prototype.FindPointInPoints(parentEl);
+        //let parentEl = attrHTMLEl.parentElement.parentElement.parentElement;
+        let parentPoint = FindParentPoint(attrHTMLEl);
 
         for (let i = 0; i < parentPoint.Attributes.length; i++) {
             if (parentPoint.Attributes[i].HTMLEl === attrHTMLEl) {
@@ -271,26 +273,23 @@ Branch.prototype.constructor = Branch;
 var Branches = []
 
 
-// punkty w gałęzi dodawać do punktu korzenia (teraz dodaje do Points) - OK
-// usuwanie punktów/gałęzi - OK
-// wyłączenie przycisku "dodaj gałąź" jeśli już jest gałąź - OK
-// chowanie/pokazywanie bloku gałęzi i guzik do tego - OK
-// chowanie poprzedniego bloku gałęzi jeśli kliknięto inny guzik lub "zwiń gałąź/powrót do root" - OK
-// atrybuty w głównym punkcie średnio działają trzeba zrobić na sztywno coś - OK
-// linia łącząca rootPoint z gałęzią - OK
-// NAPRAWIĆ NAWIGACJĘ ATTRYBUTÓW (zrobić nową funkcję) - OK
-// okno z pytaniem przy usuwaniu punktu/gałęzi/atr (+ gdzieś opcje wyłączenia i włączenia tych okien) - OK
+function FindParentPoint(sender) {
+    let parentPoint;
 
-// zapisywanie do JSON
+    if (Point.prototype.FindPointInPoints(sender.parentElement.parentElement.parentElement)) {
+        parentPoint = Point.prototype.FindPointInPoints(sender.parentElement.parentElement.parentElement);
+    }
+    else if (Branch.prototype.FindBranchPoint(sender.parentElement.parentElement.parentElement)) {
+        parentPoint = Branch.prototype.FindBranchPoint(sender.parentElement.parentElement.parentElement);
+    }
+
+    return parentPoint;
+}
+
 // odczytywanie z JSON
-// baner na górze z kilkoma opcjami (zapisz, pobierz plik, wyłącz okna ostrzeżeń...)
+// baner na górze z kilkoma opcjami (zapisz, pobierz plik, wyłącz okna ostrzeżeń...) - DODAĆ PRZYCISK ZAPISZ
 // na sam koniec pewnie usunąć główny punkt
 
 // MAPA
-// połowa ekranu po lewej/prawej - OK
+
 // dropdown list z typem pokazywanych punktów
-// opis punktu po kliknięciu na niego
-// po kliknięciu na punkt można dodać dane jako nowy atrybut punktu (współrzędne jakoś w ukrytym polu)
-// ALBO
-// dodać przycisk "dodaj link" obok dodaj atrybut i będzie podaj link, i nazwę
-// w AttributeBlock trzebaby wtedy podać typ jaki wchodzi "isLink" albo coś

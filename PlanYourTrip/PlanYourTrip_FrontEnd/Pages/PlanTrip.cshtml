@@ -11,6 +11,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=1920, initial-scale=1.0, maximum-scale=1.0 user-scalabe=no" />
     <title>PlanYourTrip_FrontEnd</title>
+
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/PlanYourTrip_FrontEnd.styles.css" asp-append-version="true" />
@@ -18,8 +19,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=AkRWWzJ1A9giOQzAfl3JO5mfxwJUMlAOsKsBHtS3UvQ8E-Ez1xQqspSNwGpnwjPd' async defer></script>
 </head>
-<body>
+<body onload="GetMap();">
     <div class="windowDiv" id="addLinkBox" style="visibility:hidden";>
         <div class="centerBoxPosition">
             <div class="centerBox">
@@ -50,40 +52,58 @@
             </div>
         </div>
     </div>
-@*
-    <div class="windowDiv" id="removeElQuestion" style="visibility:visible";>
-        <div class="centerBoxPosition">
-            <div class="centerBox">
-                <div class="container">
-                    <div class="row addLinkField">
-                        <label>
-                            Czy na pewno chcesz usunąć ten element?
-                        </label>
-                    </div>
-                    <div class="row justify-content-between">
-                        <button class="col-4 btn btn-outline-danger" id="closeQuestionBox">
-                            Anuluj
-                        </button>
-                        <button class="col-4 btn btn-outline-dark" id="removeEl">
-                            Usuń
-                        </button>
-                    </div>
+
+    <div id="navBar" class="navBarContainer">
+        <div class="navBar">
+            <div class="row justify-content-between" style="height:100%;">
+                <div class="col-3">
+                    <input class="planTitleInput" oninput="ResizeInput(this)"/>
+                </div>
+                <div class="col-3">
+                    <label>Pytaj przed usunięciem</label>
+                    <input type="checkbox" id="askBeforeDeleteBool" checked/>
                 </div>
             </div>
         </div>
     </div>
-*@
-    <div id="navBar" class="navBarContainer">
-        <div class="navBar">
-            aaa
-        </div>
-    </div>
 
     <div class="container-fluid">
-        <div class="row">
+        <div class="row" style="margin: 0;">
             <div class="col-6 mapBlock">
                 <div class="col-6 mapContainer">
-                    MAP BLOCK
+                    <div class="mapAndLabels">
+                        <div class="pointsTypes">
+                            <select name="types" id="pointTypesDDL">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                            </select>
+                        </div>
+                        <div class="labelContainer" id="placeLabel" style="visibility:hidden;">
+                            <div class="closeLabelBox" onclick="closeLabelBox()">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                                  <path fill-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z"/>
+                                  <path fill-rule="evenodd" d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z"/>
+                                </svg>
+                            </div>
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <h2 id="mapOutput">Title</h2>
+                                    </div>
+                                    <div class="col-12">
+                                        <p>Place</p>
+                                    </div>
+                                    <button class="btn btn-primary" onclick="addPlaceToPoint()">
+                                        Dodaj miejsce do punktu
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="myMap"></div>
+                        
+                    </div>
                 </div>
             </div>
             <div class=col-6>
@@ -122,9 +142,10 @@
     </div>
 
 
-
+    <script src="~/js/bingMap.js"></script>
     <script src="~/js/planTripObjects.js"></script>
     <script src="~/js/blocks.js"></script>
     <script src="~/js/planTrip.js"></script>
+    
 </body>
 </html>
