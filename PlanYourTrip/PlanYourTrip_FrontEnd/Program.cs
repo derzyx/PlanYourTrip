@@ -1,7 +1,11 @@
+using PlanYourTrip_FrontEnd.ApiLogic;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+
+builder.Services.AddHttpClient<TripPlanProcessor>();
 
 var app = builder.Build();
 

@@ -19,8 +19,7 @@ namespace PlanYourTrip_ClassLibrary.Classes
         //Relacje
         public int AutorId { get; set; }
         [ForeignKey("AutorId")]
-        public Users Users { get; set; }
-
-        public ICollection<Contributors> Contributors { get; set; }
+        public Users? Users { get; set; }
+        public ICollection<Contributors>? Contributors { get; set; }
     }
 }
