@@ -12,16 +12,27 @@ const removeQuestionBox = document.getElementById("removeElQuestion");
 const closeQuestionBtn = document.getElementById("closeQuestionBox");
 const removeElBtn = document.getElementById("removeEl");
 
+// wybór typu miejsc
 const pointTypesDDL = document.getElementById("pointTypesDDL");
 
+// blok z info o miejscu
 const placeLabel = document.getElementById("placeLabel");
 
+const planName = document.getElementById("planName");
+const planTripString = document.getElementById("planTripString");
+
 const askBeforeDeleteBool = document.getElementById("askBeforeDeleteBool");
+
+const saveTripToDbBtn = document.getElementById("saveTripToDB");
+const getTripStringBtn = document.getElementById("getTripString");
+
 
 var currentPointFocus;
 var currentBranchFocus;
 
 // EVENTS
+
+window.onload = loadTrip();
 
 closeLinkBoxBtn.addEventListener("click", function (e) {
     addLinkBox.style.visibility = "hidden";
@@ -36,6 +47,11 @@ addLinkBtn.addEventListener("click", function (e) {
 
 pointTypesDDL.addEventListener("change", function (e) {
     console.log(e.target.value);
+});
+
+getTripString.addEventListener("click", async function (e) {
+    await saveValues()
+        .then(saveTripToDbBtn.click());
 });
 
 // FUNCTIONS
@@ -83,7 +99,31 @@ function ColorPick(sender) {
     pointParent.children[0].style.backgroundColor = sender.value;
 }
 
+
+//https://css-tricks.com/converting-color-spaces-in-javascript/
+function RGBToHex(rgb) {
+    // Choose correct separator
+    let sep = rgb.indexOf(",") > -1 ? "," : " ";
+    // Turn "rgb(r,g,b)" into [r,g,b]
+    rgb = rgb.substr(4).split(")")[0].split(sep);
+
+    let r = (+rgb[0]).toString(16),
+        g = (+rgb[1]).toString(16),
+        b = (+rgb[2]).toString(16);
+
+    if (r.length == 1)
+        r = "0" + r;
+    if (g.length == 1)
+        g = "0" + g;
+    if (b.length == 1)
+        b = "0" + b;
+
+    return "#" + r + g + b;
+}
+
+
 function ChangePointFocus(point, isBranch) {
+    console.log(point);
     if (currentPointFocus !== undefined) {
         currentPointFocus.HTMLEl.children[0].className = "point"
     }
@@ -119,6 +159,14 @@ function UpdateBranchOffset(point) {
     }
 }
 
+function UpdateAllBranchesOffset() {
+    for (let p = 0; p < Points.length; p++) {
+        if (Points[p].HasBranch) {
+            Points[p].Branch.style.marginTop = (Points[p].HTMLEl.offsetTop - 120) + "px";
+        }
+    }
+}
+
 function OpenAddLinkBox(sender) {
     addLinkBox.style.visibility = "visible";
     let parentPointEl = sender.parentElement.parentElement.parentElement;
@@ -148,6 +196,7 @@ function RemoveByType(sender, type) {
             break;
         case "attribute":
             Attribute.prototype.RemoveAttribute(sender);
+            UpdateAllBranchesOffset();
             break;
     }
 }
@@ -179,7 +228,9 @@ function saveValues() {
 
         //tytuły głównych punktów
         let pointTitle = Points[p].HTMLEl.getElementsByClassName("pointTitle")[0].value;
+        let pointBgColor = Points[p].HTMLEl.getElementsByClassName("point")[0].style.backgroundColor;
         Points[p].Title = pointTitle;
+        Points[p].BackgroundColor = pointBgColor;
 
         //atrybuty w głównych punktach
         if (Points[p].Attributes.length > 0) {
@@ -218,6 +269,81 @@ function saveValues() {
             }
         }
     }
+    Trip.push(new Options(planName.value, askBeforeDeleteBool.checked));
+    Trip.push(Points);
 
-    return JSON.stringify(Points);
+    planTripString.value = JSON.stringify(Trip);
+
+    return new Promise(resolve => {
+        JSON.stringify(Trip);
+    })
+    //return JSON.stringify(Trip);
+}
+
+function loadTrip() {
+    if (planTripString.value != '')
+    {
+        let LTrip = JSON.parse(planTripString.value);
+        let LOptions = LTrip[0];
+        let LPoints = LTrip[1];
+        console.log(LPoints);
+        Points = LPoints;
+
+        // Opcje
+        planName.value = LOptions.PlanName;
+        askBeforeDeleteBool.checked = LOptions.AskBeforeDelete;
+
+
+        // Główne punkty
+        for (let p = 0; p < LPoints.length; p++) {
+            let pointEl = PointBlock(LPoints[p]);
+            addedMainPointsContainer.insertBefore(pointEl, null);
+            LPoints[p].HTMLEl = pointEl;
+
+            // Atrybuty w głównych punktach
+            let attrContainer = LPoints[p].HTMLEl.getElementsByClassName("addedAttributes")[0];
+            if (LPoints[p].Attributes.length > 0) {
+                for (let a = 0; a < LPoints[p].Attributes.length; a++) {
+                    let attrEl = AttributeBlock(LPoints[p].Attributes[a]);
+                    attrContainer.insertBefore(attrEl, null);
+                    LPoints[p].Attributes[a].HTMLEl = attrEl;
+                }
+            }
+
+            // Gałezie
+            if (LPoints[p].HasBranch) {
+                let branchBtns = LPoints[p].HTMLEl.getElementsByClassName("addBranchBtn")[0];
+                AddAndRemoveBranchVisibility(branchBtns);
+
+                Branch.prototype.AddBranch(LPoints[p].HTMLEl);
+                let branchEl = LPoints[p].Branch;
+
+
+                for (let bp = 0; bp < LPoints[p].BranchPoints.length; bp++) {
+                    // Podpunkty w gałęziach
+                    let branchPoint = LPoints[p].BranchPoints[bp];
+                    let branchPointEl = PointBlock(branchPoint);
+                    LPoints[p].Branch.getElementsByClassName("addedPoints")[0].insertBefore(branchPointEl, null);
+                    branchPoint.HTMLEl = branchPointEl;
+
+                    // Atrybuty w podpunktach
+                    let attrContainer = branchPoint.HTMLEl.getElementsByClassName("addedAttributes")[0];
+                    if (branchPoint.Attributes.length > 0) {
+                        for (let a = 0; a < branchPoint.Attributes.length; a++) {
+                            let attrEl = AttributeBlock(branchPoint.Attributes[a]);
+                            attrContainer.insertBefore(attrEl, null);
+                            branchPoint.Attributes[a].HTMLEl = attrEl;
+                        }
+                    }
+                }
+                branchEl.style.visibility = "hidden";
+            }
+        }
+        let attrInputs = document.getElementsByClassName("pointAttrInput");
+        for (let ai = 0; ai < attrInputs.length; ai++) {
+            ResizeInput(attrInputs[ai]);
+        }
+
+        console.log(JSON.stringify(Points));
+    }
 }

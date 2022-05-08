@@ -53,19 +53,30 @@
         </div>
     </div>
 
+
+
     <div id="navBar" class="navBarContainer">
         <div class="navBar">
             <div class="row justify-content-between" style="height:100%;">
                 <div class="col-3">
-                    <input class="planTitleInput" oninput="ResizeInput(this)"/>
+                    <form method="post">
+                        <input id="planName" asp-for="PlanName" class="planTitleInput" oninput="ResizeInput(this)" value=@Model.TripPlan.Nazwa />
+                        <input id="planTripString" asp-for="TripString" style="visibility:hidden;" value=@Model.TripPlan.PunktyJSON/>
+                        <button id="saveTripToDB" style="visibility:hidden;"></button>
+                    </form>
                 </div>
                 <div class="col-3">
                     <label>Pytaj przed usunięciem</label>
-                    <input type="checkbox" id="askBeforeDeleteBool" checked/>
+                    <input type="checkbox" id="askBeforeDeleteBool" checked />
+
+                    <button id="getTripString">zapisz (do C#)</button>
+
                 </div>
             </div>
         </div>
     </div>
+
+
 
     <div class="container-fluid">
         <div class="row" style="margin: 0;">
@@ -109,7 +120,7 @@
             <div class=col-6>
                 <div class="row justify-content-center" style="margin:50px 0;">
                     <div id="mainPoints" class="col-6">
-                        <div class="col-11 pointContainer">
+@*                        <div class="col-11 pointContainer">
                             <div class=point>
                                 <input class="pointTitle" value="pierwszy" />
                                 <div class="addedAttributes">
@@ -128,7 +139,7 @@
                                     <input title="Kolor punktu" class="btn btn-outline-secondary tinyButton" type="color" style="width:28px; height:28px; padding:inherit;" onchange="ColorPick(this)" oninput="ColorPick(this)"/>
                                 </div>
                             </div>
-                        </div>
+                        </div>*@
                         <div id="addedPoints"></div>
                         <div id="addPoint" class="col-8 point addPoint" onclick="Point.prototype.AddPoint(this)">
                             <p>+ Dodaj punkt</p>
@@ -141,7 +152,7 @@
         </div>
     </div>
 
-
+    <script src="~/js/tripJSON.js"></script>
     <script src="~/js/bingMap.js"></script>
     <script src="~/js/planTripObjects.js"></script>
     <script src="~/js/blocks.js"></script>

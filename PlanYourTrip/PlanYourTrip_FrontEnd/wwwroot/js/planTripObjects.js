@@ -1,4 +1,11 @@
-﻿var Points = []; //for main points
+﻿var Trip = [];
+
+function Options(planName, askBeforeDelete) {
+    this.PlanName = planName;
+    this.AskBeforeDelete = askBeforeDelete;
+}
+
+var Points = []; //for main points
 
 var pointPrototype = {
     Title: "",
@@ -9,7 +16,7 @@ var pointPrototype = {
     HasBranch: false,
     HTMLEl: "",
     AddPoint: (sender) => {
-        let point = new Point((defaultPointTitle + " " + (Points.length + 1)), false, false, null, Points.length, null, null, "white");
+        let point = new Point((defaultPointTitle + " " + (Points.length + 1)), false, false, null, Points.length, null, null, "#ffffff");
         let pointBlock = PointBlock(point);
         let parentEl = sender.parentElement;
         parentEl.children[parentEl.childElementCount - 2].insertBefore(pointBlock, null);
@@ -20,7 +27,7 @@ var pointPrototype = {
     AddBranchPoint: (sender) => {
         let parentEl = sender.parentElement;
         let pointsContainer = parentEl.children[parentEl.childElementCount - 2];
-        let point = new Point((defaultPointTitle + " " + (pointsContainer.childElementCount + 1)), true, false, null, pointsContainer.childElementCount, null, null, "white");
+        let point = new Point((defaultPointTitle + " " + (pointsContainer.childElementCount + 1)), true, false, null, pointsContainer.childElementCount, null, null, "#ffffff");
         let pointBlock = PointBlock(point);
         pointsContainer.insertBefore(pointBlock, null);
         point.HTMLEl = pointBlock;
@@ -58,6 +65,10 @@ var pointPrototype = {
         }
 
         pointHTMLEl.remove();
+
+        for (let i = 0; i < Points.length; i++) {
+            UpdateBranchOffset(Points[i]);
+        }
     },
     MovePoint: (pointHTMLEl, direction) => {
         let elementId = FindElementId(pointHTMLEl);
@@ -212,9 +223,14 @@ var branchPrototype = {
         console.log(rootEl.offsetTop);
 
         branchesContainer.appendChild(branchDiv);
-
-        Points[FindElementId(rootEl)].HasBranch = true;
-        Points[FindElementId(rootEl)].Branch = branchDiv;
+        console.log(Points);
+        
+        let parentPoint = Point.prototype.FindPointInPoints(rootEl);
+        console.log(parentPoint);
+        parentPoint.HasBranch = true;
+        parentPoint.Branch = branchDiv;
+        //Points[FindElementId(rootEl)].HasBranch = true;
+        //Points[FindElementId(rootEl)].Branch = branchDiv;
 
         Branches.push(new Branch(rootEl, branchDiv));
         console.log(Points)
@@ -286,9 +302,7 @@ function FindParentPoint(sender) {
     return parentPoint;
 }
 
-// odczytywanie z JSON
 // baner na górze z kilkoma opcjami (zapisz, pobierz plik, wyłącz okna ostrzeżeń...) - DODAĆ PRZYCISK ZAPISZ
-// na sam koniec pewnie usunąć główny punkt
 
 // MAPA
 

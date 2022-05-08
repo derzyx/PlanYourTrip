@@ -66,14 +66,16 @@ function PointBlock(point) {
         btnAddAttr.addEventListener("click", function (e) {
             Attribute.prototype.AddAttribute(
                 Point.prototype.FindPointInPoints(this.parentElement.parentElement.parentElement)
-            )
+            );
+            UpdateAllBranchesOffset();
         });
     }
     else {
         btnAddAttr.addEventListener("click", function (e) {
             Attribute.prototype.AddAttribute(
                 Branch.prototype.FindBranchPoint(this.parentElement.parentElement.parentElement)
-            )
+            );
+            UpdateAllBranchesOffset();
         });
     }
     
@@ -134,6 +136,7 @@ function PointBlock(point) {
     btnDelete.innerHTML = crossIcon;
 
     btnBgColor.title = "Kolor punktu";
+    btnBgColor.value = point.BackgroundColor === "white" ? "#ffffff" : RGBToHex(point.BackgroundColor);
     btnBgColor.className = "btn btn-outline-secondary tinyButton";
     btnBgColor.type = "color";
     btnBgColor.style.width = "28px";
@@ -163,7 +166,7 @@ function PointBlock(point) {
 
     if (point.IsBranch == false) {
         let btnAddBranch = document.createElement("button");
-        btnAddBranch.className = "btn btn-outline-secondary tinyButton";
+        btnAddBranch.className = "btn btn-outline-secondary tinyButton addBranchBtn";
         btnAddBranch.innerHTML = plusIcon + "dodaj gałąź";
         btnAddBranch.addEventListener("click", function (e) {
             Branch.prototype.AddBranch(this.parentElement.parentElement);
