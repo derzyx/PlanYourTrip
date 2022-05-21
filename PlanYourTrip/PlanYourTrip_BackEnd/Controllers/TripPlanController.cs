@@ -35,13 +35,24 @@ namespace PlanYourTrip_BackEnd.Controllers
             return Ok(tripPlan);
         }
 
+        [HttpGet]
+        [Route("MyPlans/{userId}")]
+        public async Task<ActionResult<TripPlans>> GetUserTripPlans(int userId)
+        {
+            var tripPlans = await _context.TripPlans
+                .FromSqlRaw($"SELECT * FROM dbo.TripPlans WHERE AutorId = {userId}")
+                .ToListAsync();
+            if (tripPlans == null)
+            {
+                return BadRequest("Nie odnaleziono planu");
+            }
+
+            return Ok(tripPlans);
+        }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTripPlan(int id, TripPlans request)
         {
-            string tripToUpdate = request.ToString();
-            TripPlans trip = new TripPlans { AutorId = 1, Nazwa = "aaa" };
-
-            Console.WriteLine(tripToUpdate);
             if (id != request.TripPlanId)
             {
                 return BadRequest();
@@ -56,6 +67,9 @@ namespace PlanYourTrip_BackEnd.Controllers
             tripPlan.Nazwa = request.Nazwa;
             tripPlan.Opis = request.Opis;
             tripPlan.PunktyJSON = request.PunktyJSON;
+            tripPlan.DataUtworzenia = request.DataUtworzenia;
+            tripPlan.OstatniaAktualizacja = request.OstatniaAktualizacja;
+            tripPlan.AutorId = request.AutorId;
 
             try
             {
@@ -67,6 +81,43 @@ namespace PlanYourTrip_BackEnd.Controllers
             }
 
             return NoContent();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<TripPlans>> CreateTripPlan(TripPlans plan)
+        {
+            try
+            {
+                _context.TripPlans.Add(plan);
+                return Ok(await _context.SaveChangesAsync());
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteTripPlan(int id)
+        {
+            var tripPlan = await _context.TripPlans.FindAsync(id);
+            if (tripPlan == null)
+            {
+                return BadRequest("Nie znaleziono planu");
+            }
+
+            try
+            {
+                _context.TripPlans.Remove(tripPlan);
+                return Ok(await _context.SaveChangesAsync());
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
     }
 }

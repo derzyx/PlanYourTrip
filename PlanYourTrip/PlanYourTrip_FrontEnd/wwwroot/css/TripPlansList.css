@@ -1,0 +1,49 @@
+﻿.loadMoreBlock {
+    margin-top: 3rem;
+    margin-bottom: calc(3rem + 61px);
+}
+
+@media (max-width: 576px) {
+    .loadMoreBlock {
+        margin-bottom: calc(3rem + 181px);
+    }
+}
+
+.planBlock{
+    background-color:rgb(217, 239, 246);
+}
+
+.planBlock:last-child{
+    margin: 0 !important;
+}
+
+.deleteBox{
+    background-color:white;
+}
+
+.deleteBoxBgPanel{
+    width: 100%;
+    height: 100%;
+    background-color:rgb(152, 152, 152, 0.61);
+}
+
+#deleteContainer {
+    position: fixed;
+    top: 0;
+    height: 100vh;
+    width: 100%;
+}
+
+#deleteBoxRow {
+    position: absolute;
+    height: 100vh;
+    width: 100%;
+}
+
+.hiddenField{
+    position: absolute;
+    visibility: hidden;
+    top: 0;
+    left: 0;
+    width: 100px;
+}

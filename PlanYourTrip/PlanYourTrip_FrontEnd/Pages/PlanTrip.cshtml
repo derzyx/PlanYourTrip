@@ -60,7 +60,7 @@
             <div class="row justify-content-between" style="height:100%;">
                 <div class="col-3">
                     <form method="post">
-                        <input id="planName" asp-for="PlanName" class="planTitleInput" oninput="ResizeInput(this)" value=@Model.TripPlan.Nazwa />
+                        <input id="planName" asp-for="PlanName" class="planTitleInput" oninput="ResizeInput(this)" value=@Model.TripPlan.Nazwa/>
                         <input id="planTripString" asp-for="TripString" style="visibility:hidden;" value=@Model.TripPlan.PunktyJSON/>
                         <button id="saveTripToDB" style="visibility:hidden;"></button>
                     </form>

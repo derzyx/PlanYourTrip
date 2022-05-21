@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PlanYourTrip_BackEnd.Data;
 
@@ -11,9 +12,10 @@ using PlanYourTrip_BackEnd.Data;
 namespace PlanYourTrip_BackEnd.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220519140349_TripPlanTable_AddNullable")]
+    partial class TripPlanTable_AddNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -136,18 +138,12 @@ namespace PlanYourTrip_BackEnd.Migrations
                     b.Property<int>("AutorId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("DataUtworzenia")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Nazwa")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Opis")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("OstatniaAktualizacja")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("PunktyJSON")
                         .HasColumnType("nvarchar(max)");

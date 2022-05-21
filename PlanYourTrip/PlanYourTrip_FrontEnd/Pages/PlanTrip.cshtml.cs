@@ -13,24 +13,40 @@ namespace PlanYourTrip_FrontEnd.Pages
             _tripPlanProcessor = tripPlanProcessor;
         
         
+        private TripPlans _tripPlan { get; set; }
 
+        //Current trip plan
         [BindProperty]
-        public TripPlans TripPlan { get; set; } 
+        public TripPlans TripPlan { get { 
+                if(_tripPlan == null)
+                {
+                    return new TripPlans() { Nazwa = "Nowy plan", PunktyJSON = ""};
+                }
+                else
+                {
+                    return _tripPlan;
+                }
+            } set { _tripPlan = value; } } 
+
         [BindProperty]
         public string PlanName { get; set; }
         [BindProperty]
         public string TripString { get; set; }
 
-
         public async Task OnGet()
         {
-            try
+            int planId = Convert.ToInt32(HttpContext.Request.Query["plan"]);
+
+            if (planId != 0)
             {
-                TripPlan = await _tripPlanProcessor.GetPlan(4);
-            }
-            catch (Exception ex)
-            {
-                throw;
+                try
+                {
+                    TripPlan = await _tripPlanProcessor.GetPlan(planId);
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                }
             }
             //TripString = System.IO.File.ReadAllText(@"C:\Users\mkrau\source\VS2022_repos\PlanYourTrip\PlanYourTrip\PlanYourTrip_FrontEnd\wwwroot\js\TEMPTripString.txt");
             //string tripString = TripString;
@@ -38,25 +54,44 @@ namespace PlanYourTrip_FrontEnd.Pages
 
         public async Task<IActionResult> OnPost()
         {
-            //string planName = PlanName;
-            //string tripString = TripString;
+            int planId = Convert.ToInt32(HttpContext.Request.Query["plan"]);
+            TripPlans newPlan;
             try
             {
-                var currentPlan = await _tripPlanProcessor.GetPlan(4);
+                if(planId == 0)
+                {
+                    newPlan = new TripPlans
+                    {
+                        Nazwa = PlanName,
+                        Opis = "",
+                        PunktyJSON = TripString,
+                        DataUtworzenia = DateTime.UtcNow,
+                        OstatniaAktualizacja = DateTime.UtcNow,
+                        AutorId = 1
+                    };
 
-                TripPlans newPlan = new TripPlans {
-                    TripPlanId = Convert.ToInt32(currentPlan.TripPlanId),
-                    Nazwa = PlanName,
-                    Opis = currentPlan.Opis,
-                    PunktyJSON = TripString,
-                    AutorId = Convert.ToInt32(currentPlan.AutorId),
-                    Contributors = currentPlan.Contributors,
-                    Users = currentPlan.Users
-                };
+                    await _tripPlanProcessor.AddTripPlan(newPlan);
+                }
+                else
+                {
+                    TripPlans currentPlan = await _tripPlanProcessor.GetPlan(planId);
 
-                await _tripPlanProcessor.UpdateTripPlan(newPlan);
+                    newPlan = new TripPlans
+                    {
+                        TripPlanId = currentPlan.TripPlanId,
+                        Nazwa = PlanName,
+                        Opis = TripPlan.Opis,
+                        PunktyJSON = TripString,
+                        DataUtworzenia = currentPlan.DataUtworzenia,
+                        OstatniaAktualizacja = DateTime.UtcNow,
+                        AutorId = Convert.ToInt32(currentPlan.AutorId),
+                        //Contributors = TripPlan.Contributors,
+                        //Users = TripPlan.Users
+                    };
+                    await _tripPlanProcessor.UpdateTripPlan(newPlan);
+                }
 
-                return new RedirectToPageResult("/Index");
+                return new RedirectToPageResult("/MyTripList");
             }
             catch (Exception)
             {
