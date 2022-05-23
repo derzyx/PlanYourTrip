@@ -20,18 +20,23 @@ namespace PlanYourTrip_FrontEnd.Pages
         public TripPlans TripPlan { get { 
                 if(_tripPlan == null)
                 {
-                    return new TripPlans() { Nazwa = "Nowy plan", PunktyJSON = ""};
+                    return new TripPlans() { PunktyJSON = "" };
                 }
                 else
                 {
                     return _tripPlan;
                 }
-            } set { _tripPlan = value; } } 
+            } set { 
+                _tripPlan = value; 
+            } } 
+
 
         [BindProperty]
         public string PlanName { get; set; }
         [BindProperty]
         public string TripString { get; set; }
+        [BindProperty]
+        public bool IsPublic { get; set; }
 
         public async Task OnGet()
         {
@@ -42,14 +47,13 @@ namespace PlanYourTrip_FrontEnd.Pages
                 try
                 {
                     TripPlan = await _tripPlanProcessor.GetPlan(planId);
+                    Console.WriteLine(TripPlan);
                 }
                 catch (Exception ex)
                 {
                     throw;
                 }
             }
-            //TripString = System.IO.File.ReadAllText(@"C:\Users\mkrau\source\VS2022_repos\PlanYourTrip\PlanYourTrip\PlanYourTrip_FrontEnd\wwwroot\js\TEMPTripString.txt");
-            //string tripString = TripString;
         }
 
         public async Task<IActionResult> OnPost()
@@ -67,7 +71,8 @@ namespace PlanYourTrip_FrontEnd.Pages
                         PunktyJSON = TripString,
                         DataUtworzenia = DateTime.UtcNow,
                         OstatniaAktualizacja = DateTime.UtcNow,
-                        AutorId = 1
+                        AutorId = 1,
+                        Publiczny = IsPublic
                     };
 
                     await _tripPlanProcessor.AddTripPlan(newPlan);
@@ -85,13 +90,12 @@ namespace PlanYourTrip_FrontEnd.Pages
                         DataUtworzenia = currentPlan.DataUtworzenia,
                         OstatniaAktualizacja = DateTime.UtcNow,
                         AutorId = Convert.ToInt32(currentPlan.AutorId),
-                        //Contributors = TripPlan.Contributors,
-                        //Users = TripPlan.Users
+                        Publiczny = IsPublic
                     };
                     await _tripPlanProcessor.UpdateTripPlan(newPlan);
                 }
 
-                return new RedirectToPageResult("/MyTripList");
+                return new RedirectToPageResult("/MyTripsList");
             }
             catch (Exception)
             {

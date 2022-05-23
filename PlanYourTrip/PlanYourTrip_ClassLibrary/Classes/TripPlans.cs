@@ -17,6 +17,7 @@ namespace PlanYourTrip_ClassLibrary.Classes
         public string? PunktyJSON { get; set; }
         public DateTime? DataUtworzenia { get; set; }
         public DateTime? OstatniaAktualizacja { get; set; }
+        public bool Publiczny { get; set; } = false;
 
         //Relacje
         public int AutorId { get; set; }

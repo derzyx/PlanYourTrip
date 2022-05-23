@@ -20,7 +20,6 @@ function GetMap() {
         Microsoft.Maps.Events.addHandler(map, 'viewchangeend', function () {
             getLocationsInView();
             gridLayer.clear();
-            //getPointByEntityId('7024127122536923140');
         });
         getLocationsInView();
     })
@@ -45,7 +44,6 @@ function getLocationsInView() {
 
         Microsoft.Maps.SpatialDataService.QueryAPIManager.search(queryOptions, map, function (data) {
             map.entities.clear();
-            //console.log(data);
             for (let i = 0; i < data.length; i++) {
                 data[i].entity.title = data[i].metadata.Name;
                 Microsoft.Maps.Events.addHandler(data[i], 'click', pushpinClicked);
@@ -64,7 +62,6 @@ function pushpinClicked(e) {
     }
     if (e.target.metadata) {
         currentPlace = e.target;
-        //console.log(currentPlace);
         outputDiv.textContent = currentPlace.entity.title;
     }
 }
@@ -83,9 +80,3 @@ function getPointByEntityId(id) {
         });
     });
 }
-
-
-
-// zrobić tablice z podobnymi typami miejsc
-// wyświetlić metadane pod mapą przy kliknięciu
-// do linka jako hiddenVal zapisać entityId

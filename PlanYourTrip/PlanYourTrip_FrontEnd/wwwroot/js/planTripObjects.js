@@ -229,8 +229,6 @@ var branchPrototype = {
         console.log(parentPoint);
         parentPoint.HasBranch = true;
         parentPoint.Branch = branchDiv;
-        //Points[FindElementId(rootEl)].HasBranch = true;
-        //Points[FindElementId(rootEl)].Branch = branchDiv;
 
         Branches.push(new Branch(rootEl, branchDiv));
         console.log(Points)
@@ -301,9 +299,3 @@ function FindParentPoint(sender) {
 
     return parentPoint;
 }
-
-// baner na górze z kilkoma opcjami (zapisz, pobierz plik, wyłącz okna ostrzeżeń...) - DODAĆ PRZYCISK ZAPISZ
-
-// MAPA
-
-// dropdown list z typem pokazywanych punktów

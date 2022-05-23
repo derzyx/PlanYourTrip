@@ -1,4 +1,5 @@
 ﻿@page
+@addTagHelper*, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     Layout = null;
 }
@@ -61,6 +62,8 @@
                 <div class="col-3">
                     <form method="post">
                         <input id="planName" asp-for="PlanName" class="planTitleInput" oninput="ResizeInput(this)" value=@Model.TripPlan.Nazwa/>
+                        <label for="isPublicCheckbox">Publiczny</label>
+                        <input type="checkbox" asp-for="IsPublic" id="isPublicCheckbox" checked="s"/>
                         <input id="planTripString" asp-for="TripString" style="visibility:hidden;" value=@Model.TripPlan.PunktyJSON/>
                         <button id="saveTripToDB" style="visibility:hidden;"></button>
                     </form>
@@ -68,7 +71,6 @@
                 <div class="col-3">
                     <label>Pytaj przed usunięciem</label>
                     <input type="checkbox" id="askBeforeDeleteBool" checked />
-
                     <button id="getTripString">zapisz (do C#)</button>
 
                 </div>

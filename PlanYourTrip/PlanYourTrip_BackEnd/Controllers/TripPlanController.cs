@@ -70,6 +70,7 @@ namespace PlanYourTrip_BackEnd.Controllers
             tripPlan.DataUtworzenia = request.DataUtworzenia;
             tripPlan.OstatniaAktualizacja = request.OstatniaAktualizacja;
             tripPlan.AutorId = request.AutorId;
+            tripPlan.Publiczny = request.Publiczny;
 
             try
             {
