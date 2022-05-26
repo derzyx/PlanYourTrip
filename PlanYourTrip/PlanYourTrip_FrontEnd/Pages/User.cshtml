@@ -1,21 +1,17 @@
 ﻿@page
-@model IndexModel
+@model PlanYourTrip_FrontEnd.Pages.UserModel
 @{
     ViewData["Title"] = "Home page";
 }
-<div class="container-fluid position-relative">
-    
-    <div class="position-absolute bg-image" style="background-image:url(/img/China_Travel_China_Tour_China.jpg);">
-
-    </div>
+<div class="container-fluid position-relative infoContainer">
     <div class="row-cols-1 d-flex justify-content-center">
-        <div class="col-auto" style="margin:10rem 0;">
-            <div class="row-cols-1 d-flex flex-column justify-content-center my-5">
-                <div class="col-auto">
-                    <h1>Dokąd dziś się wybierasz?</h1>
+        <div class="col-8">
+            <div class="row-cols-1">
+                <div class="col">
+                    <h1>User</h1>
                 </div>
-                <div class="col-auto mx-auto my-4">
-                    <a class="btn btn-primary px-5 py-3" asp-page="/PlanTrip">Zaplanuj podróż</a>
+                <div class="col">
+                    <p>Brak opisu</p>
                 </div>
             </div>
         </div>
@@ -25,7 +21,7 @@
     <div class="row-cols-1">
         <div class="col-auto mb-4">
             <h1 class="m-0">
-                Ostatnio dodane podróże
+                Udostępnione podróże użytkownika User
             </h1>
         </div>
         <div class="col">
@@ -61,11 +57,6 @@
                     </div>
                 }
             </div>
-        </div>
-        <div class="col-auto d-flex justify-content-center m-5">
-            <a class="btn btn-primary py-3 px-4">
-                <h5>Zobacz więcej</h5>
-            </a>
         </div>
     </div>
 </div>

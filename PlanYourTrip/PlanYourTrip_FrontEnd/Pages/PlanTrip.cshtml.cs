@@ -38,8 +38,13 @@ namespace PlanYourTrip_FrontEnd.Pages
         [BindProperty]
         public bool IsPublic { get; set; }
 
-        public async Task OnGet()
+        public async Task<IActionResult> OnGet()
         {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("_CurrentUser")))
+            {
+                return new RedirectToPageResult("/Login");
+            }
+
             int planId = Convert.ToInt32(HttpContext.Request.Query["plan"]);
 
             if (planId != 0)
@@ -47,13 +52,14 @@ namespace PlanYourTrip_FrontEnd.Pages
                 try
                 {
                     TripPlan = await _tripPlanProcessor.GetPlan(planId);
-                    Console.WriteLine(TripPlan);
                 }
                 catch (Exception ex)
                 {
                     throw;
                 }
             }
+
+            return Page();
         }
 
         public async Task<IActionResult> OnPost()

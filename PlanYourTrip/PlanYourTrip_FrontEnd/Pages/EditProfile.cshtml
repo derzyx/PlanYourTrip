@@ -1,0 +1,128 @@
+﻿@page
+@model PlanYourTrip_FrontEnd.Pages.EditProfileModel
+@{
+}
+
+<div class="container spaceFromFooter">
+    <div class="row d-flex flex-column align-content-center">
+        <form method="post">
+            <div class="col-6 mt-5 p-5 mx-auto border border-secondary rounded loginBox">
+                <div>
+                    <h1><b>Edytuj profil</b></h1>
+                </div>
+                <div class="mt-4">
+                    <h5 id="Nick">
+                        Nick:
+                        <b style="color:red">
+                            *
+                        </b>
+                    </h5>
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="text" class="form-control" id="nick" />
+                    @*<span asp-validation-for="@Model.Nick" class="text-danger"></span>*@
+                </div>
+                <div class="mt-4">
+                    <h5 id="Imie">
+                        Imie:
+                    </h5>
+                    <input type="text" class="form-control" id="name" />
+                </div>
+                <div class="mt-4">
+                    <h5 id="Nazwisko">
+                        Nazwisko:
+                    </h5>
+                    <input type="text" class="form-control" id="surname" />
+                </div>
+                <div class="mt-4">
+                    <h5 id="Email">
+                        Email:
+                        <b style="color:red">
+                            *
+                        </b>
+                    </h5>
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="email" class="form-control" id="email" />
+                    @*<span asp-validation-for="@Model.Email" class="text-danger"></span>*@
+                </div>
+
+                <div class="mt-4">
+                    <h5 id="Opis">
+                        Opis:
+                    </h5>
+                    <textarea rows=5 class="form-control" id="desc"></textarea>
+                </div>
+
+                <div class="row d-flex justify-content-between mt-3 mx-0">
+                    <div class="col-auto p-0">
+                        <p>
+                            <b style="color:red">
+                                *
+                            </b>
+                            - pole wymagane
+                        </p>
+                    </div>
+                    <div class="col-auto p-0">
+                        <button class="btn btn-primary p-3">
+                            Zapisz
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <form method="post">
+            <div class="col-6 mt-4 p-5 mx-auto border border-secondary rounded">
+                <div>
+                    <h1><b>Zmiana hasła</b></h1>
+                </div>
+                <div class="mt-4">
+                    <h5 id="StareHaslo">
+                        Stare hasło:
+                        <b style="color:red">
+                            *
+                        </b>
+                    </h5>
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="password" class="form-control" id="password" />
+                    @*<span asp-validation-for="@Model.Password" class="text-danger"></span>*@
+                </div>
+                <div class="mt-4">
+                    <h5 id="NoweHaslo">
+                        Nowe hasło:
+                        <b style="color:red">
+                            *
+                        </b>
+                    </h5>
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="password" class="form-control" id="password" />
+                    @*<span asp-validation-for="@Model.Password" class="text-danger"></span>*@
+                </div>
+                <div class="mt-4">
+                    <h5 id="NoweHasloPowtorz">
+                        Powtórz hasło:
+                        <b style="color:red">
+                            *
+                        </b>
+                    </h5>
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="password" class="form-control" id="password" />
+                    @*<span asp-validation-for="@Model.Password" class="text-danger"></span>*@
+                </div>
+                <div class="row d-flex justify-content-between mt-3 mx-0">
+                    <div class="col-auto p-0">
+                        <p>
+                            <b style="color:red">
+                                *
+                            </b>
+                            - pole wymagane
+                        </p>
+                    </div>
+                    <div class="col-auto p-0">
+                        <button class="btn btn-primary p-3">
+                            Zapisz
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

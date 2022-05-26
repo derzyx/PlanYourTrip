@@ -33,18 +33,20 @@ namespace PlanYourTrip_FrontEnd.Pages
                     return Quantity;
                 }
             } }
-
-
-
-        public async Task OnGet()
+        public async Task<IActionResult> OnGet()
         {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("_CurrentUser")))
+            {
+                return new RedirectToPageResult("/Login");
+            }
             Plans = await _tripPlanProcessor.GetUserPlans(1);
+            return Page();
         }
 
-        public async Task<ActionResult> OnPost()
+        public async Task<IActionResult> OnPost()
         {
             await _tripPlanProcessor.DeleteTripPlan(Convert.ToInt32(PostToRemove));
-            return RedirectToPage("/MyTripsList");
+            return new RedirectToPageResult("/MyTripsList");
         }
     }
 }

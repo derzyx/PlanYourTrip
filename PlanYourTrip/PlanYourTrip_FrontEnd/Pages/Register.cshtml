@@ -1,0 +1,87 @@
+﻿@page
+@model PlanYourTrip_FrontEnd.Pages.RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="position-absolute registerBgImage" style="background-image:url(/img/japan-g36c925818_1920.jpg);"></div>
+<div class="container spaceFromFooter">
+    <div class="row d-flex flex-column align-content-center">
+        <div class="col-6 mt-5 p-5 mx-auto border border-secondary rounded loginBox">
+            <form method="post">
+                <div class="mt-4">
+                    <h1><b>Rejestracja</b></h1>
+                </div>
+                <div class="mt-4">
+                    <h5 id="Nick">
+                        Nick:
+                        <b style="color:red">
+                            *
+                        </b>
+                    </h5>
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="text" class="form-control" id="nick" asp-for="@Model.Nick"/>
+                    <span asp-validation-for="@Model.Nick" class="text-danger"></span>
+                </div>
+                <div class="mt-4">
+                    <h5 id="Imie">
+                        Imie:
+                    </h5>
+                    <input type="text" class="form-control" id="name"/>
+                </div>
+                <div class="mt-4">
+                    <h5 id="Nazwisko">
+                        Nazwisko:
+                    </h5>
+                    <input type="text" class="form-control" id="surname"/>
+                </div>
+                <div class="mt-4">
+                    <h5 id="Email">
+                        Email:
+                        <b style="color:red">
+                            *
+                        </b>
+                    </h5>
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="email" class="form-control" id="email" asp-for="@Model.Email"/>
+                    <span asp-validation-for="@Model.Email" class="text-danger"></span>
+                </div>
+                <div class="mt-4">
+                    <h5 id="Haslo">
+                        Hasło:
+                        <b style="color:red">
+                            *
+                        </b>
+                    </h5>
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="password" class="form-control" id="password" asp-for="@Model.Password"/>
+                    <span asp-validation-for="@Model.Password" class="text-danger"></span>
+                </div>
+                <div class="mt-4">
+                    <h5 id="Opis">
+                        Opis:
+                    </h5>
+                    <textarea rows=5 class="form-control" id="desc"></textarea>
+                </div>
+
+                <div class="row d-flex justify-content-between mt-3 mb-5 mx-0">
+                    <div class="col-auto p-0">
+                        <p>
+                            <b style="color:red">
+                                *
+                            </b>
+                             - pole wymagane
+                        </p>
+                    </div>
+                    <div class="col-auto p-0">
+                        <button class="btn btn-primary p-3" onclick="">
+                            Zarejestruj
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/formValidation.js"></script>

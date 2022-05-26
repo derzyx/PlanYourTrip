@@ -1,0 +1,48 @@
+﻿@page
+@model PlanYourTrip_FrontEnd.Pages.LoginModel
+@{
+}
+
+<div class="position-absolute loginBgImage" style="background-image:url(/img/beach-sea-coast-photography-town-view-660031-pxhere.com.jpg);"></div>
+<div class="container loginWindow">
+    
+
+    <div class="row h-100 d-flex justify-content-center align-items-center ">
+        <div class="col-4 p-5 mx-auto border border-secondary rounded loginBox">
+            <div class="mb-5">
+                <h1>
+                    <b>Logowanie</b>
+                </h1>
+                <hr />
+            </div>
+            <div class="mt-4">
+                <h5 id="Nick">
+                    Email:
+                </h5>
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="text" class="form-control" id="nick" />
+                @*<span asp-validation-for="" class="text-danger"></span>*@
+            </div>
+            <div class="mt-4">
+                <h5 id="Nick">
+                    Hasło:
+                </h5>
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="text" class="form-control" id="nick" />
+                @*<span asp-validation-for="" class="text-danger"></span>*@
+            </div>
+            <div class="row d-flex justify-content-between mt-4">
+                <div class="col-auto">
+                    Nie masz jeszcze konta?
+                    <br />
+                    <a asp-page="/Register">Zarejestruj się</a>
+                </div>
+                <div class="col-auto">
+                    <button class="btn btn-primary p-3">
+                        Zaloguj
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -29,19 +29,6 @@ namespace PlanYourTrip_FrontEnd.ApiLogic
         public async Task<List<TripPlans>> GetUserPlans(int userId) =>
             await _httpClient.GetFromJsonAsync<List<TripPlans>>($"TripPlan/MyPlans/{userId}");
 
-        public async Task UpdateTripPlan(TripPlans plan)
-        {
-            var tripPlanJson = new StringContent(
-                JsonConvert.SerializeObject(plan),
-                Encoding.UTF8,
-                Application.Json);
-
-            using var httpResponseMessage =
-                await _httpClient.PutAsync($"TripPlan/{plan.TripPlanId}", tripPlanJson);
-
-            httpResponseMessage.EnsureSuccessStatusCode();
-        }
-
         public async Task AddTripPlan(TripPlans plan)
         {
             var tripPlanJson = new StringContent(
@@ -51,6 +38,19 @@ namespace PlanYourTrip_FrontEnd.ApiLogic
 
             using var httpResponseMessage =
                 await _httpClient.PostAsync($"TripPlan", tripPlanJson);
+
+            httpResponseMessage.EnsureSuccessStatusCode();
+        }
+
+        public async Task UpdateTripPlan(TripPlans plan)
+        {
+            var tripPlanJson = new StringContent(
+                JsonConvert.SerializeObject(plan),
+                Encoding.UTF8,
+                Application.Json);
+
+            using var httpResponseMessage =
+                await _httpClient.PutAsync($"TripPlan/{plan.TripPlanId}", tripPlanJson);
 
             httpResponseMessage.EnsureSuccessStatusCode();
         }
