@@ -6,6 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 
 builder.Services.AddHttpClient<TripPlanProcessor>();
+builder.Services.AddHttpClient<UserProcessor>();
 
 builder.Services.AddHttpContextAccessor();
 
@@ -14,7 +15,7 @@ builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
     options.Cookie.Name = ".Recipes.Session";
-    options.IdleTimeout = TimeSpan.FromSeconds(10);
+    options.IdleTimeout = TimeSpan.FromMinutes(20);
     options.Cookie.IsEssential = true;
 });
 

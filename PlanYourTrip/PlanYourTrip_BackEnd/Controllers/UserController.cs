@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PlanYourTrip_ClassLibrary.Classes;
+using PlanYourTrip_ClassLibrary.ClassesDTO;
+//using System.Web.Http;
 
 namespace PlanYourTrip_BackEnd.Controllers
 {
@@ -27,8 +28,9 @@ namespace PlanYourTrip_BackEnd.Controllers
             return Ok(await _context.Users.ToListAsync());
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Users>> GetUser(int id)
+        [HttpGet]
+        [Route("Id/{id}")]
+        public async Task<ActionResult<Users>> GetUserByID(int id)
         {
             var user = await _context.Users.FindAsync(id);
             if (user == null)
@@ -38,16 +40,60 @@ namespace PlanYourTrip_BackEnd.Controllers
             return Ok(user);
         }
 
+        [HttpGet]
+        [Route("Email/{email}")]
+        public async Task<ActionResult<Users>> GetUserByEmail(string email)
+        {
+            var user = await _context.Users
+                .FromSqlRaw($"SELECT * FROM dbo.Users WHERE Email = '{email}'")
+                .FirstOrDefaultAsync();
+            if (user == null)
+            {
+                return BadRequest("Nie znaleziono użytkownika");
+            }
+            else
+            {
+                return Ok(user);
+            } 
+        }
+
         [HttpPost]
-        public async Task<ActionResult<List<Users>>> AddUser(Users user)
+        public async Task<ActionResult<Users>> AddUser(Users user)
         {
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
-            return Ok(await _context.Users.ToListAsync());
+
+            return Ok("Dodano użytkownika");
+            //return Ok(await _context.Users.ToListAsync());
+        }
+
+        [HttpPost]
+        [Route("Login")]
+        public async Task<ActionResult<Users>> LoginUser(UsersDTO userToLog)
+        {
+            Console.WriteLine(userToLog);
+            var user = await _context.Users
+                .FromSqlRaw($"SELECT * FROM dbo.Users WHERE Email = '{userToLog.Email}'")
+                .FirstOrDefaultAsync();
+            if (user == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                if(user.Haslo == userToLog.Haslo)
+                {
+                    return Ok(user);
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<List<Users>>> UpdateUser(Users request)
+        public async Task<ActionResult<Users>> UpdateUser(Users request)
         {
             var user = await _context.Users.FindAsync(request.Id);
             if (user == null)
@@ -61,7 +107,8 @@ namespace PlanYourTrip_BackEnd.Controllers
 
             await _context.SaveChangesAsync();
 
-            return Ok(await _context.Users.ToListAsync());
+            return Ok("Zaktualizowano użytkownika");
+            //return Ok(await _context.Users.ToListAsync());
         }
 
         [HttpDelete("{id}")]

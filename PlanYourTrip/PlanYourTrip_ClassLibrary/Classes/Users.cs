@@ -27,9 +27,6 @@ namespace PlanYourTrip_ClassLibrary.Classes
         public int IdAvatar { get; set; } = 1;
 
         //Relacje
-        public List<Posts> Posts { get; set; }
-        public List<Answers> Answers { get; set; }
-        public List<TripPlans> TripPlans { get; set; }
-        public Contributors Contributors { get; set; }
+        public List<TripPlans>? TripPlans { get; set; }
     }
 }

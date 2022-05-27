@@ -1,11 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using PlanYourTrip_ClassLibrary.Classes;
+using PlanYourTrip_ClassLibrary.KeysStorage;
 using PlanYourTrip_FrontEnd.ApiLogic;
 
 namespace PlanYourTrip_FrontEnd.Pages
 {
-    public class MyTripsListModel : PageModel
+    public class MyTripsListModel : PageModel, ILogout
     {
         private readonly TripPlanProcessor _tripPlanProcessor;
 
@@ -33,13 +34,16 @@ namespace PlanYourTrip_FrontEnd.Pages
                     return Quantity;
                 }
             } }
+
+
         public async Task<IActionResult> OnGet()
         {
-            if (string.IsNullOrEmpty(HttpContext.Session.GetString("_CurrentUser")))
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString(SessionKeys.CurrentUser)))
             {
                 return new RedirectToPageResult("/Login");
             }
-            Plans = await _tripPlanProcessor.GetUserPlans(1);
+
+            Plans = await _tripPlanProcessor.GetUserPlans(Convert.ToInt32(HttpContext.Session.GetString(SessionKeys.CurrentUser)));
             return Page();
         }
 
@@ -47,6 +51,12 @@ namespace PlanYourTrip_FrontEnd.Pages
         {
             await _tripPlanProcessor.DeleteTripPlan(Convert.ToInt32(PostToRemove));
             return new RedirectToPageResult("/MyTripsList");
+        }
+
+        public ActionResult OnPostLogout()
+        {
+            HttpContext.Session.Remove(SessionKeys.CurrentUser);
+            return new RedirectToPageResult("/Index");
         }
     }
 }

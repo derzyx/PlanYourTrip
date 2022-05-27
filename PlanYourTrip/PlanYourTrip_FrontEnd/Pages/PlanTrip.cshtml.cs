@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using PlanYourTrip_ClassLibrary.Classes;
+using PlanYourTrip_ClassLibrary.KeysStorage;
 using PlanYourTrip_FrontEnd.ApiLogic;
 
 namespace PlanYourTrip_FrontEnd.Pages
@@ -40,7 +41,7 @@ namespace PlanYourTrip_FrontEnd.Pages
 
         public async Task<IActionResult> OnGet()
         {
-            if (string.IsNullOrEmpty(HttpContext.Session.GetString("_CurrentUser")))
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString(SessionKeys.CurrentUser)))
             {
                 return new RedirectToPageResult("/Login");
             }
@@ -53,7 +54,7 @@ namespace PlanYourTrip_FrontEnd.Pages
                 {
                     TripPlan = await _tripPlanProcessor.GetPlan(planId);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     throw;
                 }

@@ -1,16 +1,18 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using PlanYourTrip_ClassLibrary.Classes;
+using PlanYourTrip_ClassLibrary.KeysStorage;
+using PlanYourTrip_FrontEnd.ApiLogic;
 using System.ComponentModel.DataAnnotations;
 
 namespace PlanYourTrip_FrontEnd.Pages
 {
-    public class EditProfileModel : PageModel
+    public class EditProfileModel : PageModel, ILogout
     {
-        private readonly TripPlanProcessor _tripPlanProcessor;
+        private readonly UserProcessor _userProcessor;
 
-        public PlanTripModel(TripPlanProcessor tripPlanProcessor) =>
-            _tripPlanProcessor = tripPlanProcessor;
+        public EditProfileModel(UserProcessor userProcessor) =>
+            _userProcessor = userProcessor;
 
         //First form
         [BindProperty]
@@ -27,7 +29,7 @@ namespace PlanYourTrip_FrontEnd.Pages
         [BindProperty]
         public string Desc { get; set; }
 
-        //Secont form
+        //Second form
         [BindProperty]
         [Required]
         [StringLength(30, MinimumLength = 8)]
@@ -44,23 +46,28 @@ namespace PlanYourTrip_FrontEnd.Pages
         [BindProperty]
         public Users CurrentUser { get; set; }
 
+
+
         public async Task<IActionResult> OnGet()
         {
-            if (string.IsNullOrEmpty(HttpContext.Session.GetString("_CurrentUser")))
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString(SessionKeys.CurrentUser)))
             {
                 return new RedirectToPageResult("/Login");
             }
-            else
+
+            Users currentUser = await _userProcessor.GetUserById(Convert.ToInt32(HttpContext.Session.GetString(SessionKeys.CurrentUser)));
+            if(currentUser == null)
             {
-                
+                return new RedirectToPageResult("/Error");
             }
 
             return Page();
         }
 
-        public async Task<IActionResult> OnPost()
+        public ActionResult OnPostLogout()
         {
-
+            HttpContext.Session.Remove(SessionKeys.CurrentUser);
+            return new RedirectToPageResult("/Index");
         }
     }
 }
