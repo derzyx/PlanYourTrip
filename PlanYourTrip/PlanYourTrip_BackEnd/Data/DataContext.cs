@@ -9,6 +9,7 @@ namespace PlanYourTrip_BackEnd.Data
 
         public DbSet<Users> Users { get; set; }
         public DbSet<TripPlans> TripPlans { get; set; }
+        public DbSet<Subscription> Subscription { get; set; }
         
     }
 }

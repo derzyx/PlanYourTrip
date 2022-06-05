@@ -1,11 +1,11 @@
 ﻿
 
-function OpenDeleteWindow(postId) {
+function OpenDeleteWindow(entityId) {
     document.getElementById("deleteContainer").style.visibility = "visible";
-    document.getElementById("postIdField").value = postId;
+    document.getElementById("entityIdField").value = entityId;
 }
 
 function HideDeleteWindow() {
     document.getElementById("deleteContainer").style.visibility = "hidden";
-    document.getElementById("postIdField").value = 0;
+    document.getElementById("entityIdField").value = 0;
 }

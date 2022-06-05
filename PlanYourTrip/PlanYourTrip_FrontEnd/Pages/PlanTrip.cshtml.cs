@@ -37,7 +37,13 @@ namespace PlanYourTrip_FrontEnd.Pages
         [BindProperty]
         public string TripString { get; set; }
         [BindProperty]
-        public bool IsPublic { get; set; }
+        public string IsPublic { get; set; } = "false";
+
+        [BindProperty]
+        public string PlanDesc { get; set; }
+
+        [BindProperty]
+        public string PageOnExit { get; set; }
 
         public async Task<IActionResult> OnGet()
         {
@@ -53,6 +59,7 @@ namespace PlanYourTrip_FrontEnd.Pages
                 try
                 {
                     TripPlan = await _tripPlanProcessor.GetPlan(planId);
+                    IsPublic = (TripPlan.Publiczny) ? "true" : "false";
                 }
                 catch (Exception)
                 {
@@ -63,46 +70,55 @@ namespace PlanYourTrip_FrontEnd.Pages
             return Page();
         }
 
-        public async Task<IActionResult> OnPost()
+
+        public async Task<IActionResult> OnPostAsync()
         {
             int planId = Convert.ToInt32(HttpContext.Request.Query["plan"]);
-            TripPlans newPlan;
+            TripPlans newPlan = new TripPlans
+            {
+                Nazwa = TripPlan.Nazwa,
+                Opis = TripPlan.Opis,
+                PunktyJSON = TripPlan.PunktyJSON,
+                DataUtworzenia = DateTime.UtcNow.AddHours(2),
+                OstatniaAktualizacja = DateTime.UtcNow.AddHours(2),
+                AutorId = Convert.ToInt32(HttpContext.Session.GetString(SessionKeys.CurrentUser)),
+                Publiczny = (Request.Form["planVisibility"] == "true") ? true : false
+            };
             try
             {
-                if(planId == 0)
+                if (planId == 0)
                 {
-                    newPlan = new TripPlans
-                    {
-                        Nazwa = PlanName,
-                        Opis = "",
-                        PunktyJSON = TripString,
-                        DataUtworzenia = DateTime.UtcNow,
-                        OstatniaAktualizacja = DateTime.UtcNow,
-                        AutorId = 1,
-                        Publiczny = IsPublic
-                    };
-
                     await _tripPlanProcessor.AddTripPlan(newPlan);
                 }
                 else
                 {
                     TripPlans currentPlan = await _tripPlanProcessor.GetPlan(planId);
 
-                    newPlan = new TripPlans
+                    if (Convert.ToInt32(HttpContext.Session.GetString(SessionKeys.CurrentUser)) != currentPlan.AutorId)
                     {
-                        TripPlanId = currentPlan.TripPlanId,
-                        Nazwa = PlanName,
-                        Opis = TripPlan.Opis,
-                        PunktyJSON = TripString,
-                        DataUtworzenia = currentPlan.DataUtworzenia,
-                        OstatniaAktualizacja = DateTime.UtcNow,
-                        AutorId = Convert.ToInt32(currentPlan.AutorId),
-                        Publiczny = IsPublic
-                    };
-                    await _tripPlanProcessor.UpdateTripPlan(newPlan);
+                        newPlan.DataUtworzenia = DateTime.UtcNow.AddHours(2);
+                        await _tripPlanProcessor.AddTripPlan(newPlan);
+                    }
+                    else
+                    {
+                        newPlan.TripPlanId = currentPlan.TripPlanId;
+                        newPlan.DataUtworzenia = currentPlan.DataUtworzenia;
+                        await _tripPlanProcessor.UpdateTripPlan(newPlan);
+                    }
                 }
 
-                return new RedirectToPageResult("/MyTripsList");
+                if (PageOnExit == "stay")
+                {
+                    return Page();
+                }
+                else if (PageOnExit == "exit")
+                {
+                    return new RedirectToPageResult("/MyTripsList");
+                }
+                else
+                {
+                    return new RedirectToPageResult("/Error");
+                }
             }
             catch (Exception)
             {

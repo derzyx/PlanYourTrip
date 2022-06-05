@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PlanYourTrip_BackEnd.Data;
 
@@ -11,9 +12,10 @@ using PlanYourTrip_BackEnd.Data;
 namespace PlanYourTrip_BackEnd.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220604113142_AddSubscriptionTable")]
+    partial class AddSubscriptionTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -132,13 +134,13 @@ namespace PlanYourTrip_BackEnd.Migrations
                     b.HasOne("PlanYourTrip_ClassLibrary.Classes.Users", "Observed")
                         .WithMany()
                         .HasForeignKey("ObservedId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("PlanYourTrip_ClassLibrary.Classes.Users", "Subscriber")
                         .WithMany()
                         .HasForeignKey("SubscriberId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Observed");

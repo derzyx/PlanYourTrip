@@ -1,4 +1,5 @@
 ﻿@page
+@using PlanYourTrip_ClassLibrary.Classes
 @model PlanYourTrip_FrontEnd.Pages.UserModel
 @{
     ViewData["Title"] = "Home page";
@@ -8,10 +9,41 @@
         <div class="col-8">
             <div class="row-cols-1">
                 <div class="col">
-                    <h1>User</h1>
+                    <div class="row d-flex justify-content-between">
+                        <div class="col-auto">
+                            <h1>@Model.ViewedUser.Nick</h1>
+                        </div>
+                        <div class="col-3 d-flex justify-content-center align-items-center">
+                            <form method="post">
+                                <input type="hidden" asp-for=@Model.ViewedUserId value=@Model.ViewedUserId/>
+                                @{
+                                    switch (Model.SubType)
+                                    {
+                                        case PlanYourTrip_FrontEnd.Pages.UserModel.SubscriptionType.Subscribed:
+                                            <button id="addToSubBtn" class="btn btn-primary" asp-page-handler="RemoveSub">Przestań obserwować użytkownika</button>
+                                            break;
+                                        case PlanYourTrip_FrontEnd.Pages.UserModel.SubscriptionType.NotSubscribed:
+                                            <button id="addToSubBtn" class="btn btn-primary" asp-page-handler="AddSub">Obserwuj użytkownika</button>
+                                            break;
+                                        case PlanYourTrip_FrontEnd.Pages.UserModel.SubscriptionType.NotLogged:
+                                            <a id="addToSubBtn" class="btn btn-primary" asp-page="/Login">Obserwuj użytkownika</a>
+                                            break;
+                                        case PlanYourTrip_FrontEnd.Pages.UserModel.SubscriptionType.Self:
+                                            break;
+                                    }
+                                }
+                            </form>
+                        </div>
+                    </div>
                 </div>
                 <div class="col">
-                    <p>Brak opisu</p>
+                    Imie: @Model.ViewedUser.Imie
+                </div>
+                <div class="col">
+                    Nazwisko: @Model.ViewedUser.Nazwisko
+                </div>
+                <div class="col">
+                    <p>@Model.ViewedUser.Opis</p>
                 </div>
             </div>
         </div>
@@ -21,36 +53,33 @@
     <div class="row-cols-1">
         <div class="col-auto mb-4">
             <h1 class="m-0">
-                Udostępnione podróże użytkownika User
+                Udostępnione podróże użytkownika @Model.ViewedUser.Nick
             </h1>
         </div>
         <div class="col">
             <div class="row">
-                @for(int i=0; i < 6; i++)
+                @for (int i = 0; i < Model.Plans.Count; i++)
                 {
                     <div class="col-lg-4">
                         <div class="position-relative mx-3 my-4 p-4 border border-secondary rounded tripCard">
+                            <div class="row d-flex justify-content-center justify-items-center readFurtherBtn">
+                                <button class="col btn btn-primary">Zobacz plan</button>
+                            </div>
                             <div class="textOverflowFade"></div>
                             <div class="row-cols-1">
                                 <div class="col">
-                                    <h2 class="m-0">Tytuł</h2>
+                                    <h2 class="m-0">@Model.Plans[i].Nazwa</h2>
                                 </div>
                                 <div class="col">
                                     <div class="row d-flex justify-content-between">
                                         <div class="col-auto">
-                                            AutorAutorAutorAutorAutor
-                                        </div>
-                                        <div class="col-auto">
-                                            @DateTime.Now
+                                            @Model.Plans[i].DataUtworzenia
                                         </div>
                                     </div>
                                 </div>
                                 <hr class="mt-0"/>
                                 <div class="col">
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                                    <p>@Html.Raw(Model.Plans[i].Opis)</p>
                                 </div>
                             </div>
                         </div>

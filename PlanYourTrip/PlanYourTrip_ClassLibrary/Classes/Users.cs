@@ -10,11 +10,11 @@ namespace PlanYourTrip_ClassLibrary.Classes
         public int Id { get; set; }
         [Required]
         [Column(Order = 1)]
-        public string Nick { get; set; } = string.Empty;
+        public string Nick { get; set; }
         [Column(Order = 2)]
-        public string Imie { get; set; } = string.Empty;
+        public string? Imie { get; set; }
         [Column(Order = 3)]
-        public string Nazwisko { get; set; } = string.Empty;
+        public string? Nazwisko { get; set; }
         [Required]
         [Column(Order = 4)]
         public string Email { get; set; }
@@ -22,9 +22,9 @@ namespace PlanYourTrip_ClassLibrary.Classes
         [Column(Order = 5)]
         public string Haslo { get; set; }
         [Column(Order = 6)]
-        public string Opis { get; set; }
+        public string? Opis { get; set; }
         [Column(Order = 7)]
-        public int IdAvatar { get; set; } = 1;
+        public int? IdAvatar { get; set; } = 1;
 
         //Relacje
         public List<TripPlans>? TripPlans { get; set; }

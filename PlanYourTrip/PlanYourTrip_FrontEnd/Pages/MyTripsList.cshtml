@@ -13,9 +13,9 @@
 
             <div class="row d-flex flex-row justify-content-between mt-3">
                 <button value="Anuluj" class="col-3 btn btn-outline-secondary" onclick="HideDeleteWindow()">Anuluj</button>
-                <form method="post" class="col-3" asp-page-handler="OnPost">
+                <form method="post" class="col-3" asp-page-handler="RemovePlan">
                     <input type="submit" value="Usuń" class="btn btn-danger">
-                    <input id="postIdField" class="hiddenField" type="hidden" asp-for="PostToRemove">
+                    <input id="entityIdField" class="hiddenField" type="hidden" asp-for="PlanToRemove">
                 </form>
             </div>
 
@@ -91,4 +91,4 @@
     </div>
 </div>
 
-<script src="~/js/planList.js"></script>
+<script src="~/js/deleteWindow.js"></script>

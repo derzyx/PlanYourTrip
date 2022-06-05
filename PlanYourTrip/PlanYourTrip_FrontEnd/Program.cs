@@ -7,6 +7,7 @@ builder.Services.AddRazorPages();
 
 builder.Services.AddHttpClient<TripPlanProcessor>();
 builder.Services.AddHttpClient<UserProcessor>();
+builder.Services.AddHttpClient<SubscriptionProcessor>();
 
 builder.Services.AddHttpContextAccessor();
 

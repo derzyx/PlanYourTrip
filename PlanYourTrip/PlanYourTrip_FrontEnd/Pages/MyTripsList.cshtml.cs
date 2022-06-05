@@ -16,7 +16,7 @@ namespace PlanYourTrip_FrontEnd.Pages
         [BindProperty]
         public List<TripPlans> Plans { get; set; }
         [BindProperty]
-        public string PostToRemove { get; set; }
+        public string PlanToRemove { get; set; }
 
 
 
@@ -47,9 +47,9 @@ namespace PlanYourTrip_FrontEnd.Pages
             return Page();
         }
 
-        public async Task<IActionResult> OnPost()
+        public async Task<IActionResult> OnPostRemovePlan()
         {
-            await _tripPlanProcessor.DeleteTripPlan(Convert.ToInt32(PostToRemove));
+            await _tripPlanProcessor.DeleteTripPlan(Convert.ToInt32(PlanToRemove));
             return new RedirectToPageResult("/MyTripsList");
         }
 

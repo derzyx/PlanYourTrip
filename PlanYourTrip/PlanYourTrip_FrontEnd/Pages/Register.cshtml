@@ -3,7 +3,9 @@
 @{
     ViewData["Title"] = "Register";
 }
-
+@section scripts{
+    <partial name="_ValidationScriptsPartial"/>
+}
 <div class="position-absolute registerBgImage" style="background-image:url(/img/japan-g36c925818_1920.jpg);"></div>
 <div class="container spaceFromFooter">
     <div class="row d-flex flex-column align-content-center">
@@ -27,13 +29,13 @@
                     <h5 id="Imie">
                         Imie:
                     </h5>
-                    <input type="text" class="form-control" id="name"/>
+                    <input type="text" class="form-control" id="name" asp-for="@Model.Name"/>
                 </div>
                 <div class="mt-4">
                     <h5 id="Nazwisko">
                         Nazwisko:
                     </h5>
-                    <input type="text" class="form-control" id="surname"/>
+                    <input type="text" class="form-control" id="surname" asp-for="@Model.Surname"/>
                 </div>
                 <div class="mt-4">
                     <h5 id="Email">
@@ -61,20 +63,26 @@
                     <h5 id="Opis">
                         Opis:
                     </h5>
-                    <textarea rows=5 class="form-control" id="desc"></textarea>
+                    <textarea rows=5 class="form-control" id="desc" asp-for="@Model.Desc"></textarea>
+                </div>
+                <div class="mt-4">
+                    <h5 class="text-danger">@Model.ErrorMessage</h5>
+                </div>
+                <div class="mt-4">
+                    <h5 class="text-success">@Model.SuccessMessage</h5>
                 </div>
 
                 <div class="row d-flex justify-content-between mt-3 mb-5 mx-0">
                     <div class="col-auto p-0">
                         <p>
-                            <b style="color:red">
+                            <b class="text-danger">
                                 *
                             </b>
                              - pole wymagane
                         </p>
                     </div>
                     <div class="col-auto p-0">
-                        <button class="btn btn-primary p-3" onclick="">
+                        <button class="btn btn-primary p-3">
                             Zarejestruj
                         </button>
                     </div>

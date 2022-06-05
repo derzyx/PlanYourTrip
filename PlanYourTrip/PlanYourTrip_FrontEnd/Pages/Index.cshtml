@@ -1,4 +1,5 @@
 ﻿@page
+@using PlanYourTrip_ClassLibrary.Classes
 @model IndexModel
 @{
     ViewData["Title"] = "Home page";
@@ -30,31 +31,29 @@
         </div>
         <div class="col">
             <div class="row">
-                @for(int i=0; i < 6; i++)
+                @for(int i = 0; i < Model.Plans.Count; i++)
+                @*@foreach(TripPlans plan in Model.Plans)*@
                 {
                     <div class="col-lg-4">
                         <div class="position-relative mx-3 my-4 p-4 border border-secondary rounded tripCard">
                             <div class="textOverflowFade"></div>
                             <div class="row-cols-1">
                                 <div class="col">
-                                    <h2 class="m-0">Tytuł</h2>
+                                    <h2 class="m-0">@Model.Plans[i].Nazwa</h2>
                                 </div>
                                 <div class="col">
                                     <div class="row d-flex justify-content-between">
                                         <div class="col-auto">
-                                            AutorAutorAutorAutorAutor
+                                            <a asp-page="/User" asp-route-id=@Model.Plans[i].AutorId>@Model.AuthorsNicks[i]</a>
                                         </div>
                                         <div class="col-auto">
-                                            @DateTime.Now
+                                            @Model.Plans[i].DataUtworzenia
                                         </div>
                                     </div>
                                 </div>
                                 <hr class="mt-0"/>
                                 <div class="col">
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                                    <p>@Model.Plans[i].Opis</p>
                                 </div>
                             </div>
                         </div>

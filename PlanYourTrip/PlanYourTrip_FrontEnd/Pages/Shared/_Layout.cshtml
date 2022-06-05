@@ -28,13 +28,16 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between align-content-center">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/TripPlans">Przeglądaj plany</a>
+                            <a class="nav-link text-dark" asp-area="" asp-page="/AllTripPlans">Przeglądaj plany</a>
                         </li>
                         @if (!string.IsNullOrEmpty(Accessor.HttpContext.Session.GetString(SessionKeys.CurrentUser)))
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-page="/MyTripsList">Moje plany</a>
-                            </li>   
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/MySubscriptions">Subskrybcje</a>
+                            </li>
                             <li class="nav-item mx-2">
                                 <a class="btn btn-primary" asp-area="" asp-page="/PlanTrip">Stwórz plan</a>
                             </li>                            

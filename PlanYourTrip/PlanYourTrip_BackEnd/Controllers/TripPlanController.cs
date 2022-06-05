@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PlanYourTrip_ClassLibrary.Classes;
+using PlanYourTrip_ClassLibrary.ClassesDTO;
 
 namespace PlanYourTrip_BackEnd.Controllers
 {
@@ -9,7 +10,6 @@ namespace PlanYourTrip_BackEnd.Controllers
     [ApiController]
     public class TripPlanController : ControllerBase
     {
-
         private readonly DataContext _context;
 
         public TripPlanController(DataContext context)
@@ -17,13 +17,28 @@ namespace PlanYourTrip_BackEnd.Controllers
             _context = context;
         }
 
+        // Plans
+        // Plans/{id}
+        // Plans/User/{userId}
+        // Plans/User/{userId}/Public
+        // Plans/Filter
+        // Plans/Latest/{quantity}
+        // Plans/Latest/{userId}/{quantity}
+        // Plans/SubsLatest
+        //
+        // Put {id}
+        // Post
+        // Delete {id}
+
         [HttpGet]
+        [Route("Plans")]
         public async Task<ActionResult<List<TripPlans>>> GetAllPlans()
         {
             return Ok(await _context.TripPlans.ToListAsync());
         }
 
-        [HttpGet("{id}")]
+        [HttpGet]
+        [Route("Plans/{id}")]
         public async Task<ActionResult<TripPlans>> GetTripPlan(int id)
         {
             var tripPlan = await _context.TripPlans.FindAsync(id);
@@ -36,19 +51,140 @@ namespace PlanYourTrip_BackEnd.Controllers
         }
 
         [HttpGet]
-        [Route("MyPlans/{userId}")]
-        public async Task<ActionResult<TripPlans>> GetUserTripPlans(int userId)
+        //[Route("MyPlans/{userId}")]
+        [Route("Plans/User/{userId}")]
+        public async Task<ActionResult<List<TripPlans>>> GetUserTripPlans(int userId)
         {
             var tripPlans = await _context.TripPlans
-                .FromSqlRaw($"SELECT * FROM dbo.TripPlans WHERE AutorId = {userId}")
+                .FromSqlRaw($"SELECT * FROM dbo.TripPlans WHERE AutorId = {userId} ORDER BY DataUtworzenia DESC")
                 .ToListAsync();
             if (tripPlans == null)
             {
-                return BadRequest("Nie odnaleziono planu");
+                return BadRequest("Nie odnaleziono planów ");
             }
 
             return Ok(tripPlans);
         }
+
+        [HttpGet]
+        //[Route("MyPlans/{userId}")]
+        [Route("Plans/User/{userId}/Public")]
+        public async Task<ActionResult<List<TripPlans>>> GetUserPublicTripPlans(int userId)
+        {
+            var tripPlans = await _context.TripPlans
+                .FromSqlRaw($"SELECT * FROM dbo.TripPlans WHERE Publiczny = 1 AND AutorId = {userId}  ORDER BY DataUtworzenia DESC")
+                .ToListAsync();
+            if (tripPlans == null)
+            {
+                return BadRequest("Nie odnaleziono planów ");
+            }
+
+            return Ok(tripPlans);
+        }
+
+
+        [HttpPost]
+        [Route("Plans/Filter")]
+        public async Task<ActionResult<List<TripPlans>>> GetFilteredPlans(PlansFilterDTO filters)
+        {
+            List<TripPlans> tripPlans;
+            string dateMinParsed = "";
+            string dateMaxParsed = "";
+
+            if (!string.IsNullOrEmpty(filters.DateMin))
+                dateMinParsed = DateTime.Parse(filters.DateMin).ToString("O");
+
+            if (!string.IsNullOrEmpty(filters.DateMax))
+                dateMaxParsed = DateTime.Parse(filters.DateMax).ToString("O");
+
+            string sortType = (filters.SortType == "desc") ? "DESC" : "ASC";
+
+
+            if (string.IsNullOrEmpty(dateMinParsed) && string.IsNullOrEmpty(dateMaxParsed))
+            {
+                tripPlans = await _context.TripPlans
+                    .FromSqlRaw($"SELECT * FROM TripPlans WHERE Publiczny = 1 ORDER BY DataUtworzenia {sortType}")
+                    .ToListAsync();
+            }
+            else if (!string.IsNullOrEmpty(dateMinParsed) && string.IsNullOrEmpty(dateMaxParsed))
+            {
+                tripPlans = await _context.TripPlans
+                    .FromSqlRaw($"SELECT * FROM TripPlans WHERE Publiczny = 1 AND DataUtworzenia >= '{dateMinParsed}' ORDER BY DataUtworzenia {sortType}")
+                    .ToListAsync();
+            }
+            else if (string.IsNullOrEmpty(dateMinParsed) && !string.IsNullOrEmpty(dateMaxParsed))
+            {
+                tripPlans = await _context.TripPlans
+                    .FromSqlRaw($"SELECT * FROM TripPlans WHERE Publiczny = 1 AND DataUtworzenia <= '{dateMaxParsed}' ORDER BY DataUtworzenia {sortType}")
+                    .ToListAsync();
+            }
+            else
+            {
+                tripPlans = await _context.TripPlans
+                    .FromSqlRaw($"SELECT * FROM TripPlans WHERE Publiczny = 1 AND DataUtworzenia BETWEEN '{dateMinParsed}' AND '{dateMaxParsed}' ORDER BY DataUtworzenia {sortType}")
+                    .ToListAsync();
+            }
+
+            if (tripPlans == null)
+            {
+                return BadRequest("Nie znaleziono planów");
+            }
+
+            return Ok(tripPlans);
+        }
+
+        [HttpGet]
+        //[Route("LatestPlans/{quantity}")]
+        [Route("Plans/Latest/{quantity}")]
+        public async Task<ActionResult<List<TripPlans>>> GetTopTripPlans(int quantity)
+        {
+            var tripPlans = await _context.TripPlans
+                .FromSqlRaw($"SELECT TOP {quantity} * FROM TripPlans WHERE Publiczny = 1 ORDER BY DataUtworzenia DESC")
+                .ToListAsync();
+
+            if (tripPlans == null)
+            {
+                return BadRequest("Brak planów");
+            }
+
+            return Ok(tripPlans);
+        }
+
+        [HttpGet]
+        [Route("LatestsPlans/{userId}/{quantity}")]
+        public async Task<ActionResult<List<TripPlans>>> GetUserTopTripPlans(int userId, int quantity)
+        {
+            var tripPlans = await _context.TripPlans
+                .FromSqlRaw($"SELECT TOP {quantity} * FROM TripPlans WHERE Publiczny = 1 AND AutorId = {userId} ORDER BY DataUtworzenia DESC")
+                .ToListAsync();
+
+            if (tripPlans == null)
+            {
+                return BadRequest("Brak planów");
+            }
+
+            return Ok(tripPlans);
+        }
+
+        [HttpPost]
+        [Route("Plans/SubsLatest")]
+        public async Task<ActionResult<List<TripPlans>>> GetSubsLatestPlans(List<int> userIds)
+        {
+            int quantity = userIds.Last<int>();
+            List<TripPlans> subLatestPlans = new List<TripPlans>();
+
+            for(int i = 0; i < userIds.Count-1; i++)
+            {
+                subLatestPlans.AddRange(
+                    await _context.TripPlans
+                    .FromSqlRaw($"SELECT TOP {quantity} * FROM TripPlans WHERE Publiczny = 1 AND AutorId = {userIds[i]} ORDER BY DataUtworzenia DESC")
+                    .ToListAsync());
+            }
+
+            return(subLatestPlans);
+        }
+
+
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTripPlan(int id, TripPlans request)

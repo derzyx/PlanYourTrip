@@ -27,11 +27,26 @@ namespace PlanYourTrip_FrontEnd.Pages
         [BindProperty]
         public string ErrorMessage { get; set; }
 
-        public void OnGet()
+
+        private string badRequestCode = HttpStatusCode.BadRequest.ToString();
+        private string notFoundCode = HttpStatusCode.NotFound.ToString();
+        private string OKCode = HttpStatusCode.OK.ToString();
+
+        public IActionResult OnGet()
         {
-            if (!string.IsNullOrEmpty(HttpContext.Request.Query["e"]))
+            if (!string.IsNullOrEmpty(HttpContext.Session.GetString(SessionKeys.CurrentUser)))
             {
-                ErrorMessage = "Nieprawid³owe dane logowania";
+                return new RedirectToPageResult("/Login");
+            }
+
+            return Page();
+        }
+
+        public void OnGetResponseMessage()
+        {
+            if (HttpContext.Request.Query["c"] == badRequestCode || HttpContext.Request.Query["c"] == notFoundCode)
+            {
+                ErrorMessage = HttpContext.Request.Query["m"];
             }
         }
 
@@ -39,23 +54,17 @@ namespace PlanYourTrip_FrontEnd.Pages
         {
             UsersDTO user = new UsersDTO { Email = Email, Haslo = Password };
 
-            using var httpResponseMessage =
-                await _userProcessor.LoginUser(user);
+            HttpResponseMessage message = await _userProcessor.LoginUser(user);
 
-            HttpStatusCode statusCode = httpResponseMessage.StatusCode;
-
-            switch (statusCode)
+            if (message.IsSuccessStatusCode)
             {
-                case HttpStatusCode.OK:
-                    Users currentUser = await _userProcessor.GetUserByEmail(Email);
-                    HttpContext.Session.SetString(SessionKeys.CurrentUser, currentUser.Id.ToString());
-                    return new RedirectToPageResult("/Index");
-                case HttpStatusCode.BadRequest:
-                    return new RedirectToPageResult("/Login", new { e = HttpStatusCode.BadRequest });
-                case HttpStatusCode.NotFound:
-                    return new RedirectToPageResult("/Login", new { e = HttpStatusCode.NotFound });
-                default:
-                    return new RedirectToPageResult("/Login", new { e = HttpStatusCode.BadRequest });
+                Users currentUser = await _userProcessor.GetUserByEmail(Email);
+                HttpContext.Session.SetString(SessionKeys.CurrentUser, currentUser.Id.ToString());
+                return new RedirectToPageResult("/Index");
+            }
+            else
+            {
+                return new RedirectToPageResult("/Login", "ResponseMessage", new { c = message.StatusCode, m = message.Content.ReadAsStringAsync().Result });
             }
         }
     }

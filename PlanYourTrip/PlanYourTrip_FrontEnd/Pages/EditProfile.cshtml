@@ -1,12 +1,40 @@
 ﻿@page
+@using PlanYourTrip_ClassLibrary.KeysStorage
 @model PlanYourTrip_FrontEnd.Pages.EditProfileModel
 @{
 }
 
+<div class="container-fluid" id="deleteContainer" style="visibility:hidden;">
+    <div class="row-cols-1 d-flex flex-column align-items-center justify-content-center" id="deleteBoxRow">
+        <form method="post" class="col-3" asp-page-handler="DeleteUser">
+            <div class="border border-dark rounded col-lg-12 deleteBox p-5">
+                <label>
+                    <b>Aby usunąć konto wpisz @Model.DeleteConfirmText w polu poniżej</b>
+                </label>
+                <input id="deleteConfirmInput" type="text" asp-for=@Model.DeleteConfirmInput>
+
+                <div class="row d-flex flex-row justify-content-between mt-3">
+                    <a value="Anuluj" class="col-3 btn btn-outline-secondary" onclick="HideDeleteWindow()">Anuluj</a>
+
+                    <input type="submit" value="Usuń" class="col-3 btn btn-danger">
+                    <input id="entityIdField" class="hiddenField" type="hidden">
+
+                </div>
+
+            </div>
+        </form>
+    </div>
+    <div class="deleteBoxBgPanel">
+    </div>
+</div>
+
+
 <div class="container spaceFromFooter">
     <div class="row d-flex flex-column align-content-center">
-        <form method="post">
+        <form method="post" asp-page-handler="UserData">
             <div class="col-6 mt-5 p-5 mx-auto border border-secondary rounded loginBox">
+                <span class="text-danger">@Html.Raw(Model.ErrorMessage)</span>
+                <span class="text-success">@Html.Raw(Model.SuccessMessage)</span>
                 <div>
                     <h1><b>Edytuj profil</b></h1>
                 </div>
@@ -17,21 +45,19 @@
                             *
                         </b>
                     </h5>
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <input type="text" class="form-control" id="nick" />
-                    @*<span asp-validation-for="@Model.Nick" class="text-danger"></span>*@
+                    <input type="text" class="form-control" id="nick" value=@Model.CurrentUser.Nick asp-for=@Model.Nick/>
                 </div>
                 <div class="mt-4">
                     <h5 id="Imie">
                         Imie:
                     </h5>
-                    <input type="text" class="form-control" id="name" />
+                    <input type="text" class="form-control" id="name" value=@Model.CurrentUser.Imie asp-for=@Model.Name/>
                 </div>
                 <div class="mt-4">
                     <h5 id="Nazwisko">
                         Nazwisko:
                     </h5>
-                    <input type="text" class="form-control" id="surname" />
+                    <input type="text" class="form-control" id="surname" value=@Model.CurrentUser.Nazwisko asp-for=@Model.Surname />
                 </div>
                 <div class="mt-4">
                     <h5 id="Email">
@@ -40,16 +66,14 @@
                             *
                         </b>
                     </h5>
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <input type="email" class="form-control" id="email" />
-                    @*<span asp-validation-for="@Model.Email" class="text-danger"></span>*@
+                    <input type="email" class="form-control" id="email" value=@Model.CurrentUser.Email asp-for=@Model.Email/>
                 </div>
 
                 <div class="mt-4">
                     <h5 id="Opis">
                         Opis:
                     </h5>
-                    <textarea rows=5 class="form-control" id="desc"></textarea>
+                    <textarea rows=5 class="form-control" id="desc" asp-for=@Model.Desc>@Model.CurrentUser.Opis aaaa</textarea>
                 </div>
 
                 <div class="row d-flex justify-content-between mt-3 mx-0">
@@ -69,7 +93,7 @@
                 </div>
             </div>
         </form>
-        <form method="post">
+        <form method="post" asp-page-handler="Password">
             <div class="col-6 mt-4 p-5 mx-auto border border-secondary rounded">
                 <div>
                     <h1><b>Zmiana hasła</b></h1>
@@ -81,9 +105,7 @@
                             *
                         </b>
                     </h5>
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <input type="password" class="form-control" id="password" />
-                    @*<span asp-validation-for="@Model.Password" class="text-danger"></span>*@
+                    <input type="password" class="form-control" id="oldPassword" asp-for=@Model.CurrentPassword/>
                 </div>
                 <div class="mt-4">
                     <h5 id="NoweHaslo">
@@ -92,9 +114,7 @@
                             *
                         </b>
                     </h5>
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <input type="password" class="form-control" id="password" />
-                    @*<span asp-validation-for="@Model.Password" class="text-danger"></span>*@
+                    <input type="password" class="form-control" id="newPassword" asp-for=@Model.NewPassword/>
                 </div>
                 <div class="mt-4">
                     <h5 id="NoweHasloPowtorz">
@@ -103,9 +123,7 @@
                             *
                         </b>
                     </h5>
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <input type="password" class="form-control" id="password" />
-                    @*<span asp-validation-for="@Model.Password" class="text-danger"></span>*@
+                    <input type="password" class="form-control" id="newPasswordRepeat" asp-for=@Model.NewPasswordRepeat/>
                 </div>
                 <div class="row d-flex justify-content-between mt-3 mx-0">
                     <div class="col-auto p-0">
@@ -124,5 +142,22 @@
                 </div>
             </div>
         </form>
+
+            <div class="col-6 mt-4 p-5 mx-auto border border-secondary rounded">
+                <div>
+                    <h1><b>Usuń konto</b></h1>
+                </div>
+                <div class="row d-flex justify-content-end mt-3 mx-0">
+                    <div class="col-auto p-0">
+                        <button class="btn btn-danger p-3" onclick="OpenDeleteWindow(@Convert.ToInt32(HttpContext.Session.GetString(SessionKeys.CurrentUser)))">
+                            Usuń konto
+                        </button>
+                    </div>
+                </div>
+            </div>
+
     </div>
 </div>
+
+
+<script src="~/js/deleteWindow.js"></script>

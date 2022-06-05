@@ -24,15 +24,21 @@ const planTripString = document.getElementById("planTripString");
 const askBeforeDeleteBool = document.getElementById("askBeforeDeleteBool");
 
 const saveTripToDbBtn = document.getElementById("saveTripToDB");
-const getTripStringBtn = document.getElementById("getTripString");
+const exitPlan = document.getElementById("exitPlan");
+const saveAndExitPlan = document.getElementById("saveAndExitPlan");
+const nextPage = document.getElementById("nextPage");
 
 
 var currentPointFocus;
 var currentBranchFocus;
+var askBeforeDelete;
 
 // EVENTS
 
-window.onload = loadTrip();
+window.addEventListener("load", function (e) {
+    loadTrip();
+    setAskBeforeDeleteBool();
+});
 
 closeLinkBoxBtn.addEventListener("click", function (e) {
     addLinkBox.style.visibility = "hidden";
@@ -49,9 +55,20 @@ pointTypesDDL.addEventListener("change", function (e) {
     console.log(e.target.value);
 });
 
-getTripString.addEventListener("click", async function (e) {
+exitPlan.addEventListener("click", async function (e) {
     await saveValues()
+        .then(nextPage.value = "stay")
         .then(saveTripToDbBtn.click());
+});
+
+saveAndExitPlan.addEventListener("click", async function (e) {
+    await saveValues()
+        .then(nextPage.value = "exit")
+        .then(saveTripToDbBtn.click());
+});
+
+askBeforeDeleteBool.addEventListener("change", function (e) {
+    setAskBeforeDeleteBool();
 });
 
 // FUNCTIONS
@@ -63,6 +80,16 @@ function FindElementId(element) {
             return i;
         }
     }
+}
+
+function setAskBeforeDeleteBool() {
+    if (askBeforeDeleteBool.value === "true") {
+        askBeforeDelete = true;
+    }
+    else {
+        askBeforeDelete = false;
+    }
+    console.log(askBeforeDelete);
 }
 
 function ResizeInput(sender) {
@@ -175,7 +202,7 @@ function OpenAddLinkBox(sender) {
 }
 
 function OpenRemoveElQuestionBox(sender, type) {
-    if (askBeforeDeleteBool.checked) {
+    if (askBeforeDelete) {
         document.querySelector("body").insertBefore(RemoveElQuestionBlock(sender, type), document.getElementById("navBar"));
     }
     else {
@@ -269,7 +296,7 @@ function saveValues() {
             }
         }
     }
-    Trip.push(new Options(planName.value, askBeforeDeleteBool.checked));
+    Trip.push(new Options(planName.value, askBeforeDeleteBool.value));
     Trip.push(Points);
 
     planTripString.value = JSON.stringify(Trip);
@@ -291,7 +318,7 @@ function loadTrip() {
 
         // Opcje
         planName.value = LOptions.PlanName;
-        askBeforeDeleteBool.checked = LOptions.AskBeforeDelete;
+        askBeforeDeleteBool.value = LOptions.AskBeforeDelete;
 
 
         // Główne punkty
