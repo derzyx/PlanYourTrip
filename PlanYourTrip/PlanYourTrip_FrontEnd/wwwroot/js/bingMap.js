@@ -1,4 +1,7 @@
 ﻿const outputDiv = document.getElementById("mapOutput");
+const addressDiv = document.getElementById("placeAddress");
+const phoneDiv = document.getElementById("phone");
+const pointTypes = document.getElementById("pointTypesDDL");
 
 var sdsDataSourceUrl = "https://spatial.virtualearth.net/REST/v1/data/Microsoft/PointsOfInterest";
 var map;
@@ -20,8 +23,12 @@ function GetMap() {
         Microsoft.Maps.Events.addHandler(map, 'viewchangeend', function () {
             getLocationsInView();
             gridLayer.clear();
-            //getPointByEntityId('7024127122536923140');
         });
+        pointTypes.addEventListener("input", function () {
+            placesTable = pointTypes.value;
+            getLocationsInView();
+            gridLayer.clear();
+        })
         getLocationsInView();
     })
 }
@@ -40,12 +47,11 @@ function getLocationsInView() {
                 location: map.getCenter(),
                 radius: 25
             },
-            filter: new sds.Filter('EntityTypeID', sds.FilterCompareOperator.isIn, placesTable)
+            filter: new sds.Filter('EntityTypeID', sds.FilterCompareOperator.isIn, [placesTable])
         };
 
         Microsoft.Maps.SpatialDataService.QueryAPIManager.search(queryOptions, map, function (data) {
             map.entities.clear();
-            //console.log(data);
             for (let i = 0; i < data.length; i++) {
                 data[i].entity.title = data[i].metadata.Name;
                 Microsoft.Maps.Events.addHandler(data[i], 'click', pushpinClicked);
@@ -64,8 +70,10 @@ function pushpinClicked(e) {
     }
     if (e.target.metadata) {
         currentPlace = e.target;
-        //console.log(currentPlace);
+        console.log(currentPlace)
         outputDiv.textContent = currentPlace.entity.title;
+        addressDiv.textContent = currentPlace.metadata.AdminDistrict2 + " " + currentPlace.metadata.AddressLine;
+        phoneDiv.textContent = currentPlace.metadata.Phone;
     }
 }
 
@@ -83,9 +91,3 @@ function getPointByEntityId(id) {
         });
     });
 }
-
-
-
-// zrobić tablice z podobnymi typami miejsc
-// wyświetlić metadane pod mapą przy kliknięciu
-// do linka jako hiddenVal zapisać entityId

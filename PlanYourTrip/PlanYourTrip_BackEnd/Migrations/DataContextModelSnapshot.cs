@@ -22,107 +22,27 @@ namespace PlanYourTrip_BackEnd.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("ContributorsTripPlans", b =>
+            modelBuilder.Entity("PlanYourTrip_ClassLibrary.Classes.Subscription", b =>
                 {
-                    b.Property<int>("ContributorsContributorId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TripPlansTripPlanId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ContributorsContributorId", "TripPlansTripPlanId");
-
-                    b.HasIndex("TripPlansTripPlanId");
-
-                    b.ToTable("ContributorsTripPlans");
-                });
-
-            modelBuilder.Entity("PlanYourTrip_ClassLibrary.Classes.Answers", b =>
-                {
-                    b.Property<int>("IdAnswer")
+                    b.Property<int>("IdSubscription")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdAnswer"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdSubscription"), 1L, 1);
 
-                    b.Property<int?>("AutorId")
+                    b.Property<int>("ObservedId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("Data")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("PostId")
+                    b.Property<int>("SubscriberId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Tresc")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.HasKey("IdSubscription");
 
-                    b.HasKey("IdAnswer");
+                    b.HasIndex("ObservedId");
 
-                    b.HasIndex("AutorId");
+                    b.HasIndex("SubscriberId");
 
-                    b.HasIndex("PostId");
-
-                    b.ToTable("Answers");
-                });
-
-            modelBuilder.Entity("PlanYourTrip_ClassLibrary.Classes.Contributors", b =>
-                {
-                    b.Property<int>("ContributorId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ContributorId"), 1L, 1);
-
-                    b.Property<int>("UserI_FK")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ContributorId");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.ToTable("Contributors");
-                });
-
-            modelBuilder.Entity("PlanYourTrip_ClassLibrary.Classes.Posts", b =>
-                {
-                    b.Property<int>("IdPost")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IdPost"), 1L, 1);
-
-                    b.Property<int>("AutorId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("Data")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Polubienia")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Tresc")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Tytul")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ZdjeciaJSON")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("IdPost");
-
-                    b.HasIndex("AutorId");
-
-                    b.ToTable("Posts");
+                    b.ToTable("Subscription");
                 });
 
             modelBuilder.Entity("PlanYourTrip_ClassLibrary.Classes.TripPlans", b =>
@@ -136,16 +56,23 @@ namespace PlanYourTrip_BackEnd.Migrations
                     b.Property<int>("AutorId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime?>("DataUtworzenia")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Nazwa")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Opis")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime?>("OstatniaAktualizacja")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("Publiczny")
+                        .HasColumnType("bit");
+
                     b.Property<string>("PunktyJSON")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("TripPlanId");
@@ -174,17 +101,15 @@ namespace PlanYourTrip_BackEnd.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnOrder(5);
 
-                    b.Property<int>("IdAvatar")
+                    b.Property<int?>("IdAvatar")
                         .HasColumnType("int")
                         .HasColumnOrder(7);
 
                     b.Property<string>("Imie")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnOrder(2);
 
                     b.Property<string>("Nazwisko")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnOrder(3);
 
@@ -194,7 +119,6 @@ namespace PlanYourTrip_BackEnd.Migrations
                         .HasColumnOrder(1);
 
                     b.Property<string>("Opis")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnOrder(6);
 
@@ -203,58 +127,23 @@ namespace PlanYourTrip_BackEnd.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("ContributorsTripPlans", b =>
+            modelBuilder.Entity("PlanYourTrip_ClassLibrary.Classes.Subscription", b =>
                 {
-                    b.HasOne("PlanYourTrip_ClassLibrary.Classes.Contributors", null)
+                    b.HasOne("PlanYourTrip_ClassLibrary.Classes.Users", "Observed")
                         .WithMany()
-                        .HasForeignKey("ContributorsContributorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("ObservedId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("PlanYourTrip_ClassLibrary.Classes.TripPlans", null)
+                    b.HasOne("PlanYourTrip_ClassLibrary.Classes.Users", "Subscriber")
                         .WithMany()
-                        .HasForeignKey("TripPlansTripPlanId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("PlanYourTrip_ClassLibrary.Classes.Answers", b =>
-                {
-                    b.HasOne("PlanYourTrip_ClassLibrary.Classes.Users", "User")
-                        .WithMany("Answers")
-                        .HasForeignKey("AutorId");
-
-                    b.HasOne("PlanYourTrip_ClassLibrary.Classes.Posts", "Post")
-                        .WithMany("Odpowiedzi")
-                        .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("SubscriberId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.Navigation("Post");
+                    b.Navigation("Observed");
 
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("PlanYourTrip_ClassLibrary.Classes.Contributors", b =>
-                {
-                    b.HasOne("PlanYourTrip_ClassLibrary.Classes.Users", "User")
-                        .WithOne("Contributors")
-                        .HasForeignKey("PlanYourTrip_ClassLibrary.Classes.Contributors", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("PlanYourTrip_ClassLibrary.Classes.Posts", b =>
-                {
-                    b.HasOne("PlanYourTrip_ClassLibrary.Classes.Users", "User")
-                        .WithMany("Posts")
-                        .HasForeignKey("AutorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
+                    b.Navigation("Subscriber");
                 });
 
             modelBuilder.Entity("PlanYourTrip_ClassLibrary.Classes.TripPlans", b =>
@@ -268,20 +157,8 @@ namespace PlanYourTrip_BackEnd.Migrations
                     b.Navigation("Users");
                 });
 
-            modelBuilder.Entity("PlanYourTrip_ClassLibrary.Classes.Posts", b =>
-                {
-                    b.Navigation("Odpowiedzi");
-                });
-
             modelBuilder.Entity("PlanYourTrip_ClassLibrary.Classes.Users", b =>
                 {
-                    b.Navigation("Answers");
-
-                    b.Navigation("Contributors")
-                        .IsRequired();
-
-                    b.Navigation("Posts");
-
                     b.Navigation("TripPlans");
                 });
 #pragma warning restore 612, 618

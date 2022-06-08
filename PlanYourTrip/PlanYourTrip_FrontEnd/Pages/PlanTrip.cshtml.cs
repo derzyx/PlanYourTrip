@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using PlanYourTrip_ClassLibrary.Classes;
+using PlanYourTrip_ClassLibrary.KeysStorage;
 using PlanYourTrip_FrontEnd.ApiLogic;
 
 namespace PlanYourTrip_FrontEnd.Pages
@@ -13,50 +14,111 @@ namespace PlanYourTrip_FrontEnd.Pages
             _tripPlanProcessor = tripPlanProcessor;
         
         
+        private TripPlans _tripPlan { get; set; }
 
+        //Current trip plan
         [BindProperty]
-        public TripPlans TripPlan { get; set; } 
+        public TripPlans TripPlan { get { 
+                if(_tripPlan == null)
+                {
+                    return new TripPlans() { PunktyJSON = "" };
+                }
+                else
+                {
+                    return _tripPlan;
+                }
+            } set { 
+                _tripPlan = value; 
+            } } 
+
+
         [BindProperty]
         public string PlanName { get; set; }
         [BindProperty]
         public string TripString { get; set; }
+        [BindProperty]
+        public string IsPublic { get; set; } = "false";
 
+        [BindProperty]
+        public string PlanDesc { get; set; }
 
-        public async Task OnGet()
+        [BindProperty]
+        public string PageOnExit { get; set; }
+
+        public async Task<IActionResult> OnGet()
         {
-            try
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString(SessionKeys.CurrentUser)))
             {
-                TripPlan = await _tripPlanProcessor.GetPlan(4);
+                return new RedirectToPageResult("/Login");
             }
-            catch (Exception ex)
+
+            int planId = Convert.ToInt32(HttpContext.Request.Query["plan"]);
+
+            if (planId != 0)
             {
-                throw;
+                try
+                {
+                    TripPlan = await _tripPlanProcessor.GetPlan(planId);
+                    IsPublic = (TripPlan.Publiczny) ? "true" : "false";
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
             }
-            //TripString = System.IO.File.ReadAllText(@"C:\Users\mkrau\source\VS2022_repos\PlanYourTrip\PlanYourTrip\PlanYourTrip_FrontEnd\wwwroot\js\TEMPTripString.txt");
-            //string tripString = TripString;
+
+            return Page();
         }
+
 
         public async Task<IActionResult> OnPost()
         {
-            //string planName = PlanName;
-            //string tripString = TripString;
+            int planId = Convert.ToInt32(HttpContext.Request.Query["plan"]);
+            TripPlans newPlan = new TripPlans
+            {
+                Nazwa = TripPlan.Nazwa,
+                Opis = TripPlan.Opis,
+                PunktyJSON = TripPlan.PunktyJSON,
+                DataUtworzenia = DateTime.UtcNow.AddHours(2),
+                OstatniaAktualizacja = DateTime.UtcNow.AddHours(2),
+                AutorId = Convert.ToInt32(HttpContext.Session.GetString(SessionKeys.CurrentUser)),
+                Publiczny = (Request.Form["planVisibility"] == "true") ? true : false
+            };
             try
             {
-                var currentPlan = await _tripPlanProcessor.GetPlan(4);
+                if (planId == 0)
+                {
+                    await _tripPlanProcessor.AddTripPlan(newPlan);
+                }
+                else
+                {
+                    TripPlans currentPlan = await _tripPlanProcessor.GetPlan(planId);
 
-                TripPlans newPlan = new TripPlans {
-                    TripPlanId = Convert.ToInt32(currentPlan.TripPlanId),
-                    Nazwa = PlanName,
-                    Opis = currentPlan.Opis,
-                    PunktyJSON = TripString,
-                    AutorId = Convert.ToInt32(currentPlan.AutorId),
-                    Contributors = currentPlan.Contributors,
-                    Users = currentPlan.Users
-                };
+                    if (Convert.ToInt32(HttpContext.Session.GetString(SessionKeys.CurrentUser)) != currentPlan.AutorId)
+                    {
+                        newPlan.DataUtworzenia = DateTime.UtcNow.AddHours(2);
+                        await _tripPlanProcessor.AddTripPlan(newPlan);
+                    }
+                    else
+                    {
+                        newPlan.TripPlanId = currentPlan.TripPlanId;
+                        newPlan.DataUtworzenia = currentPlan.DataUtworzenia;
+                        await _tripPlanProcessor.UpdateTripPlan(newPlan);
+                    }
+                }
 
-                await _tripPlanProcessor.UpdateTripPlan(newPlan);
-
-                return new RedirectToPageResult("/Index");
+                if (PageOnExit == "stay")
+                {
+                    return Page();
+                }
+                else if (PageOnExit == "exit")
+                {
+                    return new RedirectToPageResult("/MyTripsList");
+                }
+                else
+                {
+                    return new RedirectToPageResult("/Error");
+                }
             }
             catch (Exception)
             {

@@ -1,0 +1,86 @@
+﻿@page
+@model PlanYourTrip_FrontEnd.Pages.AllTripPlansModel
+@{
+}
+
+<div class="container latestPlansContainer">
+    <div class="row-cols-1">
+        <div class="col-auto mb-4">
+            <h1 class="m-0">
+                Wszystkie publiczne podróże
+            </h1>
+        </div>
+        <form method="post" asp-page-handler="Filter">
+            <div class="col-auto mb-4 mx-3">
+                <div class="row d-flex justify-content-between">
+                    <div class="col-12">
+                        <p>Filtruj datę:</p>
+                        <span class="text-danger">@Model.ErrorMessage</span>
+                    </div>
+                    <div class="col-3">
+                        <div class="input-group w-100 h-100">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">Od</span>
+                            </div>
+                            <input id="minDate" class="form-control" type="date" value=@Model.DateMin asp-for=@Model.DateMin/>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="input-group w-100 h-100">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">Do</span>
+                            </div>
+                            <input id="maxDate" class="form-control" type="date" value=@Model.DateMax asp-for=@Model.DateMax/>
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <select name="sortType" id="plansSortType" class="form-control">
+                            <option value="asc">Od najstarszych</option>
+                            <option value="desc">Od najnowszych</option>
+                        </select>
+                    </div>
+                    <div class="col-auto">
+                        <button class="btn btn-primary">Filtruj</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="col">
+            <div class="row">
+                @for(int i = 0; i < Model.Plans.Count; i++)
+                {
+                    <div class="col-lg-4">
+                        <div class="position-relative mx-3 my-4 p-4 border border-secondary rounded tripCard">
+                            <div class="row d-flex justify-content-center justify-items-center readFurtherBtn">
+                                <a class="col btn btn-primary" asp-page="/PlanTrip" asp-route-plan=@Model.Plans[i].TripPlanId>Zobacz plan</a>
+                            </div>
+                            <div class="textOverflowFade"></div>
+                            <div class="row-cols-1">
+                                <div class="col">
+                                    <h2 class="m-0">@Model.Plans[i].Nazwa</h2>
+                                </div>
+                                <div class="col">
+                                    <div class="row d-flex justify-content-between">
+                                        <div class="col-auto">
+                                            <a asp-page="/User" asp-route-id=@Model.Plans[i].AutorId>@Model.AuthorsNicks[i]</a>
+                                        </div>
+                                        <div class="col-auto">
+                                            @Model.Plans[i].DataUtworzenia
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr class="mt-0"/>
+                                <div class="col">
+                                    <p>@Model.Plans[i].Opis</p>                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="col-auto d-flex justify-content-center m-5">
+            <p>@Model.EndOfListMessage</p>
+        </div>
+    </div>
+</div>

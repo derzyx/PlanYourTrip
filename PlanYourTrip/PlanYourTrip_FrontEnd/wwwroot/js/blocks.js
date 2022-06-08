@@ -246,7 +246,7 @@ function AttributeBlock(attribute) {
     if (attribute.Type === "attr") {
         let valueInput = document.createElement("input");
         valueInput.className = "pointAttrInput attrValue";
-        valueInput.value = "wartość";
+        valueInput.value = attribute.Value;
         valueInput.addEventListener("input", function (e) { ResizeInput(e.target) });
         valueInput.style.width = "8ch";
         inputDiv.appendChild(valueInput);

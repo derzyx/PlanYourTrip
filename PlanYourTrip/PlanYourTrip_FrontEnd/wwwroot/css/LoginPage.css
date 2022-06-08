@@ -1,0 +1,33 @@
+﻿.loginWindow{
+    height: calc(100vh - 118px);
+}
+
+.loginBgImage {
+    width: 100%;
+    height: calc(100vh - 118px);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-origin: border-box;
+    filter: opacity(.7);
+    z-index: -1;
+}
+
+.loginBox{
+    background-color: white;
+}
+
+.spaceFromFooter{
+    margin-bottom: calc(4em + 61px);
+}
+
+.registerBgImage {
+    width: 100%;
+    height: calc(100% - 118px);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-origin: border-box;
+    filter: opacity(.7);
+    z-index: -1;
+}

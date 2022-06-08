@@ -1,0 +1,69 @@
+﻿@page
+@using PlanYourTrip_ClassLibrary.Classes
+@model PlanYourTrip_FrontEnd.Pages.MySubscriptionsModel
+@{
+    List<TripPlans> userPlans;
+}
+<div class="container m-4 mx-auto">
+    <div class="row-cols-1 mx-5">
+        <div class="col">
+            <h1>Subskrybcje</h1>
+        </div>
+        <hr />
+        <div class="col my-5">
+            <input type="text" id="filterInput" class="form-control" placeholder="Wyszukaj użytkownika"/>
+        </div>
+        <div id="subcriptionsBox" style="margin-bottom: 5rem;">
+        @for(int i=0; i < Model.UserSubs.Count-1; i++)
+        {   
+            <div class="col my-4 subscribedProfileBox">
+                <hr />
+                <div class="row-cols-1">
+                    <div class="col">
+                        <h2 class="userNick">@Model.SubsNicks[i]</h2>
+                    </div>
+                    <div class="col">
+                        <div class="row">
+                            @{
+                                userPlans = Model.SubsLatestPlans.Where(plan => plan.AutorId == Model.UserSubs[i]).ToList();
+                                for(int j=0; j < userPlans.Count; j++){
+                                <div class="col-3">
+                                    <div class="position-relative mx-3 my-4 p-3 border border-secondary rounded smallTripCard">
+                                        <div class="row d-flex justify-content-center justify-items-center readFurtherBtn">
+                                            <a class="col btn btn-primary" asp-page="/PlanTrip" asp-route-plan=@userPlans[j].TripPlanId>Zobacz plan</a>
+                                        </div>
+                                        <div class="textOverflowFade"></div>
+                                        <div class="row-cols-1">
+                                            <div class="col" style="position: relative;">
+                                                <div class="titleOverflowFade"></div>
+                                                <h2 class="m-0">@userPlans[j].Nazwa</h2>
+                                            </div>
+                                            <div class="col">
+                                                <div class="row d-flex justify-content-between">
+                                                    <div class="col-auto">
+                                                        @userPlans[j].DataUtworzenia
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr class="mt-0"/>
+                                            <div class="col">
+                                                <p>@userPlans[j].Opis</p>                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                }
+                            }
+                            <div class="col-3 d-flex justify-content-center align-items-center">
+                                <a class="btn btn-primary p-4" asp-page="/User" asp-route-id=@Model.UserSubs[i]>Zobacz profil</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        </div>
+    </div>
+</div>
+
+<script src="~/js/filterSubscribed.js"></script>

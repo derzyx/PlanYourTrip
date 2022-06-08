@@ -1,0 +1,58 @@
+﻿@page
+@model PlanYourTrip_FrontEnd.Pages.LoginModel
+@{
+    ViewData["Title"] = "Login";
+}
+@section scripts{
+    <partial name="_ValidationScriptsPartial"/>
+}
+<div class="position-absolute loginBgImage" style="background-image:url(/img/beach-sea-coast-photography-town-view-660031-pxhere.com.jpg);"></div>
+<div class="container loginWindow">
+
+
+    <div class="row h-100 d-flex justify-content-center align-items-center ">
+        <div class="col-4 p-5 mx-auto border border-secondary rounded loginBox">
+            <div class="mb-5">
+                <h1>
+                    <b>Logowanie</b>
+                </h1>
+                <hr />
+            </div>
+            <form method="post">
+                <div class="mt-4">
+                    <h5 id="Email">
+                        Email:
+                    </h5>
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="text" class="form-control" id="email" asp-for=@Model.Email />
+                    <span asp-validation-for="@Model.Email" class="text-danger"></span>
+                </div>
+                <div class="mt-4">
+                    <h5 id="Password">
+                        Hasło:
+                    </h5>
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="password" class="form-control" id="password" asp-for=@Model.Password />
+                    <span asp-validation-for="@Model.Password" class="text-danger"></span>
+                </div>
+                <div class="mt-4">
+                    <p class="text-danger">@Model.ErrorMessage</p>
+                </div>
+                <div class="row d-flex justify-content-between mt-4">
+                    <div class="col-auto">
+                        Nie masz jeszcze konta?
+                        <br />
+                        <a asp-page="/Register">Zarejestruj się</a>
+                    </div>
+                    <div class="col-auto">
+                        <button class="btn btn-primary py-2 px-4">
+                            Zaloguj
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+

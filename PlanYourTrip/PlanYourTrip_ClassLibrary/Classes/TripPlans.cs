@@ -12,14 +12,16 @@ namespace PlanYourTrip_ClassLibrary.Classes
     {
         [Key]
         public int TripPlanId { get; set; }
-        public string Nazwa { get; set; }
-        public string Opis { get; set; }
-        public string PunktyJSON { get; set; }
+        public string Nazwa { get; set; } = "Nowy plan";
+        public string? Opis { get; set; }
+        public string? PunktyJSON { get; set; }
+        public DateTime? DataUtworzenia { get; set; }
+        public DateTime? OstatniaAktualizacja { get; set; }
+        public bool Publiczny { get; set; } = false;
 
         //Relacje
         public int AutorId { get; set; }
         [ForeignKey("AutorId")]
         public Users? Users { get; set; }
-        public ICollection<Contributors>? Contributors { get; set; }
     }
 }

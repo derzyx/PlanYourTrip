@@ -1,26 +1,73 @@
 ﻿@page
+@using PlanYourTrip_ClassLibrary.Classes
 @model IndexModel
 @{
     ViewData["Title"] = "Home page";
 }
-<div class="container-fluid">
-    <div class="row justify-content-center">
-        <div class="bg-image row">
-            <div class="row">
-                <div class="d-flex align-items-center justify-content-center">
-                    <h1 class="display-4">Welcome</h1>
-                    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container-fluid position-relative">
+    
+    <div class="position-absolute bg-image" style="background-image:url(/img/China_Travel_China_Tour_China.jpg);">
+
+    </div>
+    <div class="row-cols-1 d-flex justify-content-center">
+        <div class="col-auto" style="margin:10rem 0;">
+            <div class="row-cols-1 d-flex flex-column justify-content-center my-5">
+                <div class="col-auto">
+                    <h1>Dokąd dziś się wybierasz?</h1>
+                </div>
+                <div class="col-auto mx-auto my-4">
+                    <a class="btn btn-primary px-5 py-3" asp-page="/PlanTrip">Zaplanuj podróż</a>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-<div class="testowy">
-    <iframe src="PostPreview/#container" scrolling="no" frameborder="0" height="100" width="100" ></iframe>
-</div>
-<div class="testowy2">
-    @{
-        await Html.RenderPartialAsync("Shared/_PartialViewTEST");
-    }
+<div class="container latestPlansContainer">
+    <div class="row-cols-1">
+        <div class="col-auto mb-4">
+            <h1 class="m-0">
+                Ostatnio dodane podróże
+            </h1>
+        </div>
+        <div class="col">
+            <div class="row">
+                @for(int i = 0; i < Model.Plans.Count; i++)
+                @*@foreach(TripPlans plan in Model.Plans)*@
+                {
+                    <div class="col-lg-4">
+                        <div class="position-relative mx-3 my-4 p-4 border border-secondary rounded tripCard">
+                            <div class="row d-flex justify-content-center justify-items-center readFurtherBtn">
+                                <a class="col btn btn-primary" asp-page="/PlanTrip" asp-route-plan=@Model.Plans[i].TripPlanId>Zobacz plan</a>
+                            </div>
+                            <div class="textOverflowFade"></div>
+                            <div class="row-cols-1">
+                                <div class="col">
+                                    <h2 class="m-0">@Model.Plans[i].Nazwa</h2>
+                                </div>
+                                <div class="col">
+                                    <div class="row d-flex justify-content-between">
+                                        <div class="col-auto">
+                                            <a asp-page="/User" asp-route-id=@Model.Plans[i].AutorId>@Model.AuthorsNicks[i]</a>
+                                        </div>
+                                        <div class="col-auto">
+                                            @Model.Plans[i].DataUtworzenia
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr class="mt-0"/>
+                                <div class="col">
+                                    <p>@Model.Plans[i].Opis</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="col-auto d-flex justify-content-center m-5">
+            <a class="btn btn-primary py-3 px-4" asp-page="/AllTripPlans">
+                <h5>Zobacz więcej</h5>
+            </a>
+        </div>
+    </div>
 </div>

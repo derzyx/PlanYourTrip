@@ -7,11 +7,9 @@ namespace PlanYourTrip_BackEnd.Data
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
-        public DbSet<Answers> Answers { get; set; }
         public DbSet<Users> Users { get; set; }
-        public DbSet<Contributors> Contributors { get; set; }
-        public DbSet<Posts> Posts { get; set; }
         public DbSet<TripPlans> TripPlans { get; set; }
+        public DbSet<Subscription> Subscription { get; set; }
         
     }
 }
