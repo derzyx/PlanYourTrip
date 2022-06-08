@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using PlanYourTrip_ClassLibrary.Classes;
 using PlanYourTrip_ClassLibrary.ClassesDTO;
-using PlanYourTrip_ClassLibrary.Repository;
 using System.Linq.Expressions;
 
 namespace PlanYourTrip_BackEnd.Controllers
@@ -19,17 +18,31 @@ namespace PlanYourTrip_BackEnd.Controllers
             _context = context;
         }
 
+        //Get/All
+        //Get/ById/{userId}
+        //Get/ByEmail/{email}
+        //Get/PublicData/One/{userId}
+        //Get/PublicData/Many
+        //Get/Nicks
+        //
+        //Add
+        //Login
+        //Update/{userId}
+        //PatchPassword/{userId}
+        //Remove/{userId}
+
         [HttpGet]
+        [Route("Get/All")]
         public async Task<ActionResult<List<Users>>> GetAllUsers()
         {
             return Ok(await _context.Users.ToListAsync());
         }
 
         [HttpGet]
-        [Route("Id/{id}")]
-        public async Task<ActionResult<Users>> GetUserByID(int id)
+        [Route("Get/ById/{userId}")]
+        public async Task<ActionResult<Users>> GetUserByID(int userId)
         {
-            var user = await _context.Users.FindAsync(id);
+            var user = await _context.Users.FindAsync(userId);
             if (user == null)
             {
                 return BadRequest("Nie znaleziono użytkownika");
@@ -38,10 +51,27 @@ namespace PlanYourTrip_BackEnd.Controllers
         }
 
         [HttpGet]
-        [Route("PublicData/{id}")]
-        public async Task<ActionResult<UserPublicDataDTO>> GetUserPublicData(int id)
+        [Route("Get/ByEmail/{email}")]
+        public async Task<ActionResult<Users>> GetUserByEmail(string email)
         {
-            Users userData = await _context.Users.FindAsync(id);
+            var user = await _context.Users
+                .FromSqlRaw($"SELECT * FROM dbo.Users WHERE Email = '{email}'")
+                .FirstOrDefaultAsync();
+            if (user == null)
+            {
+                return BadRequest("Nie znaleziono użytkownika");
+            }
+            else
+            {
+                return Ok(user);
+            } 
+        }
+
+        [HttpGet]
+        [Route("Get/PublicData/One/{userId}")]
+        public async Task<ActionResult<UserPublicDataDTO>> GetUserPublicData(int userId)
+        {
+            Users userData = await _context.Users.FindAsync(userId);
             if (userData == null)
             {
                 return BadRequest("Nie znaleziono użytkownika");
@@ -58,47 +88,8 @@ namespace PlanYourTrip_BackEnd.Controllers
             });
         }
 
-
-        [HttpGet]
-        [Route("Email/{email}")]
-        public async Task<ActionResult<Users>> GetUserByEmail(string email)
-        {
-            var user = await _context.Users
-                .FromSqlRaw($"SELECT * FROM dbo.Users WHERE Email = '{email}'")
-                .FirstOrDefaultAsync();
-            if (user == null)
-            {
-                return BadRequest("Nie znaleziono użytkownika");
-            }
-            else
-            {
-                return Ok(user);
-            } 
-        }
-
         [HttpPost]
-        [Route("Nicks")]
-        public async Task<ActionResult<List<string>>> ReturnUsersNicks(List<int> usersIds)
-        {
-            List<string> userNicks = new List<string>();
-
-            if (usersIds == null)
-            {
-                return BadRequest();
-            }
-
-            foreach (int id in usersIds)
-            {
-                Users user = await _context.Users.FindAsync(id);
-                userNicks.Add(user.Nick);
-            }
-
-            return userNicks;
-        }
-
-
-        [HttpPost]
-        [Route("PublicDataList")]
+        [Route("Get/PublicData/Many")]
         public async Task<ActionResult<List<UserPublicDataDTO>>> ReturnUsersPublicData(List<int> usersIds)
         {
             List<UserPublicDataDTO> usersData = new List<UserPublicDataDTO>();
@@ -124,19 +115,30 @@ namespace PlanYourTrip_BackEnd.Controllers
             return usersData;
         }
 
-        [HttpGet]
-        [Route("{id}/Subscriptions")]
-        public async Task<ActionResult<List<Subscription>>> GetUserSubscriptions(int id)
+        [HttpPost]
+        [Route("Get/Nicks")]
+        public async Task<ActionResult<List<string>>> ReturnUsersNicks(List<int> usersIds)
         {
-            var observed = await _context.Subscription
-                .FromSqlRaw($"SELECT * FROM Subscription WHERE SubscriberId = {id}")
-                .ToListAsync();
+            List<string> userNicks = new List<string>();
 
-            return Ok(observed);
+            if (usersIds == null)
+            {
+                return BadRequest();
+            }
+
+            foreach (int id in usersIds)
+            {
+                Users user = await _context.Users.FindAsync(id);
+                userNicks.Add(user.Nick);
+            }
+
+            return userNicks;
         }
 
 
+
         [HttpPost]
+        [Route("Add")]
         public async Task<ActionResult<Users>> AddUser(Users user)
         {
             string errorString = "";
@@ -197,11 +199,12 @@ namespace PlanYourTrip_BackEnd.Controllers
             }
         }
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult<Users>> UpdateUser(int id, Users request)
+        [HttpPut]
+        [Route("Update/{userId}")]
+        public async Task<ActionResult<Users>> UpdateUser(int userId, Users request)
         {
             string errorString = "";
-            var user = await _context.Users.FindAsync(id);
+            var user = await _context.Users.FindAsync(userId);
 
             if (user == null)
             {
@@ -253,12 +256,13 @@ namespace PlanYourTrip_BackEnd.Controllers
             }
         }
 
-        [HttpPatch("{id}")]
-        public async Task<ActionResult<Users>> UpdatePassword(int id, [FromBody] PasswordDTO passwords)
+        [HttpPatch]
+        [Route("PatchPassword/{userId}")]
+        public async Task<ActionResult<Users>> UpdatePassword(int userId, [FromBody] PasswordDTO passwords)
         {
             if(passwords != null)
             {
-                var user = await _context.Users.FindAsync(id);
+                var user = await _context.Users.FindAsync(userId);
 
 
                 // Validation
@@ -301,10 +305,11 @@ namespace PlanYourTrip_BackEnd.Controllers
             }
         }
 
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Users>> RemoveUser(int id)
+        [HttpDelete]
+        [Route("Remove/{userId}")]
+        public async Task<ActionResult<Users>> RemoveUser(int userId)
         {
-            var user = await _context.Users.FindAsync(id);
+            var user = await _context.Users.FindAsync(userId);
             if (user == null)
             {
                 return BadRequest("Nie znaleziono użytkownika");

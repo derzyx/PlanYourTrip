@@ -2,7 +2,6 @@
 using Newtonsoft.Json;
 using PlanYourTrip_ClassLibrary.Classes;
 using PlanYourTrip_ClassLibrary.ClassesDTO;
-using PlanYourTrip_ClassLibrary.Repository;
 using System.Text;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -17,11 +16,23 @@ namespace PlanYourTrip_FrontEnd.ApiLogic
         {
             _httpClient = httpClient;
 
-            //_httpClient.BaseAddress = new Uri("https://planyourtrip-backendapp.azurewebsites.net/api/");
-            _httpClient.BaseAddress = new Uri("https://localhost:7224/api/");
+            _httpClient.BaseAddress = new Uri("https://planyourtrip-backendapp.azurewebsites.net/api/");
+            //_httpClient.BaseAddress = new Uri("https://localhost:7224/api/");
         }
 
-        // Get all users
+        //Get/All
+        //Get/ById/{userId}
+        //Get/ByEmail/{email}
+        //Get/PublicData/One/{userId}
+        //Get/PublicData/Many
+        //Get/Nicks
+        //
+        //Add
+        //Login
+        //Update/{userId}
+        //PatchPassword/{userId}
+        //Remove/{userId}
+
         public async Task<List<Users>> GetUsers()
         {
             List<Users> user = null;
@@ -31,83 +42,53 @@ namespace PlanYourTrip_FrontEnd.ApiLogic
 
             if (httpResponseMessage.IsSuccessStatusCode)
             {
-                user = await _httpClient.GetFromJsonAsync<List<Users>>($"User");
+                user = await _httpClient.GetFromJsonAsync<List<Users>>($"User/Get/All");
             }
 
             return user;
         }
-
-        // Get user by ID
-        public async Task<Users> GetUserById(int id)
+        public async Task<Users> GetUserById(int userId)
         {
             Users user = null;
 
             HttpResponseMessage httpResponseMessage =
-                await _httpClient.GetAsync($"User/id/{id}");
+                await _httpClient.GetAsync($"User/Get/ById/{userId}");
 
             if (httpResponseMessage.IsSuccessStatusCode)
             {
-                user = await _httpClient.GetFromJsonAsync<Users>($"User/id/{id}");
+                user = await _httpClient.GetFromJsonAsync<Users>($"User/Get/ById/{userId}");
             }
 
             return user;
         }
-
-        public async Task<UserPublicDataDTO> GetUserPublicData(int id)
-        {
-            UserPublicDataDTO user = null;
-
-            HttpResponseMessage httpResponseMessage =
-                await _httpClient.GetAsync($"User/PublicData/{id}");
-
-            if (httpResponseMessage.IsSuccessStatusCode)
-            {
-                user = await _httpClient.GetFromJsonAsync<UserPublicDataDTO>($"User/PublicData/{id}");
-            }
-
-            return user;
-        }
-
-        // Get user by Email
         public async Task<Users> GetUserByEmail(string email)
         {
             Users user = null;
 
             HttpResponseMessage httpResponseMessage =
-                await _httpClient.GetAsync($"User/email/{email}");
+                await _httpClient.GetAsync($"User/Get/ByEmail/{email}");
 
             if (httpResponseMessage.IsSuccessStatusCode)
             {
-                user = await _httpClient.GetFromJsonAsync<Users>($"User/email/{email}");
+                user = await _httpClient.GetFromJsonAsync<Users>($"User/Get/ByEmail/{email}");
             }
 
             return user;
         }
-
-
-
-
-        // this is a POST method
-        public async Task<HttpResponseMessage> GetUsersNicks(List<int> usersIds)
+        public async Task<UserPublicDataDTO> GetUserPublicData(int userId)
         {
+            UserPublicDataDTO user = null;
+
             HttpResponseMessage httpResponseMessage =
-                await _httpClient.GetAsync($"User");
+                await _httpClient.GetAsync($"User/Get/ById/{userId}");
 
             if (httpResponseMessage.IsSuccessStatusCode)
             {
-                var usersIdsJson = new StringContent(
-                    JsonConvert.SerializeObject(usersIds),
-                    Encoding.UTF8,
-                    Application.Json);
+                user = await _httpClient.GetFromJsonAsync<UserPublicDataDTO>($"User/Get/PublicData/One/{userId}");
+            }
 
-                return await _httpClient.PostAsync($"User/Nicks", usersIdsJson);
-            }
-            else
-            {
-                return new HttpResponseMessage(System.Net.HttpStatusCode.BadRequest);
-            }
+            return user;
         }
-
         public async Task<HttpResponseMessage> GetUsersPublicDataList(List<int> usersIds)
         {
 
@@ -121,18 +102,35 @@ namespace PlanYourTrip_FrontEnd.ApiLogic
                     Encoding.UTF8,
                     Application.Json);
 
-                return await _httpClient.PostAsync($"User/PublicDataList", usersIdsJson);
+                return await _httpClient.PostAsync($"User/Get/PublicData/Many", usersIdsJson);
             }
             else
             {
                 return new HttpResponseMessage(System.Net.HttpStatusCode.BadRequest);
             }
         }
+        public async Task<HttpResponseMessage> GetUsersNicks(List<int> usersIds)
+        {
+            HttpResponseMessage httpResponseMessage =
+                await _httpClient.GetAsync($"User/Get/All");
 
-        public async Task<List<Subscription>> GetUserSubscriptions(int id) =>
-            await _httpClient.GetFromJsonAsync<List<Subscription>>($"User/{id}/Subscriptions");
+            if (httpResponseMessage.IsSuccessStatusCode)
+            {
+                var usersIdsJson = new StringContent(
+                    JsonConvert.SerializeObject(usersIds),
+                    Encoding.UTF8,
+                    Application.Json);
+
+                return await _httpClient.PostAsync($"User/Get/Nicks", usersIdsJson);
+            }
+            else
+            {
+                return new HttpResponseMessage(System.Net.HttpStatusCode.BadRequest);
+            }
+        }
             
-        // Add new user
+
+
         public async Task<HttpResponseMessage> AddUser(Users user)
         {
             var userJson = new StringContent(
@@ -140,7 +138,7 @@ namespace PlanYourTrip_FrontEnd.ApiLogic
                 Encoding.UTF8,
                 Application.Json);
 
-            return await _httpClient.PostAsync("User", userJson);
+            return await _httpClient.PostAsync("User/Add", userJson);
         }
         public async Task<HttpResponseMessage> LoginUser(UsersDTO user)
         {
@@ -149,12 +147,8 @@ namespace PlanYourTrip_FrontEnd.ApiLogic
                 Encoding.UTF8,
                 Application.Json);
 
-            return await _httpClient.PostAsync("User/login", userJson);
+            return await _httpClient.PostAsync("User/Login", userJson);
         }
-        
-
-
-        // Update user
         public async Task<HttpResponseMessage> UpdateUser(Users user)
         {
             var userJson = new StringContent(
@@ -162,10 +156,8 @@ namespace PlanYourTrip_FrontEnd.ApiLogic
                 Encoding.UTF8,
                 Application.Json);
 
-            return await _httpClient.PutAsync($"User/{user.Id}", userJson);
+            return await _httpClient.PutAsync($"User/Update/{user.Id}", userJson);
         }
-
-        // Update users password
         public async Task<HttpResponseMessage> UpdatePassword(PasswordDTO passwords)
         {
             var userJson = new StringContent(
@@ -173,13 +165,11 @@ namespace PlanYourTrip_FrontEnd.ApiLogic
                 Encoding.UTF8,
                 Application.Json);
 
-            return await _httpClient.PatchAsync($"User/{passwords.UserId}", userJson);
+            return await _httpClient.PatchAsync($"User/PatchPassword/{passwords.UserId}", userJson);
         }
-
-        // Remove user
-        public async Task<HttpResponseMessage> DeleteUser(int id)
+        public async Task<HttpResponseMessage> DeleteUser(int userId)
         {
-            return await _httpClient.DeleteAsync($"User/{id}");
+            return await _httpClient.DeleteAsync($"User/Remove/{userId}");
         }
     }
 }

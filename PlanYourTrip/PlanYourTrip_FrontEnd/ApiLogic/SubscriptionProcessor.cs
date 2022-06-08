@@ -17,17 +17,25 @@ namespace PlanYourTrip_FrontEnd.ApiLogic
         {
             _httpClient = httpClient;
 
-            //_httpClient.BaseAddress = new Uri("https://planyourtrip-backendapp.azurewebsites.net/api/");
-            _httpClient.BaseAddress = new Uri("https://localhost:7224/api/");
+            _httpClient.BaseAddress = new Uri("https://planyourtrip-backendapp.azurewebsites.net/api/");
+            //_httpClient.BaseAddress = new Uri("https://localhost:7224/api/");
         }
 
+        //Get/All
+        //Get/UserSubsIds/{userId}
+        //Get/IsSubscribed
+        //
+        //Add
+        //Remove/{subId}
+
+
         public async Task<List<int>> GetUserSubscriptions(int id) =>
-            await _httpClient.GetFromJsonAsync<List<int>>($"Subscription/User/{id}");
+            await _httpClient.GetFromJsonAsync<List<int>>($"Subscription/Get/UserSubsIds/{id}");
 
         public async Task<HttpResponseMessage> GetSubscription(SubscriptionDTO subscription)
         {
             HttpResponseMessage httpResponseMessage =
-                await _httpClient.GetAsync($"Subscription");
+                await _httpClient.GetAsync($"Subscription/Get/All");
 
             if (httpResponseMessage.IsSuccessStatusCode)
             {
@@ -36,7 +44,7 @@ namespace PlanYourTrip_FrontEnd.ApiLogic
                     Encoding.UTF8,
                     Application.Json);
 
-                return await _httpClient.PostAsync("Subscription/IsSubscribed", subJson);
+                return await _httpClient.PostAsync("Subscription/Get/IsSubscribed", subJson);
             }
             else
             {
@@ -47,7 +55,7 @@ namespace PlanYourTrip_FrontEnd.ApiLogic
         public async Task<HttpResponseMessage> AddSub(Subscription subscription)
         {
             HttpResponseMessage httpResponseMessage =
-                await _httpClient.GetAsync($"Subscription");
+                await _httpClient.GetAsync($"Subscription/Get/All");
 
             if (httpResponseMessage.IsSuccessStatusCode)
             {
@@ -64,9 +72,9 @@ namespace PlanYourTrip_FrontEnd.ApiLogic
             }
         }
 
-        public async Task<HttpResponseMessage> RemoveSub(int id)
+        public async Task<HttpResponseMessage> RemoveSub(int subId)
         {
-            return await _httpClient.DeleteAsync($"Subscription/Remove/{id}");
+            return await _httpClient.DeleteAsync($"Subscription/Remove/{subId}");
         }
     }
 }

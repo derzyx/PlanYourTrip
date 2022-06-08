@@ -16,28 +16,35 @@ namespace PlanYourTrip_BackEnd.Controllers
             _context = context;
         }
 
+        //Get/All
+        //Get/UserSubsIds/{userId}
+        //Get/IsSubscribed
+        //
+        //Add
+        //Remove/{subId}
+
 
         [HttpGet]
-        public ActionResult Get()
+        [Route("Get/All")]
+        public async Task<ActionResult<List<Subscription>>> Get()
         {
-            return Ok();
+            return Ok(await _context.Subscription.ToListAsync());
         }
 
         [HttpGet]
-        [Route("User/{id}")]
-        public async Task<ActionResult<List<int>>> GetUserSubscriptions(int id)
+        [Route("Get/UserSubsIds/{userId}")]
+        public async Task<ActionResult<List<int>>> GetUserSubscriptions(int userId)
         {
             var subs = _context.Subscription
-                .FromSqlRaw($"SELECT ObservedId FROM Subscription WHERE SubscriberId = {id}")
+                .FromSqlRaw($"SELECT ObservedId FROM Subscription WHERE SubscriberId = {userId}")
                 .Select(x => x.ObservedId)
                 .ToList();
 
             return Ok(subs);
         }
 
-        // Checks if user is subscribed to another user
         [HttpPost]
-        [Route("IsSubscribed")]
+        [Route("Get/IsSubscribed")]
         public async Task<ActionResult<Subscription>> GetSubscription(SubscriptionDTO subscription)
         {
             var sub = _context.Subscription
@@ -50,6 +57,9 @@ namespace PlanYourTrip_BackEnd.Controllers
             }
             else return BadRequest();
         }
+
+
+
 
         [HttpPost]
         [Route("Add")]

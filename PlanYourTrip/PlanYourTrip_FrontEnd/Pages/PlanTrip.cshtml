@@ -54,6 +54,25 @@
         </div>
     </div>
 
+    <div id="tutrialWindow" class="position-absolute" style="z-index: 100; visibility:hidden; height:95vh; overflow:hidden;">
+        <div class="row d-flex flex-column justify-content-center p-5">
+            <div class="col d-flex justify-content-center" style="background-color:rgb(199,199,199);">
+                <img id="interfejsImg" src="~/img/tutorial1.jpg" width="80%"/>
+                <img id="punktyImg" src="~/img/tutorial2.jpg" width="80%" style="display:none;"/>
+            </div>
+            <div class="col d-flex justify-content-center" style="background-color:rgb(199,199,199);">
+                <a class="btn btn-primary m-2" onclick="
+                    document.getElementById('interfejsImg').style.display='block';
+                    document.getElementById('punktyImg').style.display='none';">Interfejs
+                </a>
+                <a class="btn btn-primary m-2" onclick="
+                    document.getElementById('interfejsImg').style.display='none';
+                    document.getElementById('punktyImg').style.display='block';">Punkty
+                </a>
+                <a class="btn btn-primary m-2" onclick="toggleWindowVisibility('tutrialWindow')">Zamknij Tutorial</a>
+            </div>
+        </div>
+    </div>
 
     <form id="navBar" method="post">
         <div class="navBarContainer">
@@ -68,7 +87,10 @@
                     <div class="col-auto d-flex align-items-center">
                         <div class="row d-flex justify-content-between">
                             <div class="col-auto">
-                                <a class="btn btn-primary" onclick="descWindowVisibility(true)">Zmień opis planu</a>
+                                <a class="btn btn-primary" onclick="toggleWindowVisibility('tutrialWindow')">Jak to działa?</a>
+                            </div>
+                            <div class="col-auto">
+                                <a class="btn btn-primary" onclick="toggleWindowVisibility('descWindow')">Zmień opis planu</a>
                             </div>
                             <div class="col-auto">
                                 <div class="input-group">
@@ -103,7 +125,8 @@
                 </div>
             </div>
         </div>
-    </form>
+    
+
 
     <div id="descWindow" class="container-fluid position-absolute" style="z-index: 10; visibility:hidden;">
         <div class="row">
@@ -115,7 +138,7 @@
                                 <p>Opisz plan:</p>
                             </div>
                             <div class="col-auto">
-                                <a id="closeDescWindowBtn" style="cursor:pointer;" onclick="descWindowVisibility(false)">
+                                <a id="closeDescWindowBtn" style="cursor:pointer;" onclick="toggleWindowVisibility('descWindow')">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
                                         <path fill-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z" />
                                         <path fill-rule="evenodd" d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z" />
@@ -125,15 +148,13 @@
                         </div>
                     </div>
                     <div class="col">
-                        <textarea rows="7" class="form-control" id="planDesc" asp-for=@Model.TripPlan.Opis>
-
-                        </textarea>
+                        <textarea rows="5" class="form-control" id="desc" asp-for=@Model.TripPlan.Opis></textarea>
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
+    </form>
 
     <div class="container-fluid">
         <div class="row" style="margin: 0;">
@@ -141,11 +162,43 @@
                 <div class="col-6 mapContainer">
                     <div class="mapAndLabels">
                         <div class="pointsTypes">
-                            <select name="types" id="pointTypesDDL">
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
+                            <select name="types" id="pointTypesDDL" class="form-control">
+                                <optgroup label="Rozrywka">
+                                    <option value="7996">Park Rozrywki</option>
+                                    <option value="7933">Kręgle</option>
+                                    <option value="7985">Kasyno</option>
+                                    <option value="7832">Kino</option>
+                                    <option value="7994">Ośrodek Kultury</option>
+                                    <option value="7992">Pole golfowe</option>
+                                    <option value="7998">Lodowisko</option>
+                                    <option value="8231">Biblioteka</option>
+                                    <option value="5813">Kluby, Bary</option>
+                                    <option value="7929">Teatr</option>
+                                    <option value="142">Centrum Rekreacji</option>
+                                    <option value="7012">Stok Narciarski</option>
+                                    <option value="9718">Zoo</option>
+                                </optgroup>
+                                <optgroup label="Atrakcje Turystyczne">
+                                    <option value="5999">Pomnik Historyczny</option>
+                                    <option value="8410">Muzeum</option>
+                                    <option value="114">Punkt Obserwacyjny</option>
+                                    <option value="7947">Park</option>
+                                    <option value="9992">Miejsce Kultu</option>
+                                    <option value="153">Ruiny</option>
+                                    <option value="236">Szlak Turystyczny</option>
+                                </optgroup>
+                                <optgroup label="Gastronomia">
+                                    <option value="9996">Kawiarnia</option>
+                                    <option value="275">Fast Food</option>
+                                    <option value="5800">Restauracja</option>
+                                    <option value="2084">Winiarnia</option>
+                                </optgroup>
+                                <optgroup label="Nocleg">
+                                    <option value="6">Agroturystyka</option>
+                                    <option value="9517">Obozowisko</option>
+                                    <option value="7013">Hotele</option>
+                                    <option value="7011">Motele</option>
+                                </optgroup>
                             </select>
                         </div>
                         <div class="labelContainer" id="placeLabel" style="visibility:hidden;">
@@ -161,7 +214,10 @@
                                         <h2 id="mapOutput">Title</h2>
                                     </div>
                                     <div class="col-12">
-                                        <p>Place</p>
+                                        <p id="placeAddress">Address</p>
+                                    </div>
+                                    <div class="col-12">
+                                        <p id="phone">Phone</p>
                                     </div>
                                     <button class="btn btn-primary" onclick="addPlaceToPoint()">
                                         Dodaj miejsce do punktu
@@ -191,15 +247,16 @@
 
 
     <script type="text/javascript">
-        function descWindowVisibility(visibility){
-            if(visibility === true){
-                document.getElementById("descWindow").style.visibility = "visible";
+        function toggleWindowVisibility(window, visibility){
+            if(document.getElementById(window).style.visibility === "visible"){
+                document.getElementById(window).style.visibility = "hidden";
             }
             else{
-                document.getElementById("descWindow").style.visibility = "hidden";
+                document.getElementById(window).style.visibility = "visible";
             }
         }
     </script>
+    <script src="~/js/enterKeyDisable.js"></script>
     <script src="~/js/bingMap.js"></script>
     <script src="~/js/planTripObjects.js"></script>
     <script src="~/js/blocks.js"></script>

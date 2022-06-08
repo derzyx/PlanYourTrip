@@ -63,7 +63,7 @@
                     <div class="col-lg-4">
                         <div class="position-relative mx-3 my-4 p-4 border border-secondary rounded tripCard">
                             <div class="row d-flex justify-content-center justify-items-center readFurtherBtn">
-                                <button class="col btn btn-primary">Zobacz plan</button>
+                                <a class="col btn btn-primary" asp-page="/PlanTrip" asp-route-plan=@Model.Plans[i].TripPlanId>Zobacz plan</a>
                             </div>
                             <div class="textOverflowFade"></div>
                             <div class="row-cols-1">

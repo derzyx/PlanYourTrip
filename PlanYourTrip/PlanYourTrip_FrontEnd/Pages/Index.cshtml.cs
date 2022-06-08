@@ -33,6 +33,7 @@ namespace PlanYourTrip_FrontEnd.Pages
             {
                 userIds.Add(plan.AutorId);
             }
+
             HttpResponseMessage response = await _userProcessor.GetUsersNicks(userIds);
             AuthorsNicks = await response.Content.ReadFromJsonAsync<List<string>>();
             return Page();

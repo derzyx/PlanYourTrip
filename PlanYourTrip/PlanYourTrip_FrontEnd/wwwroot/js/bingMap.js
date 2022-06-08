@@ -1,4 +1,7 @@
 ﻿const outputDiv = document.getElementById("mapOutput");
+const addressDiv = document.getElementById("placeAddress");
+const phoneDiv = document.getElementById("phone");
+const pointTypes = document.getElementById("pointTypesDDL");
 
 var sdsDataSourceUrl = "https://spatial.virtualearth.net/REST/v1/data/Microsoft/PointsOfInterest";
 var map;
@@ -21,6 +24,11 @@ function GetMap() {
             getLocationsInView();
             gridLayer.clear();
         });
+        pointTypes.addEventListener("input", function () {
+            placesTable = pointTypes.value;
+            getLocationsInView();
+            gridLayer.clear();
+        })
         getLocationsInView();
     })
 }
@@ -39,7 +47,7 @@ function getLocationsInView() {
                 location: map.getCenter(),
                 radius: 25
             },
-            filter: new sds.Filter('EntityTypeID', sds.FilterCompareOperator.isIn, placesTable)
+            filter: new sds.Filter('EntityTypeID', sds.FilterCompareOperator.isIn, [placesTable])
         };
 
         Microsoft.Maps.SpatialDataService.QueryAPIManager.search(queryOptions, map, function (data) {
@@ -62,7 +70,10 @@ function pushpinClicked(e) {
     }
     if (e.target.metadata) {
         currentPlace = e.target;
+        console.log(currentPlace)
         outputDiv.textContent = currentPlace.entity.title;
+        addressDiv.textContent = currentPlace.metadata.AdminDistrict2 + " " + currentPlace.metadata.AddressLine;
+        phoneDiv.textContent = currentPlace.metadata.Phone;
     }
 }
 

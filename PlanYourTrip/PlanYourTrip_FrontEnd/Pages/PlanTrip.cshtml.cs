@@ -71,7 +71,7 @@ namespace PlanYourTrip_FrontEnd.Pages
         }
 
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPost()
         {
             int planId = Convert.ToInt32(HttpContext.Request.Query["plan"]);
             TripPlans newPlan = new TripPlans

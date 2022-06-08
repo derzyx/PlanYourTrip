@@ -62,6 +62,7 @@ namespace PlanYourTrip_FrontEnd.Pages
             {
                 return new RedirectToPageResult("/Error");
             }
+            Desc = CurrentUser.Opis;
 
             //PUT method returns 204 No Content if success
             if (HttpContext.Request.Query["c"] == HttpStatusCode.OK.ToString())

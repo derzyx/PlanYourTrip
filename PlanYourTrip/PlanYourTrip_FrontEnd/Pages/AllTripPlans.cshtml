@@ -48,12 +48,11 @@
         <div class="col">
             <div class="row">
                 @for(int i = 0; i < Model.Plans.Count; i++)
-                @*@foreach(TripPlans plan in Model.Plans)*@
                 {
                     <div class="col-lg-4">
                         <div class="position-relative mx-3 my-4 p-4 border border-secondary rounded tripCard">
                             <div class="row d-flex justify-content-center justify-items-center readFurtherBtn">
-                                <button class="col btn btn-primary">Zobacz plan</button>
+                                <a class="col btn btn-primary" asp-page="/PlanTrip" asp-route-plan=@Model.Plans[i].TripPlanId>Zobacz plan</a>
                             </div>
                             <div class="textOverflowFade"></div>
                             <div class="row-cols-1">
@@ -72,8 +71,7 @@
                                 </div>
                                 <hr class="mt-0"/>
                                 <div class="col">
-                                    <p>@Model.Plans[i].Opis
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                                    <p>@Model.Plans[i].Opis</p>                                    
                                 </div>
                             </div>
                         </div>

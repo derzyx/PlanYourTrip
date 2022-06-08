@@ -6,7 +6,7 @@ using PlanYourTrip_FrontEnd.ApiLogic;
 
 namespace PlanYourTrip_FrontEnd.Pages
 {
-    public class MySubscriptionsModel : PageModel
+    public class MySubscriptionsModel : PageModel, ILogout
     {
         private readonly TripPlanProcessor _tripPlanProcessor;
         private readonly UserProcessor _userProcessor;
@@ -34,16 +34,24 @@ namespace PlanYourTrip_FrontEnd.Pages
             }
 
             UserSubs = await _subscriptionProcessor.GetUserSubscriptions(Convert.ToInt32(HttpContext.Session.GetString(SessionKeys.CurrentUser)));
+            if(UserSubs.Count > 0)
+            {
+                HttpResponseMessage nicksResponse = await _userProcessor.GetUsersNicks(UserSubs);
+                SubsNicks = await nicksResponse.Content.ReadFromJsonAsync<List<string>>();
 
-            HttpResponseMessage nicksResponse = await _userProcessor.GetUsersNicks(UserSubs);
-            SubsNicks = await nicksResponse.Content.ReadFromJsonAsync<List<string>>();
+                HttpResponseMessage plansResponse = await _tripPlanProcessor.GetSubsLatestPlans(UserSubs, 3);
+                SubsLatestPlans = await plansResponse.Content.ReadFromJsonAsync<List<TripPlans>>();
 
-            HttpResponseMessage plansResponse = await _tripPlanProcessor.GetSubsLatestPlans(UserSubs, 3);
-            SubsLatestPlans = await plansResponse.Content.ReadFromJsonAsync<List<TripPlans>>();
-
-            List<TripPlans> userPlans = SubsLatestPlans.Where(plan => plan.AutorId == UserSubs[0]).ToList();
+                List<TripPlans> userPlans = SubsLatestPlans.Where(plan => plan.AutorId == UserSubs[0]).ToList();
+            }
 
             return Page();
+        }
+
+        public ActionResult OnPostLogout()
+        {
+            HttpContext.Session.Remove(SessionKeys.CurrentUser);
+            return new RedirectToPageResult("/Index");
         }
 
     }

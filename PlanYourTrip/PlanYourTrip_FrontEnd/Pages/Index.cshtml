@@ -36,6 +36,9 @@
                 {
                     <div class="col-lg-4">
                         <div class="position-relative mx-3 my-4 p-4 border border-secondary rounded tripCard">
+                            <div class="row d-flex justify-content-center justify-items-center readFurtherBtn">
+                                <a class="col btn btn-primary" asp-page="/PlanTrip" asp-route-plan=@Model.Plans[i].TripPlanId>Zobacz plan</a>
+                            </div>
                             <div class="textOverflowFade"></div>
                             <div class="row-cols-1">
                                 <div class="col">
@@ -62,7 +65,7 @@
             </div>
         </div>
         <div class="col-auto d-flex justify-content-center m-5">
-            <a class="btn btn-primary py-3 px-4">
+            <a class="btn btn-primary py-3 px-4" asp-page="/AllTripPlans">
                 <h5>Zobacz więcej</h5>
             </a>
         </div>

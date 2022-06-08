@@ -19,8 +19,8 @@ namespace PlanYourTrip_BackEnd.Controllers
 
         // Plans
         // Plans/{id}
-        // Plans/User/{userId}
-        // Plans/User/{userId}/Public
+        // Plans/{userId}
+        // Plans/{userId}/Public
         // Plans/Filter
         // Plans/Latest/{quantity}
         // Plans/Latest/{userId}/{quantity}
@@ -29,6 +29,7 @@ namespace PlanYourTrip_BackEnd.Controllers
         // Put {id}
         // Post
         // Delete {id}
+
 
         [HttpGet]
         [Route("Plans")]
@@ -51,7 +52,6 @@ namespace PlanYourTrip_BackEnd.Controllers
         }
 
         [HttpGet]
-        //[Route("MyPlans/{userId}")]
         [Route("Plans/User/{userId}")]
         public async Task<ActionResult<List<TripPlans>>> GetUserTripPlans(int userId)
         {
@@ -67,7 +67,6 @@ namespace PlanYourTrip_BackEnd.Controllers
         }
 
         [HttpGet]
-        //[Route("MyPlans/{userId}")]
         [Route("Plans/User/{userId}/Public")]
         public async Task<ActionResult<List<TripPlans>>> GetUserPublicTripPlans(int userId)
         {
@@ -81,7 +80,6 @@ namespace PlanYourTrip_BackEnd.Controllers
 
             return Ok(tripPlans);
         }
-
 
         [HttpPost]
         [Route("Plans/Filter")]
@@ -134,7 +132,6 @@ namespace PlanYourTrip_BackEnd.Controllers
         }
 
         [HttpGet]
-        //[Route("LatestPlans/{quantity}")]
         [Route("Plans/Latest/{quantity}")]
         public async Task<ActionResult<List<TripPlans>>> GetTopTripPlans(int quantity)
         {

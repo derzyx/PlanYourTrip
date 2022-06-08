@@ -9,11 +9,20 @@
     }
 }
 
-.planBlock{
-    background-color:rgb(217, 239, 246);
+.planBlock {
+    background-color: rgb(212, 244, 248);
+    max-height: 300px;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+    overflow: hidden;
 }
 
-.planBlock:last-child{
+.planDates{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+.planBlock:last-child {
     margin: 0 !important;
 }
 
