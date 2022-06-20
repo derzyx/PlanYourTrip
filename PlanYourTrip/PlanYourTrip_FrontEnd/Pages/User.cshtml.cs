@@ -30,6 +30,12 @@ namespace PlanYourTrip_FrontEnd.Pages
 
         [BindProperty]
         public UserPublicDataDTO ViewedUser { get; set; }
+        [BindProperty]
+        public string Imie { get; set; }
+        [BindProperty]
+        public string Nazwisko {get; set; }
+        [BindProperty]
+        public string Opis { get; set; }
 
         [BindProperty]
         public List<TripPlans> Plans { get; set; }
@@ -51,6 +57,9 @@ namespace PlanYourTrip_FrontEnd.Pages
             }
 
             ViewedUser = await _userProcessor.GetUserPublicData(Convert.ToInt32(ViewedUserId));
+            Imie = (ViewedUser.Imie == null) ? "Nie podano" : ViewedUser.Imie;
+            Nazwisko = (ViewedUser.Nazwisko == null) ? "Nie podano" : ViewedUser.Nazwisko;
+            Opis = (ViewedUser.Opis == null) ? "Brak opisu" : ViewedUser.Opis;
             Plans = await _tripPlanProcessor.GetUserPublicPlans(Convert.ToInt32(ViewedUserId));
 
             AllPlans = await _tripPlanProcessor.GetPlans();
@@ -93,7 +102,7 @@ namespace PlanYourTrip_FrontEnd.Pages
             });
             Subscription sub = await response.Content.ReadFromJsonAsync<Subscription>();
 
-            HttpResponseMessage deleteResponse = await _subscriptionProcessor.RemoveSub(sub.ObservedId);
+            HttpResponseMessage deleteResponse = await _subscriptionProcessor.RemoveSub(sub.IdSubscription);
             if (deleteResponse.IsSuccessStatusCode)
             {
                 return new RedirectToPageResult("/User", new { id = sub.ObservedId });

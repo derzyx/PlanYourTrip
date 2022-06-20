@@ -17,8 +17,8 @@ namespace PlanYourTrip_FrontEnd.ApiLogic
         {
             _httpClient = httpClient;
 
-            _httpClient.BaseAddress = new Uri("https://planyourtrip-backendapp.azurewebsites.net/api/");
-            //_httpClient.BaseAddress = new Uri("https://localhost:7224/api/");
+            //_httpClient.BaseAddress = new Uri("https://planyourtrip-backendapp.azurewebsites.net/api/");
+            _httpClient.BaseAddress = new Uri("https://localhost:7224/api/");
         }
 
         //Get/All

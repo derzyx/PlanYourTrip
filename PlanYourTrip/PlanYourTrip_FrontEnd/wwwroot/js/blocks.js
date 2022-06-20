@@ -195,8 +195,6 @@ function PointBlock(point) {
     btnDeleteBranch.innerHTML = crossIcon;
     btnDeleteBranch.addEventListener("click", function (e) {
         OpenRemoveElQuestionBox(this.parentElement.parentElement.parentElement, "branch");
-        //Branch.prototype.DeleteBranch(this.parentElement.parentElement.parentElement);
-        AddAndRemoveBranchVisibility(this.parentElement)
     });
 
     visibilityAndRemoveBtns.appendChild(btnBranchVisibility);

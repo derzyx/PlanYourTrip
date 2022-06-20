@@ -52,7 +52,6 @@ addLinkBtn.addEventListener("click", function (e) {
 });
 
 pointTypesDDL.addEventListener("change", function (e) {
-    console.log(e.target.value);
 });
 
 exitPlan.addEventListener("click", async function (e) {
@@ -89,7 +88,6 @@ function setAskBeforeDeleteBool() {
     else {
         askBeforeDelete = false;
     }
-    console.log(askBeforeDelete);
 }
 
 function ResizeInput(sender) {
@@ -150,7 +148,6 @@ function RGBToHex(rgb) {
 
 
 function ChangePointFocus(point, isBranch) {
-    console.log(point);
     if (currentPointFocus !== undefined) {
         currentPointFocus.HTMLEl.children[0].className = "point"
     }
@@ -162,13 +159,11 @@ function ChangePointFocus(point, isBranch) {
     }
 
     currentPointFocus.HTMLEl.children[0].className = "point currentPoint";
-    console.log(currentPointFocus);
 }
 
 function ChangeBranchFocus(sender) {
     let branch = Branch.prototype.FindBranch(sender);
     let branchEl = branch.BranchEl;
-    console.log(branchEl);
 
     for (let i = 0; i < Branches.length; i++) {
         if (Branches[i].BranchEl === branchEl) {
@@ -180,7 +175,6 @@ function ChangeBranchFocus(sender) {
 }
 
 function UpdateBranchOffset(point) {
-    console.log(point);
     if (point.HasBranch) {
         point.Branch.style.marginTop = (point.HTMLEl.offsetTop - 120) + "px";
     }
@@ -219,6 +213,7 @@ function RemoveByType(sender, type) {
             Point.prototype.DeletePoint(sender, true);
             break;
         case "branch":
+            AddAndRemoveBranchVisibility(sender.getElementsByClassName("visibAndRemoveBtns")[0])
             Branch.prototype.DeleteBranch(sender);
             break;
         case "attribute":
@@ -229,11 +224,8 @@ function RemoveByType(sender, type) {
 }
 
 function addPlaceToPoint() {
-    console.log(currentPlace);
-    console.log(currentPointFocus);
     if (currentPointFocus != undefined && currentPlace != undefined) {
         let attribute = new Attribute("Miejsce", currentPlace.entity.title, currentPlace.metadata.EntityID, null, "map-link", null);
-        //let currentPoint = Point.prototype.FindPointInPoints(currentPointFocus.parentElement);
 
         Attribute.prototype.AddLinkAttribute(currentPointFocus, attribute);
     }
@@ -313,7 +305,6 @@ function loadTrip() {
         let LTrip = JSON.parse(planTripString.value);
         let LOptions = LTrip[0];
         let LPoints = LTrip[1];
-        console.log(LPoints);
         Points = LPoints;
 
         // Opcje
@@ -370,7 +361,5 @@ function loadTrip() {
         for (let ai = 0; ai < attrInputs.length; ai++) {
             ResizeInput(attrInputs[ai]);
         }
-
-        console.log(JSON.stringify(Points));
     }
 }

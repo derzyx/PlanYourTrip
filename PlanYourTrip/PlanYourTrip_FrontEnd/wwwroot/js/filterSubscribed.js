@@ -23,12 +23,10 @@ function FilterSubs() {
 
             if (sub.match(re)) {
                 allSubs[i].style.display = "block";
-                console.log(sub);
 
             }
             else {
                 allSubs[i].style.display = "none";
-                console.log(filterInput.value.toLowerCase());
             }
         }
     }

@@ -52,6 +52,8 @@ namespace PlanYourTrip_FrontEnd.Pages
                 return new RedirectToPageResult("/Login");
             }
 
+            string url = Request.Headers["Referer"].ToString();
+
             int planId = Convert.ToInt32(HttpContext.Request.Query["plan"]);
 
             if (planId != 0)
