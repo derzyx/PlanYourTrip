@@ -22,7 +22,6 @@ var pointPrototype = {
         parentEl.children[parentEl.childElementCount - 2].insertBefore(pointBlock, null);
         point.HTMLEl = pointBlock;
         Points.push(point);
-        console.log(Points);
     },
     AddBranchPoint: (sender) => {
         let parentEl = sender.parentElement;
@@ -36,8 +35,6 @@ var pointPrototype = {
         let rootPoint = Point.prototype.FindPointInPoints(rootPointHTMLEl);
 
         rootPoint.BranchPoints.push(point);
-
-        console.log(Points);
     },
     FindPointInPoints: (pointHTMLEL) => {
         for (let i = 0; i < Points.length; i++) {
@@ -56,12 +53,10 @@ var pointPrototype = {
             }
 
             Points.splice(Points.indexOf(thisPoint), 1);
-            console.log(Points);
         } else {
             let rootDiv = Branch.prototype.FindRootPoint(pointHTMLEl.parentElement.parentElement);
             let rootPoint = Point.prototype.FindPointInPoints(rootDiv);
             rootPoint.BranchPoints.splice(rootPoint.BranchPoints.indexOf(Branch.prototype.FindBranchPoint(pointHTMLEl)), 1);
-            console.log(Points);
         }
 
         pointHTMLEl.remove();
@@ -90,16 +85,13 @@ var pointPrototype = {
             UpdateBranchOffset(Points[Points.indexOf(point) - 1]);
             UpdateBranchOffset(Points[Points.indexOf(point)]);
         }
-        console.log(Points);
     },
     MoveBranchPoint: (branchHTMLEl, direction) => {
         let branch = Branch.prototype.FindBranch(branchHTMLEl.parentElement.parentElement);
         let point = Point.prototype.FindPointInPoints(branch.RootPoint);
         let elementId = FindElementId(branchHTMLEl);
         let parentEl = branchHTMLEl.parentElement;
-        console.log(elementId);
         let branchPoint = Branch.prototype.FindBranchPoint(branchHTMLEl);
-        console.log(branchPoint);
         let fromIndex = point.BranchPoints.indexOf(branchPoint);
 
         if (direction == "up" && (elementId != 0)) {
@@ -115,7 +107,6 @@ var pointPrototype = {
 
             parentEl.insertBefore(parentEl.children[elementId + 1], branchHTMLEl);
         }
-        console.log(Points);
     }
 }
 
@@ -145,7 +136,6 @@ var attributePrototype = {
         attrCont.insertBefore(attrBlock, null);
         attribute.HTMLEl = attrBlock;
         parentPoint.Attributes.push(attribute);
-        console.log(Points);
     },
     AddLinkAttribute: (parentPoint, attribute) => {
         let attrCont = parentPoint.HTMLEl.getElementsByClassName("addedAttributes")[0];
@@ -160,7 +150,6 @@ var attributePrototype = {
         attribute.HTMLEl = attrBlock;
 
         parentPoint.Attributes.push(attribute);
-        console.log(Points);
     },
     RemoveAttribute: (sender) => {
         let parentPoint = FindParentPoint(sender);
@@ -168,7 +157,6 @@ var attributePrototype = {
         let attrCont = parentPoint.HTMLEl.getElementsByClassName("addedAttributes")[0];
         parentPoint.Attributes.splice(FindElementId(sender), 1)
         attrCont.children[FindElementId(sender)].remove();
-        console.log(parentPoint);
     },
     MoveAttribute: (sender, direction) => {
         let parentEl = sender.parentElement;
@@ -188,10 +176,8 @@ var attributePrototype = {
             parentPoint.Attributes.splice((fromIndex + 1), 0, attribute);
             parentEl.insertBefore(parentEl.children[elementId + 1], sender);
         }
-        console.log(parentPoint);
     },
     FindAttributeObj: (attrHTMLEl) => {
-        //let parentEl = attrHTMLEl.parentElement.parentElement.parentElement;
         let parentPoint = FindParentPoint(attrHTMLEl);
 
         for (let i = 0; i < parentPoint.Attributes.length; i++) {
@@ -220,19 +206,14 @@ var branchPrototype = {
     AddBranch: (rootEl) => {
         let branchDiv = BranchBlock();
         branchDiv.style.marginTop = (rootEl.offsetTop - 120) + "px";
-        console.log(rootEl.offsetTop);
 
         branchesContainer.appendChild(branchDiv);
-        console.log(Points);
         
         let parentPoint = Point.prototype.FindPointInPoints(rootEl);
-        console.log(parentPoint);
         parentPoint.HasBranch = true;
         parentPoint.Branch = branchDiv;
 
         Branches.push(new Branch(rootEl, branchDiv));
-        console.log(Points)
-        console.log(Branches);
     },
     DeleteBranch: (rootEl) => {
         let branch = Branch.prototype.FindBranch(rootEl);
@@ -243,12 +224,8 @@ var branchPrototype = {
         rootPoint.BranchPoints = [];
         rootPoint.HasBranch = false;
 
-        console.log(branch, Branches.indexOf(branch));
         Branches.splice(Branches.indexOf(branch), 1);
         branchEl.remove();
-
-        console.log(Branches);
-        console.log(Points);
     },
     FindBranch: (rootELOrBranchEl) => {
         for (let i = 0; i < Branches.length; i++) {

@@ -207,7 +207,7 @@ namespace PlanYourTrip_BackEnd.Controllers
 
             try
             {
-                await _context.SaveChangesAsync();
+                return Ok(await _context.SaveChangesAsync());
             }
             catch (Exception)
             {

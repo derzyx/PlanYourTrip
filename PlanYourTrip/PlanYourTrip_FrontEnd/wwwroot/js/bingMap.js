@@ -70,7 +70,6 @@ function pushpinClicked(e) {
     }
     if (e.target.metadata) {
         currentPlace = e.target;
-        console.log(currentPlace)
         outputDiv.textContent = currentPlace.entity.title;
         addressDiv.textContent = currentPlace.metadata.AdminDistrict2 + " " + currentPlace.metadata.AddressLine;
         phoneDiv.textContent = currentPlace.metadata.Phone;
@@ -84,7 +83,6 @@ function getPointByEntityId(id) {
     };
 
     Microsoft.Maps.SpatialDataService.QueryAPIManager.search(queryOptions, map, function (data) {
-        console.log(data);
         map.setView({
             center: new Microsoft.Maps.Location(data[0].geometry.y, data[0].geometry.x),
             zoom: 15
