@@ -32,7 +32,7 @@
 <div class="container spaceFromFooter">
     <div class="row d-flex flex-column align-content-center">
         <form method="post" asp-page-handler="UserData">
-            <div class="col-6 mt-5 p-5 mx-auto border border-secondary rounded loginBox">
+            <div class="col-10 col-lg-6 col-md-8 mt-5 p-5 mx-auto border border-secondary rounded loginBox">
                 <span class="text-danger">@Html.Raw(Model.ErrorMessage)</span>
                 <span class="text-success">@Html.Raw(Model.SuccessMessage)</span>
                 <div>
@@ -94,7 +94,7 @@
             </div>
         </form>
         <form method="post" asp-page-handler="Password">
-            <div class="col-6 mt-4 p-5 mx-auto border border-secondary rounded">
+            <div class="col-10 col-lg-6 col-md-8 col-md-6 mt-4 p-5 mx-auto border border-secondary rounded">
                 <div>
                     <h1><b>Zmiana hasła</b></h1>
                 </div>
@@ -143,7 +143,7 @@
             </div>
         </form>
 
-            <div class="col-6 mt-4 p-5 mx-auto border border-secondary rounded">
+            <div class="col-10 col-lg-6 col-md-8 mt-4 p-5 mx-auto border border-secondary rounded">
                 <div>
                     <h1><b>Usuń konto</b></h1>
                 </div>

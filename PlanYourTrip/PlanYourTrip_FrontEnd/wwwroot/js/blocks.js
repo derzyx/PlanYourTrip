@@ -45,7 +45,7 @@ function PointBlock(point) {
     //</mainDiv>
 
     let mainDiv = document.createElement("div");
-    mainDiv.className = "col-11 pointContainer";
+    mainDiv.className = "col-12 col-lg-11 pointContainer";
 
     let pointDiv = document.createElement("div");
     pointDiv.className = "point";
@@ -175,6 +175,7 @@ function PointBlock(point) {
         });
 
         branchManageBtns.appendChild(btnAddBranch);
+        UpdateAllBranchesOffset();
     }
 
     let visibilityAndRemoveBtns = document.createElement("div");
@@ -230,7 +231,7 @@ function AttributeBlock(attribute) {
     mainDiv.addEventListener("mouseout", function (e) { VisibleBtns(this,false) })
 
     let inputDiv = document.createElement("div");
-    inputDiv.className = "col";
+    inputDiv.className = "col-12";
 
     let keyInput = document.createElement("input");
     keyInput.className = "pointAttrInput attrKey";
@@ -279,7 +280,7 @@ function AttributeBlock(attribute) {
     //--------------------------------------------------------
 
     let btnsDiv = document.createElement("div");
-    btnsDiv.className = "col justify-content-end attrBtns";
+    btnsDiv.className = "col-12 justify-content-end attrBtns";
     btnsDiv.style.visibility = "hidden";
 
     let btnsGroup = document.createElement("div")

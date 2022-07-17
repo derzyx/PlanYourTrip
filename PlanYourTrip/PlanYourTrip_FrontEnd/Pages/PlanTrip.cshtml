@@ -10,7 +10,8 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=1920, initial-scale=1.0, maximum-scale=1.0 user-scalabe=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    @*<meta name="viewport" content="width=1920, initial-scale=1.0, maximum-scale=1.0 user-scalabe=no" />*@
     <title>PlanYourTrip_FrontEnd</title>
 
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
@@ -131,9 +132,9 @@
     
 
 
-    <div id="descWindow" class="container-fluid position-absolute" style="z-index: 10; visibility:hidden;">
+    <div id="descWindow" class="container-fluid position-absolute" style="z-index: 30; visibility:hidden;">
         <div class="row">
-            <div class="col-6 rounded-bottom border border-secondary mx-auto" style="background-color:rgb(196 212 235);">
+            <div class="col-12 col-md-6 rounded-bottom border border-secondary mx-auto" style="background-color:rgb(196 212 235);">
                 <div class="row-cols-1 mx-2 my-4">
                     <div class="col">
                         <div class="row d-flex justify-content-between">
@@ -161,8 +162,8 @@
 
     <div class="container-fluid">
         <div class="row" style="margin: 0;">
-            <div class="col-6 mapBlock">
-                <div class="col-6 mapContainer">
+            <div class="col-12 col-lg-6 mapBlock">
+                <div class="col-12 col-lg-6 mapContainer">
                     <div class="mapAndLabels">
                         <div class="pointsTypes">
                             <select name="types" id="pointTypesDDL" class="form-control">
@@ -233,7 +234,7 @@
                     </div>
                 </div>
             </div>
-            <div class=col-6>
+            <div class="col-12 col-lg-6 pointsBlock">
                 <div class="row justify-content-center" style="margin:50px 0;">
                     <div id="mainPoints" class="col-6">
                         <div id="addedPoints"></div>
