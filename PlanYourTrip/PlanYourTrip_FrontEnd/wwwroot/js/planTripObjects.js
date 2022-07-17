@@ -205,7 +205,7 @@ var branchPrototype = {
     BranchEl: "",
     AddBranch: (rootEl) => {
         let branchDiv = BranchBlock();
-        branchDiv.style.marginTop = (rootEl.offsetTop - 120) + "px";
+        branchDiv.style.marginTop = (rootEl.offsetTop) + "px";
 
         branchesContainer.appendChild(branchDiv);
         

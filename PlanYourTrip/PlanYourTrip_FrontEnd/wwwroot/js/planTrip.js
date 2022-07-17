@@ -102,10 +102,12 @@ function VisibleBtns(sender, state) {
         sender.children[0].children[0].style.fontWeight = "bold";
         sender.children[0].children[1].style.fontWeight = "bold";
         btnsEl.style.visibility = "visible";
+        btnsEl.style.position = "static";
     } else {
         sender.children[0].children[0].style.fontWeight = "normal";
         sender.children[0].children[1].style.fontWeight = "normal";
         btnsEl.style.visibility = "hidden";
+        btnsEl.style.position = "absolute";
     }
 }
 
@@ -176,14 +178,14 @@ function ChangeBranchFocus(sender) {
 
 function UpdateBranchOffset(point) {
     if (point.HasBranch) {
-        point.Branch.style.marginTop = (point.HTMLEl.offsetTop - 120) + "px";
+        point.Branch.style.marginTop = (point.HTMLEl.offsetTop) + "px";
     }
 }
 
 function UpdateAllBranchesOffset() {
     for (let p = 0; p < Points.length; p++) {
         if (Points[p].HasBranch) {
-            Points[p].Branch.style.marginTop = (Points[p].HTMLEl.offsetTop - 120) + "px";
+            Points[p].Branch.style.marginTop = (Points[p].HTMLEl.offsetTop) + "px";
         }
     }
 }
@@ -355,6 +357,7 @@ function loadTrip() {
                     }
                 }
                 branchEl.style.visibility = "hidden";
+                UpdateAllBranchesOffset();
             }
         }
         let attrInputs = document.getElementsByClassName("pointAttrInput");

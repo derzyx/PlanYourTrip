@@ -13,7 +13,7 @@
         <div class="col my-5">
             <input type="text" id="filterInput" class="form-control" placeholder="Wyszukaj użytkownika"/>
         </div>
-        <div id="subcriptionsBox" style="margin-bottom: 5rem;">
+        <div id="subcriptionsBox" style="margin-bottom: 20rem;">
         @for(int i=0; i < Model.UserSubs.Count-1; i++)
         {   
             <div class="col my-4 subscribedProfileBox">
@@ -23,11 +23,11 @@
                         <h2 class="userNick">@Model.SubsNicks[i]</h2>
                     </div>
                     <div class="col">
-                        <div class="row">
+                        <div class="row d-flex justify-content-center">
                             @{
                                 userPlans = Model.SubsLatestPlans.Where(plan => plan.AutorId == Model.UserSubs[i]).ToList();
                                 for(int j=0; j < userPlans.Count; j++){
-                                <div class="col-3">
+                                <div class="col-10 col-lg-4 col-md-6 col-xl-3">
                                     <div class="position-relative mx-3 my-4 p-3 border border-secondary rounded smallTripCard">
                                         <div class="row d-flex justify-content-center justify-items-center readFurtherBtn">
                                             <a class="col btn btn-primary" asp-page="/PlanTrip" asp-route-plan=@userPlans[j].TripPlanId>Zobacz plan</a>
@@ -54,7 +54,7 @@
                                 </div>
                                 }
                             }
-                            <div class="col-3 d-flex justify-content-center align-items-center">
+                            <div class="col-12 col-sm d-flex justify-content-center align-items-center">
                                 <a class="btn btn-primary p-4" asp-page="/User" asp-route-id=@Model.UserSubs[i]>Zobacz profil</a>
                             </div>
                         </div>
