@@ -45,7 +45,7 @@ function PointBlock(point) {
     //</mainDiv>
 
     let mainDiv = document.createElement("div");
-    mainDiv.className = "col-12 col-lg-11 pointContainer";
+    mainDiv.className = "col-11 pointContainer";
 
     let pointDiv = document.createElement("div");
     pointDiv.className = "point";

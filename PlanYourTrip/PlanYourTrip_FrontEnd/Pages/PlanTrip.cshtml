@@ -55,22 +55,44 @@
         </div>
     </div>
 
-    <div id="tutrialWindow" class="position-absolute" style="z-index: 100; visibility:hidden; height:95vh; overflow:hidden;">
-        <div class="row d-flex flex-column justify-content-center p-5">
-            <div class="col d-flex justify-content-center" style="background-color:rgb(199,199,199);">
-                <img id="interfejsImg" src="~/img/tutorial1.jpg" width="80%"/>
-                <img id="punktyImg" src="~/img/tutorial2.jpg" width="80%" style="display:none;"/>
+    <div id="tutrialWindow" class="container-fluid position-absolute">
+        <div class="row d-flex flex-column justify-content-center align-items-center p-2" style="background-color:white;">
+            <div class="col-xl-4 col-lg-6 col-md-8">
+                <div class="display-6 mb-4 text-left">
+                    Pasek górny
+                </div>
             </div>
-            <div class="col d-flex justify-content-center" style="background-color:rgb(199,199,199);">
-                <a class="btn btn-primary m-2" onclick="
-                    document.getElementById('interfejsImg').style.display='block';
-                    document.getElementById('punktyImg').style.display='none';">Interfejs
-                </a>
-                <a class="btn btn-primary m-2" onclick="
-                    document.getElementById('interfejsImg').style.display='none';
-                    document.getElementById('punktyImg').style.display='block';">Punkty
-                </a>
-                <a class="btn btn-primary m-2" onclick="toggleWindowVisibility('tutrialWindow')">Zamknij Tutorial</a>
+            <div class="col-xl-4 col-lg-6 col-md-8">
+                <img width="100%" src="~/img/tut3.png"/>
+            </div>
+            <div class="col-xl-4 col-lg-6 col-md-8 text-left mt-3">
+                Tutaj możesz nazwać plan, zmienić jego opis, ustawić publiczną widoczność planu oraz włączyć/wyłączyć okienko potwierdzenia usunięcia obiektu.
+            </div>
+            <div class="col-xl-4 col-lg-6 col-md-8 mt-4">
+                <div class="display-6 mb-4 text-left">
+                    Mapa
+                </div>
+            </div>
+            <div class="col-xl-4 col-lg-6 col-md-8">
+                <img width="100%" src="~/img/tut1.png"/>
+            </div>
+            <div class="col-xl-4 col-lg-6 col-md-8 text-left mt-3">
+                W lewym górnym rogu możesz wybrać typ szukanych miejsc. Wyniki będą widoczne na mapie po odpowiednim zbliżeniu. Po kliknięciu na punkt zobaczysz jego szczegóły. Możesz też dodać miejsce do punktu o czym niżej.
+            </div>
+            <div class="col-xl-4 col-lg-6 col-md-8 mt-4">
+                <div class="display-6 mb-4 text-left">
+                    Punkty
+                </div>
+            </div>
+            <div class="col-xl-4 col-lg-6 col-md-8">
+                <img width="100%" src="~/img/tut2.png"/>
+            </div>
+            <div class="col-xl-4 col-lg-6 col-md-8 mt-3">
+                W dodanym punkcie możesz zmienić jego tytuł, dodać atrybuty lub linki, zmienić jego pozycję (strzałki w lewym dolnym rogu punktu) oraz zmienić kolor tła (czarny kwadrat). Każdy punkt może mieć jedną gałąź. Po dodaniu gałęzi możesz zmienić jej widoczność (ikonka oka) lub usunąć ją. Aby dodać miejsce na mapie do punktu kliknij w dany punkt. Pojawi się na nim niebieski cień, co oznacza obecnie wybrany punkt. Kliknij <b>"Dodaj miejsce do punktu"</b> aby utworzyć link prowadzący do tego miejsca na mapie.
+            </div>
+
+            <div class="col-4 my-5">
+                <button class="btn-primary btn" onclick="toggleWindowVisibility('tutrialWindow')">Wróć do planowania</button>
             </div>
         </div>
     </div>
@@ -86,14 +108,14 @@
                         <button id="saveTripToDB" style="visibility:hidden; position:absolute;"></button>
                     </div>
                     <div class="col-auto d-flex align-items-center">
-                        <div class="row d-flex justify-content-between">
+                        <div class="row d-flex justify-content-center">
                             <div class="col-auto">
                                 <a class="btn btn-primary" onclick="toggleWindowVisibility('tutrialWindow')">Jak to działa?</a>
                             </div>
                             <div class="col-auto">
                                 <a class="btn btn-primary" onclick="toggleWindowVisibility('descWindow')">Zmień opis planu</a>
                             </div>
-                            <div class="col-auto">
+                            <div class="col-sm-auto my-2 my-sm-0">
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" id="planVisibilityText">Widoczność planu</span>
@@ -104,7 +126,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-auto">
+                            <div class="col-sm-auto my-2 my-sm-0">
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" id="askBeforeDeleteText">Pytaj przed usunięciem</span>
@@ -252,6 +274,15 @@
 
     <script type="text/javascript">
         function toggleWindowVisibility(window, visibility){
+            if(window === "tutrialWindow"){
+                if(document.getElementById(window).style.visibility === "visible"){
+                document.getElementById(window).style.overflow = "hidden";
+                }
+                else{
+                    document.getElementById(window).style.overflow = "auto";
+                }
+            }
+
             if(document.getElementById(window).style.visibility === "visible"){
                 document.getElementById(window).style.visibility = "hidden";
             }
